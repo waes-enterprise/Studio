@@ -468,17 +468,28 @@
 
       const systemPrompt = `You are ViralScript AI — an expert at writing viral 60-second African-style short-form video scripts for TikTok, Reels, and Shorts.
 
-RULES:
+VISUAL STYLE RULES (CRITICAL):
+- ALL footage must be RAW — shot directly from a phone camera, no professional equipment
+- Natural morning sunlight ONLY — no artificial lighting, no golden hour tricks, no studio lighting
+- NO cinematic color grading, NO filters, NO LUTs, NO color correction — just raw real footage
+- NO animation, NO CGI, NO VFX, NO AI-generated visuals, NO AI touch of any kind
+- NO background music — diegetic sound only (real ambient sounds from the environment)
+- ALL characters must be African people filmed in real African locations
+- Handheld camera style — natural human hand movement, slight shake, as if a friend is filming
+- ABSOLUTELY NO zoom in or zoom out — fixed focal length, camera stays at one distance
+- The footage must look like someone grabbed their phone and started recording real life
+
+SCRIPT RULES:
 - Output exactly 7-8 scenes, each ~8 seconds
 - Each scene MUST have: sceneNumber, duration, camera, action, dialogue, engagement
-- Use handheld/raw camera style (shake, quick zoom, snap zoom, whip pan)
-- Realistic African dialogue (mix English + local slang naturally)
+- Realistic African dialogue (mix English + local slang naturally — Nigerian, Ghanaian, South African, Kenyan, etc.)
 - Hook must be in the first 3 seconds — grab attention instantly
 - Every scene must drive engagement (comments, shares, saves)
-- Dialogue should feel natural, like real people talking on the streets
-- Use relatable African situations (family, hustle, relationships, food, etc.)
+- Dialogue should feel natural, like real people talking on the streets, in homes, at markets
+- Use relatable African situations (family, hustle, relationships, food, transport, etc.)
 - Keep it fast-paced — no boring filler
 - Engagement hooks: ask questions, create suspense, use cliffhangers
+- In the "camera" field, describe natural handheld movement only (slight drift, walking motion, panning by turning the body) — NEVER mention zoom, dolly, crane, slider, or any professional equipment
 
 OUTPUT FORMAT — Return ONLY valid JSON (no markdown fences, no code blocks):
 {
@@ -486,13 +497,13 @@ OUTPUT FORMAT — Return ONLY valid JSON (no markdown fences, no code blocks):
     {
       "sceneNumber": 1,
       "duration": "0:00 - 0:08",
-      "camera": "description of camera movement",
-      "action": "what's happening physically",
-      "dialogue": "what characters say",
+      "camera": "natural handheld camera movement description",
+      "action": "what's happening physically in the scene",
+      "dialogue": "what characters say (natural African speech)",
       "engagement": "why viewer keeps watching"
     }
   ],
-  "rawText": "The full script in clean copy-paste format with scene separators"
+  "rawText": "The full script in clean copy-paste format with scene separators. Do NOT use any emojis or icons in this text. Use plain text labels only: SCENE, Camera, Action, Dialogue, Engagement. No decorative symbols."
 }`;
 
       const userMessage = `Create a viral 60-second African-style short-form video script for this idea:
@@ -500,7 +511,7 @@ OUTPUT FORMAT — Return ONLY valid JSON (no markdown fences, no code blocks):
 IDEA: ${idea}
 TONE/VIBE: ${currentTone}
 
-Remember: 7-8 scenes, ~8 seconds each, raw handheld camera style, realistic African dialogue with slang, hook in first 3 seconds, engagement drivers in every scene. Return ONLY valid JSON.`;
+Remember: 7-8 scenes, ~8 seconds each. RAW phone footage only — natural morning sunlight, no filters, no color grading, no CGI, no VFX, no background music, no zoom. All African people and locations. Handheld camera — natural movement only. Realistic African dialogue with slang. Hook in first 3 seconds. No emojis or icons in the rawText output. Return ONLY valid JSON.`;
 
       // Build model list: selected model first, then fallbacks
       const selectedModel = document.getElementById('model-select').value;
@@ -641,8 +652,8 @@ Remember: 7-8 scenes, ~8 seconds each, raw handheld camera style, realistic Afri
         textContent = rawText;
       } else if (scenesArr.length > 0) {
         textContent = scenesArr.map(s =>
-          `--- SCENE ${s.sceneNumber} (${s.duration}) ---\n📹 Camera: ${s.camera}\n🎬 Action: ${s.action}\n💬 Dialogue: ${s.dialogue}\n📊 Engagement: ${s.engagement}`
-        ).join('\n\n');
+          `SCENE ${s.sceneNumber} (${s.duration})\n\nCamera: ${s.camera}\nAction: ${s.action}\nDialogue: ${s.dialogue}\nEngagement: ${s.engagement}`
+        ).join('\n\n---\n\n');
       }
       document.getElementById('text-content').textContent = textContent;
 
@@ -656,8 +667,8 @@ Remember: 7-8 scenes, ~8 seconds each, raw handheld camera style, realistic Afri
         text = rawText;
       } else if (scenes.length > 0) {
         text = scenes.map(s =>
-          `--- SCENE ${s.sceneNumber} (${s.duration}) ---\n📹 Camera: ${s.camera}\n🎬 Action: ${s.action}\n💬 Dialogue: ${s.dialogue}\n📊 Engagement: ${s.engagement}`
-        ).join('\n\n');
+          `SCENE ${s.sceneNumber} (${s.duration})\n\nCamera: ${s.camera}\nAction: ${s.action}\nDialogue: ${s.dialogue}\nEngagement: ${s.engagement}`
+        ).join('\n\n---\n\n');
       }
 
       navigator.clipboard.writeText(text).then(() => {
@@ -673,7 +684,7 @@ Remember: 7-8 scenes, ~8 seconds each, raw handheld camera style, realistic Afri
 
     function copyScene(index) {
       const s = scenes[index];
-      const text = `--- SCENE ${s.sceneNumber} (${s.duration}) ---\n📹 Camera: ${s.camera}\n🎬 Action: ${s.action}\n💬 Dialogue: ${s.dialogue}\n📊 Engagement: ${s.engagement}`;
+      const text = `SCENE ${s.sceneNumber} (${s.duration})\n\nCamera: ${s.camera}\nAction: ${s.action}\nDialogue: ${s.dialogue}\nEngagement: ${s.engagement}`;
       navigator.clipboard.writeText(text).then(() => {
         const card = document.getElementById('scene-' + s.sceneNumber);
         const btn = card.querySelector('.copy-scene-btn');
