@@ -3,16 +3,15 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>ViralScript AI — African Short-Form Video Scripts</title>
-  <meta name="description" content="Generate viral 60-second African-style short-form video scripts with one click." />
-  <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='90'>🎬</text></svg>" />
+  <title>ViralScript AI</title>
+  <meta name="description" content="Generate viral 60-second African-style short-form video scripts with images." />
+  <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='90'>V</text></svg>" />
   <style>
     *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
 
     :root {
       --bg: #030712;
       --card: #111827;
-      --card-hover: #1a2332;
       --border: rgba(255,255,255,0.08);
       --border-hover: rgba(234,179,8,0.2);
       --yellow: #eab308;
@@ -36,33 +35,29 @@
       -webkit-font-smoothing: antialiased;
     }
 
-    /* Header */
     .header {
-      position: sticky;
-      top: 0;
-      z-index: 10;
-      background: rgba(3,7,18,0.8);
+      position: sticky; top: 0; z-index: 10;
+      background: rgba(3,7,18,0.85);
       backdrop-filter: blur(20px);
       border-bottom: 1px solid var(--border);
       padding: 12px 16px;
     }
     .header-inner {
-      max-width: 640px;
-      margin: 0 auto;
-      display: flex;
-      align-items: center;
-      justify-content: space-between;
+      max-width: 640px; margin: 0 auto;
+      display: flex; align-items: center; justify-content: space-between;
     }
     .logo-group { display: flex; align-items: center; gap: 10px; }
     .logo {
-      width: 36px; height: 36px;
-      border-radius: 10px;
+      width: 36px; height: 36px; border-radius: 10px;
       background: linear-gradient(135deg, var(--yellow), var(--orange));
       display: flex; align-items: center; justify-content: center;
       font-weight: 800; color: #000; font-size: 16px;
     }
     .logo-text { font-size: 17px; font-weight: 700; }
-    .logo-text span { background: linear-gradient(90deg, var(--yellow), var(--orange)); -webkit-background-clip: text; -webkit-text-fill-color: transparent; }
+    .logo-text span {
+      background: linear-gradient(90deg, var(--yellow), var(--orange));
+      -webkit-background-clip: text; -webkit-text-fill-color: transparent;
+    }
     .logo-sub { font-size: 10px; color: var(--text-dimmer); margin-top: -2px; }
     .view-toggle { display: flex; gap: 4px; }
     .view-btn {
@@ -71,16 +66,15 @@
       cursor: pointer; transition: all 0.2s;
     }
     .view-btn.active {
-      background: var(--yellow-dim); color: var(--yellow); border-color: rgba(234,179,8,0.3);
+      background: var(--yellow-dim); color: var(--yellow);
+      border-color: rgba(234,179,8,0.3);
     }
 
-    /* Main */
     .main { max-width: 640px; margin: 0 auto; padding: 20px 16px; }
 
-    /* Settings */
     .settings-panel {
-      background: var(--card); border: 1px solid var(--border); border-radius: 14px;
-      padding: 16px; margin-bottom: 16px;
+      background: var(--card); border: 1px solid var(--border);
+      border-radius: 14px; padding: 16px; margin-bottom: 16px;
     }
     .settings-label {
       font-size: 11px; font-weight: 600; color: var(--text-dimmer);
@@ -90,15 +84,15 @@
     .key-input {
       flex: 1; background: rgba(0,0,0,0.4); border: 1px solid var(--border);
       border-radius: 10px; padding: 10px 12px; color: var(--text); font-size: 13px;
-      font-family: 'SF Mono', 'Fira Code', monospace;
-      outline: none; transition: border-color 0.2s;
+      font-family: 'SF Mono', 'Fira Code', monospace; outline: none;
+      transition: border-color 0.2s;
     }
     .key-input:focus { border-color: rgba(234,179,8,0.4); }
     .key-input::placeholder { color: var(--text-dimmer); }
     .save-btn {
       padding: 10px 16px; border-radius: 10px; border: none; cursor: pointer;
-      background: var(--yellow-dim); color: var(--yellow); font-size: 12px; font-weight: 600;
-      transition: all 0.2s; white-space: nowrap;
+      background: var(--yellow-dim); color: var(--yellow); font-size: 12px;
+      font-weight: 600; transition: all 0.2s; white-space: nowrap;
     }
     .save-btn:hover { background: rgba(234,179,8,0.25); }
     .key-status { font-size: 11px; margin-top: 6px; color: var(--text-dimmer); }
@@ -115,10 +109,9 @@
     .model-select:focus { border-color: rgba(234,179,8,0.4); }
     .model-select option { background: #111827; color: #f3f4f6; }
 
-    /* Input */
     .input-card {
-      background: var(--card); border: 1px solid var(--border); border-radius: 14px;
-      padding: 16px; margin-bottom: 16px;
+      background: var(--card); border: 1px solid var(--border);
+      border-radius: 14px; padding: 16px; margin-bottom: 16px;
     }
     .input-label { font-size: 13px; font-weight: 600; color: var(--text-dim); margin-bottom: 8px; }
     .idea-input {
@@ -139,18 +132,39 @@
       cursor: pointer; transition: all 0.2s; text-align: center;
     }
     .tone-btn.active {
-      background: var(--yellow-dim); color: var(--yellow); border-color: rgba(234,179,8,0.35);
+      background: var(--yellow-dim); color: var(--yellow);
+      border-color: rgba(234,179,8,0.35);
     }
 
-    .generate-row { margin-top: 14px; display: flex; justify-content: flex-end; }
-    .generate-btn {
+    .gen-options { margin-top: 14px; display: flex; flex-direction: column; gap: 10px; }
+    .gen-row { display: flex; justify-content: space-between; align-items: center; }
+    .gen-row-end { display: flex; justify-content: flex-end; margin-top: 14px; }
+    .gen-btn {
       padding: 12px 28px; border-radius: 12px; border: none; cursor: pointer;
       background: linear-gradient(135deg, var(--yellow), var(--orange));
       color: #000; font-size: 14px; font-weight: 700; transition: all 0.2s;
       display: flex; align-items: center; gap: 8px;
     }
-    .generate-btn:hover { filter: brightness(1.1); transform: translateY(-1px); }
-    .generate-btn:disabled { opacity: 0.4; cursor: not-allowed; transform: none; filter: none; }
+    .gen-btn:hover { filter: brightness(1.1); transform: translateY(-1px); }
+    .gen-btn:disabled { opacity: 0.4; cursor: not-allowed; transform: none; filter: none; }
+
+    .toggle-wrap { display: flex; align-items: center; gap: 8px; }
+    .toggle-label { font-size: 12px; color: var(--text-dim); font-weight: 500; }
+    .toggle {
+      position: relative; width: 40px; height: 22px; cursor: pointer;
+    }
+    .toggle input { opacity: 0; width: 0; height: 0; }
+    .toggle-slider {
+      position: absolute; inset: 0; background: rgba(255,255,255,0.1);
+      border-radius: 11px; transition: 0.3s;
+    }
+    .toggle-slider::before {
+      content: ''; position: absolute; width: 16px; height: 16px;
+      left: 3px; bottom: 3px; background: white; border-radius: 50%;
+      transition: 0.3s;
+    }
+    .toggle input:checked + .toggle-slider { background: var(--yellow); }
+    .toggle input:checked + .toggle-slider::before { transform: translateX(18px); }
 
     .spinner {
       width: 16px; height: 16px; border: 2px solid rgba(0,0,0,0.2);
@@ -159,14 +173,12 @@
     }
     @keyframes spin { to { transform: rotate(360deg); } }
 
-    /* Error */
     .error-banner {
       background: var(--red-dim); border: 1px solid rgba(239,68,68,0.25);
       border-radius: 12px; padding: 12px 16px; margin-bottom: 16px;
       font-size: 13px; color: var(--red);
     }
 
-    /* Results Header */
     .results-header {
       display: flex; align-items: center; justify-content: space-between;
       margin-bottom: 14px;
@@ -181,13 +193,26 @@
     .copy-all-btn:hover { background: rgba(255,255,255,0.08); color: var(--text); }
     .copy-all-btn.copied { background: var(--green-dim); color: var(--green); border-color: rgba(34,197,94,0.3); }
 
-    /* Scene Cards */
-    .scenes { display: flex; flex-direction: column; gap: 10px; }
+    .scenes { display: flex; flex-direction: column; gap: 12px; }
     .scene-card {
-      background: var(--card); border: 1px solid var(--border); border-radius: 14px;
-      padding: 16px; transition: all 0.2s;
+      background: var(--card); border: 1px solid var(--border);
+      border-radius: 14px; overflow: hidden; transition: all 0.2s;
     }
     .scene-card:hover { border-color: var(--border-hover); }
+    .scene-img-wrap {
+      position: relative; width: 100%; aspect-ratio: 16/9;
+      background: rgba(0,0,0,0.4); overflow: hidden;
+    }
+    .scene-img {
+      width: 100%; height: 100%; object-fit: cover; display: block;
+    }
+    .scene-img-placeholder {
+      width: 100%; height: 100%; display: flex; flex-direction: column;
+      align-items: center; justify-content: center; color: var(--text-dimmer);
+      font-size: 12px; gap: 6px;
+    }
+    .scene-img-placeholder .spinner { border-color: rgba(255,255,255,0.15); border-top-color: var(--yellow); }
+    .scene-body { padding: 14px 16px; }
     .scene-top { display: flex; align-items: center; justify-content: space-between; margin-bottom: 10px; }
     .scene-badge {
       background: var(--yellow-dim); color: var(--yellow);
@@ -196,23 +221,21 @@
     .scene-duration { font-size: 11px; color: var(--text-dimmer); margin-left: 8px; }
     .copy-scene-btn {
       padding: 4px 10px; border-radius: 6px; font-size: 11px; font-weight: 600;
-      border: 1px solid var(--border); background: transparent; color: var(--text-dimmer);
+      border: 1px solid var(--border); background: transparent; color: var(--text-dim);
       cursor: pointer; transition: all 0.15s; opacity: 0;
     }
     .scene-card:hover .copy-scene-btn { opacity: 1; }
     .copy-scene-btn:hover { background: rgba(255,255,255,0.08); color: var(--text); }
     .copy-scene-btn.copied { opacity: 1; background: var(--green-dim); color: var(--green); border-color: rgba(34,197,94,0.3); }
-
-    .scene-lines { display: flex; flex-direction: column; gap: 6px; }
+    .scene-lines { display: flex; flex-direction: column; gap: 5px; }
     .scene-line { font-size: 13px; color: var(--text-dim); }
     .scene-line-label { color: var(--text-dimmer); font-weight: 600; margin-right: 4px; }
     .scene-line.dialogue { color: var(--text); font-weight: 500; }
     .scene-line.dialogue .scene-line-label { font-weight: 400; color: var(--text-dimmer); }
 
-    /* Text View */
     .text-view {
-      background: var(--card); border: 1px solid var(--border); border-radius: 14px;
-      padding: 16px;
+      background: var(--card); border: 1px solid var(--border);
+      border-radius: 14px; padding: 16px;
     }
     .text-pre {
       font-family: 'SF Mono', 'Fira Code', 'Courier New', monospace;
@@ -220,44 +243,39 @@
       white-space: pre-wrap; word-break: break-word; user-select: all;
     }
 
-    /* Empty State */
     .empty-state { text-align: center; padding: 48px 20px; }
     .empty-emoji { font-size: 48px; margin-bottom: 12px; }
     .empty-title { font-size: 18px; font-weight: 700; color: var(--text-dim); margin-bottom: 6px; }
     .empty-sub { font-size: 13px; color: var(--text-dimmer); max-width: 320px; margin: 0 auto; }
 
-    /* Footer */
     .footer {
       text-align: center; padding: 24px 16px; margin-top: 40px;
       border-top: 1px solid var(--border); font-size: 11px; color: var(--text-dimmer);
     }
 
-    /* Hide sections */
     .hidden { display: none !important; }
 
-    /* Loading shimmer on cards */
     @keyframes shimmer {
-      0% { opacity: 0.4; }
-      50% { opacity: 0.8; }
-      100% { opacity: 0.4; }
+      0% { opacity: 0.4; } 50% { opacity: 0.8; } 100% { opacity: 0.4; }
     }
     .loading-card {
       background: var(--card); border: 1px solid var(--border); border-radius: 14px;
       padding: 20px; text-align: center; color: var(--text-dimmer); font-size: 13px;
       animation: shimmer 1.5s ease-in-out infinite;
     }
+
+    .img-progress { font-size: 11px; color: var(--text-dimmer); text-align: center; padding: 8px; }
   </style>
 </head>
 <body>
 
-  <!-- Header -->
   <header class="header">
     <div class="header-inner">
       <div class="logo-group">
         <div class="logo">V</div>
         <div>
           <div class="logo-text"><span>ViralScript AI</span></div>
-          <div class="logo-sub">60-Second Video Script Generator</div>
+          <div class="logo-sub">Script + Visual Generator</div>
         </div>
       </div>
       <div class="view-toggle">
@@ -269,17 +287,16 @@
 
   <main class="main">
 
-    <!-- API Key Settings -->
     <div class="settings-panel">
-      <div class="settings-label">🔑 OpenRouter API Key</div>
+      <div class="settings-label">API Key</div>
       <div class="key-input-row">
         <input type="password" class="key-input" id="api-key-input" placeholder="sk-or-v1-..." />
-        <button class="save-btn" id="save-key-btn" onclick="saveApiKey()">Save</button>
+        <button class="save-btn" onclick="saveApiKey()">Save</button>
       </div>
       <div class="key-status" id="key-status"></div>
-      <div class="settings-label" style="margin-top:12px">🤖 AI Model</div>
+      <div class="settings-label" style="margin-top:12px">AI Model</div>
       <select class="model-select" id="model-select">
-        <option value="deepseek/deepseek-chat-v3-0324" selected>DeepSeek V3 (Fast & Cheap)</option>
+        <option value="deepseek/deepseek-chat-v3-0324" selected>DeepSeek V3 (Fast &amp; Cheap)</option>
         <option value="meta-llama/llama-4-maverick">Llama 4 Maverick</option>
         <option value="google/gemini-2.0-flash-001">Gemini 2.0 Flash</option>
         <option value="mistralai/mistral-small-3.1-24b-instruct">Mistral Small 3.1</option>
@@ -287,89 +304,95 @@
       </select>
     </div>
 
-    <!-- Input -->
     <div class="input-card">
-      <div class="input-label">💡 Your Video Idea</div>
+      <div class="input-label">Your Video Idea</div>
       <textarea class="idea-input" id="idea-input" placeholder="e.g. A guy tries to impress his girlfriend's Nigerian mom by cooking jollof rice but everything goes wrong..."></textarea>
 
       <div class="tone-section">
-        <div class="tone-label">🎭 Tone / Vibe</div>
+        <div class="tone-label">Tone / Vibe</div>
         <div class="tone-grid">
-          <button class="tone-btn active" data-tone="comedy" onclick="setTone(this)">😂 Comedy</button>
-          <button class="tone-btn" data-tone="drama" onclick="setTone(this)">🎭 Drama</button>
-          <button class="tone-btn" data-tone="thriller" onclick="setTone(this)">😱 Thriller</button>
-          <button class="tone-btn" data-tone="romance" onclick="setTone(this)">❤️ Romance</button>
-          <button class="tone-btn" data-tone="horror" onclick="setTone(this)">👻 Horror</button>
-          <button class="tone-btn" data-tone="inspirational" onclick="setTone(this)">✨ Inspiring</button>
-          <button class="tone-btn" data-tone="street" onclick="setTone(this)">🔥 Street</button>
-          <button class="tone-btn" data-tone="educational" onclick="setTone(this)">📚 Edu</button>
+          <button class="tone-btn active" data-tone="comedy" onclick="setTone(this)">Comedy</button>
+          <button class="tone-btn" data-tone="drama" onclick="setTone(this)">Drama</button>
+          <button class="tone-btn" data-tone="thriller" onclick="setTone(this)">Thriller</button>
+          <button class="tone-btn" data-tone="romance" onclick="setTone(this)">Romance</button>
+          <button class="tone-btn" data-tone="horror" onclick="setTone(this)">Horror</button>
+          <button class="tone-btn" data-tone="inspirational" onclick="setTone(this)">Inspiring</button>
+          <button class="tone-btn" data-tone="street" onclick="setTone(this)">Street</button>
+          <button class="tone-btn" data-tone="educational" onclick="setTone(this)">Educational</button>
         </div>
       </div>
 
-      <div class="generate-row">
-        <button class="generate-btn" id="generate-btn" onclick="generateScript()">
-          <span id="gen-text">⚡ Generate Script</span>
+      <div class="gen-options">
+        <div class="gen-row">
+          <div class="toggle-wrap">
+            <label class="toggle">
+              <input type="checkbox" id="gen-images" checked />
+              <span class="toggle-slider"></span>
+            </label>
+            <span class="toggle-label">Generate scene images</span>
+          </div>
+        </div>
+      </div>
+
+      <div class="gen-row-end">
+        <button class="gen-btn" id="generate-btn" onclick="generateScript()">
+          <span id="gen-text">Generate Script</span>
           <span id="gen-spinner" class="hidden"><div class="spinner"></div></span>
         </button>
       </div>
     </div>
 
-    <!-- Error Banner -->
     <div class="error-banner hidden" id="error-banner"></div>
 
-    <!-- Results -->
     <div class="hidden" id="results-section">
       <div class="results-header">
         <div class="results-title">
-          🎬 Your Script <span class="results-count" id="results-count"></span>
+          Your Script <span class="results-count" id="results-count"></span>
         </div>
-        <button class="copy-all-btn" id="copy-all-btn" onclick="copyAll()">📋 Copy All</button>
+        <button class="copy-all-btn" id="copy-all-btn" onclick="copyAll()">Copy All</button>
       </div>
-
-      <!-- Card View -->
       <div id="cards-view" class="scenes"></div>
-
-      <!-- Text View -->
       <div id="text-view" class="text-view hidden">
         <pre class="text-pre" id="text-content"></pre>
       </div>
     </div>
 
-    <!-- Loading State -->
     <div class="hidden" id="loading-section">
-      <div class="loading-card">🎬 Generating your viral script...</div>
+      <div class="loading-card" id="loading-text">Generating your script...</div>
     </div>
 
-    <!-- Empty State -->
     <div id="empty-state" class="empty-state">
-      <div class="empty-emoji">🎬</div>
+      <div class="empty-emoji">V</div>
       <div class="empty-title">Ready to Create Viral Scripts</div>
-      <div class="empty-sub">Drop your video idea, pick a tone, and hit Generate. Your 60-second African-style script will be ready in seconds.</div>
+      <div class="empty-sub">Drop your video idea, pick a tone, and hit Generate. Your 60-second African-style script with scene images will be ready in seconds.</div>
     </div>
 
   </main>
 
-  <footer class="footer">
-    ViralScript AI — Copy, paste, shoot. 🌍
-  </footer>
+  <footer class="footer">ViralScript AI</footer>
 
   <script>
-    // State
     let currentTone = 'comedy';
     let currentView = 'cards';
     let scenes = [];
     let rawText = '';
+    let sceneImages = [];
 
-    // Init
+    // CORS proxies to try (in order)
+    const CORS_PROXIES = [
+      '',  // direct first
+      'https://corsproxy.io/?',
+      'https://api.allorigins.win/raw?url='
+    ];
+
     (function init() {
       const saved = localStorage.getItem('vsa_api_key');
       if (saved) {
         document.getElementById('api-key-input').value = saved;
-        showKeyStatus('Key saved ✓', 'connected');
+        showKeyStatus('Key saved', 'connected');
       }
     })();
 
-    // --- API Key ---
     function saveApiKey() {
       const key = document.getElementById('api-key-input').value.trim();
       if (!key.startsWith('sk-or-v1-')) {
@@ -377,7 +400,7 @@
         return;
       }
       localStorage.setItem('vsa_api_key', key);
-      showKeyStatus('Key saved ✓', 'connected');
+      showKeyStatus('Key saved', 'connected');
     }
 
     function showKeyStatus(msg, type) {
@@ -386,18 +409,14 @@
       el.className = 'key-status ' + type;
     }
 
-    function getApiKey() {
-      return localStorage.getItem('vsa_api_key') || '';
-    }
+    function getApiKey() { return localStorage.getItem('vsa_api_key') || ''; }
 
-    // --- Tone ---
     function setTone(btn) {
       document.querySelectorAll('.tone-btn').forEach(b => b.classList.remove('active'));
       btn.classList.add('active');
       currentTone = btn.dataset.tone;
     }
 
-    // --- View ---
     function setView(v) {
       currentView = v;
       document.getElementById('btn-cards').classList.toggle('active', v === 'cards');
@@ -406,7 +425,30 @@
       document.getElementById('text-view').classList.toggle('hidden', v !== 'text');
     }
 
-    // --- Generate ---
+    // --- Fetch with CORS fallback ---
+    async function fetchWithFallback(url, options) {
+      let lastError = null;
+
+      for (const proxy of CORS_PROXIES) {
+        try {
+          const fetchUrl = proxy ? proxy + encodeURIComponent(url) : url;
+          const resp = await fetch(fetchUrl, options);
+          if (resp.ok || resp.status === 400 || resp.status === 401 || resp.status === 402) {
+            return resp;
+          }
+          // If we get 403, try next proxy (might be CORS issue)
+          if (resp.status === 403 && proxy) continue;
+          return resp;
+        } catch(e) {
+          lastError = e;
+          console.warn('Proxy failed:', proxy || 'direct', e.message);
+          continue;
+        }
+      }
+      throw lastError || new Error('Network error');
+    }
+
+    // --- AI Models ---
     const FALLBACK_MODELS = [
       'deepseek/deepseek-chat-v3-0324',
       'meta-llama/llama-4-maverick',
@@ -415,44 +457,72 @@
     ];
 
     async function callModel(model, apiKey, systemPrompt, userMessage) {
-      const response = await fetch('https://openrouter.ai/api/v1/chat/completions', {
-        method: 'POST',
-        headers: {
-          'Authorization': 'Bearer ' + apiKey,
-          'Content-Type': 'application/json',
-          'HTTP-Referer': window.location.href,
-          'X-Title': 'ViralScript AI'
-        },
-        body: JSON.stringify({
-          model: model,
-          messages: [
-            { role: 'system', content: systemPrompt },
-            { role: 'user', content: userMessage }
-          ],
-          temperature: 0.85,
-          max_tokens: 4000
-        })
+      const body = JSON.stringify({
+        model: model,
+        messages: [
+          { role: 'system', content: systemPrompt },
+          { role: 'user', content: userMessage }
+        ],
+        temperature: 0.85,
+        max_tokens: 4000
       });
 
-      if (!response.ok) {
-        let errMsg = '';
-        try {
-          const errData = await response.json();
-          errMsg = errData.error && errData.error.message ? errData.error.message : '';
-        } catch(e) {}
-        if (response.status === 401) throw new Error('Invalid API key. Check your OpenRouter key.');
-        if (response.status === 402) throw new Error('Insufficient credits on your OpenRouter account.');
-        if (response.status === 403) throw new Error('REGION_BLOCKED:' + (errMsg || 'Model not available in your region'));
-        if (response.status === 429) throw new Error('RATE_LIMITED');
-        throw new Error('AI service error (' + response.status + '): ' + (errMsg || 'Unknown error'));
-      }
+      // Try direct first, then CORS proxies
+      const attempts = [
+        { proxy: '', headers: { 'Authorization': 'Bearer ' + apiKey, 'Content-Type': 'application/json', 'HTTP-Referer': location.href, 'X-Title': 'ViralScript AI' } },
+        { proxy: 'https://corsproxy.io/?', headers: { 'Authorization': 'Bearer ' + apiKey, 'Content-Type': 'application/json' } },
+        { proxy: 'https://api.allorigins.win/raw?url=', headers: { 'Authorization': 'Bearer ' + apiKey, 'Content-Type': 'application/json' } }
+      ];
 
-      const data = await response.json();
-      const content = data.choices && data.choices[0] && data.choices[0].message && data.choices[0].message.content;
-      if (!content) throw new Error('EMPTY_RESPONSE');
-      return content;
+      for (const attempt of attempts) {
+        try {
+          const url = attempt.proxy ? attempt.proxy + encodeURIComponent('https://openrouter.ai/api/v1/chat/completions') : 'https://openrouter.ai/api/v1/chat/completions';
+          const response = await fetch(url, { method: 'POST', headers: attempt.headers, body: body });
+
+          if (!response.ok) {
+            let errMsg = '';
+            try { const d = await response.json(); errMsg = d.error?.message || ''; } catch(e) {}
+            if (response.status === 401) throw new Error('Invalid API key. Check your OpenRouter key.');
+            if (response.status === 402) throw new Error('Insufficient credits on your OpenRouter account.');
+            if (response.status === 403) { console.warn(model + ' blocked on ' + (attempt.proxy || 'direct') + ', trying next...'); continue; }
+            if (response.status === 429) throw new Error('RATE_LIMITED');
+            throw new Error('AI error (' + response.status + '): ' + (errMsg || 'Unknown'));
+          }
+
+          const data = await response.json();
+          const content = data.choices?.[0]?.message?.content;
+          if (!content) throw new Error('EMPTY_RESPONSE');
+          return content;
+        } catch(err) {
+          if (err.message === 'RATE_LIMITED' || err.message.startsWith('Invalid') || err.message.startsWith('Insufficient')) throw err;
+          if (err.message === 'EMPTY_RESPONSE') throw err;
+          console.warn('Attempt failed:', attempt.proxy || 'direct', err.message);
+          continue;
+        }
+      }
+      throw new Error('REGION_BLOCKED: Model not available');
     }
 
+    // --- Image Generation ---
+    function buildImagePrompt(scene, idea, tone) {
+      return `Photorealistic raw unedited photo taken with a smartphone camera, natural morning sunlight, no filters no color grading no CGI no VFX, African setting, ${scene.action}, ${tone} mood, documentary style, one continuous shot, no editing, verite footage, ${idea}`.substring(0, 500);
+    }
+
+    async function generateSceneImage(scene, index, idea) {
+      const prompt = buildImagePrompt(scene, idea, currentTone);
+      const encoded = encodeURIComponent(prompt);
+      const seed = Math.floor(Math.random() * 999999);
+      const url = `https://image.pollinations.ai/prompt/${encoded}?width=768&height=432&seed=${seed}&nologo=true&nofeed=true&model=flux`;
+
+      return new Promise((resolve) => {
+        const img = new Image();
+        img.onload = () => resolve(url);
+        img.onerror = () => resolve(null);
+        img.src = url;
+      });
+    }
+
+    // --- Main Generate ---
     async function generateScript() {
       const idea = document.getElementById('idea-input').value.trim();
       if (!idea) return;
@@ -462,6 +532,8 @@
         showError('Please save your OpenRouter API key first (the key field at the top).');
         return;
       }
+
+      const genImages = document.getElementById('gen-images').checked;
 
       setLoading(true);
       clearResults();
@@ -490,6 +562,7 @@ SCRIPT RULES:
 - Keep it fast-paced — no boring filler
 - Engagement hooks: ask questions, create suspense, use cliffhangers
 - In the "camera" field, describe natural handheld movement only (slight drift, walking motion, panning by turning the body) — NEVER mention zoom, dolly, crane, slider, or any professional equipment
+- Do NOT use any emojis or icons anywhere in your output
 
 OUTPUT FORMAT — Return ONLY valid JSON (no markdown fences, no code blocks):
 {
@@ -498,12 +571,12 @@ OUTPUT FORMAT — Return ONLY valid JSON (no markdown fences, no code blocks):
       "sceneNumber": 1,
       "duration": "0:00 - 0:08",
       "camera": "natural handheld camera movement description",
-      "action": "what's happening physically in the scene",
+      "action": "what is happening physically in the scene",
       "dialogue": "what characters say (natural African speech)",
       "engagement": "why viewer keeps watching"
     }
   ],
-  "rawText": "The full script in clean copy-paste format with scene separators. Do NOT use any emojis or icons in this text. Use plain text labels only: SCENE, Camera, Action, Dialogue, Engagement. No decorative symbols."
+  "rawText": "The full script in clean copy-paste format. Plain text only, no emojis, no icons. Labels: SCENE, Camera, Action, Dialogue, Engagement."
 }`;
 
       const userMessage = `Create a viral 60-second African-style short-form video script for this idea:
@@ -511,50 +584,39 @@ OUTPUT FORMAT — Return ONLY valid JSON (no markdown fences, no code blocks):
 IDEA: ${idea}
 TONE/VIBE: ${currentTone}
 
-Remember: 7-8 scenes, ~8 seconds each. RAW phone footage only — natural morning sunlight, no filters, no color grading, no CGI, no VFX, no background music, no zoom. All African people and locations. Handheld camera — natural movement only. Realistic African dialogue with slang. Hook in first 3 seconds. No emojis or icons in the rawText output. Return ONLY valid JSON.`;
+Remember: 7-8 scenes, ~8 seconds each. RAW phone footage only — natural morning sunlight, no filters, no color grading, no CGI, no VFX, no background music, no zoom. All African people and locations. Handheld camera — natural movement only. Realistic African dialogue with slang. Hook in first 3 seconds. No emojis or icons in the output. Return ONLY valid JSON.`;
 
-      // Build model list: selected model first, then fallbacks
+      // Try models with fallback
       const selectedModel = document.getElementById('model-select').value;
       const modelQueue = [selectedModel];
       FALLBACK_MODELS.forEach(m => { if (m !== selectedModel) modelQueue.push(m); });
-      // Remove duplicates
       const uniqueModels = [...new Set(modelQueue)];
 
       let content = null;
       let usedModel = null;
 
-      for (let i = 0; i < uniqueModels.length; i++) {
-        const model = uniqueModels[i];
+      for (const model of uniqueModels) {
         try {
-          // Show which model we're trying
-          document.querySelector('.loading-card').textContent = '🎬 Trying ' + model.split('/').pop() + '...';
+          setLoadingMsg('Generating script with ' + model.split('/').pop() + '...');
           content = await callModel(model, apiKey, systemPrompt, userMessage);
           usedModel = model;
           break;
         } catch(err) {
-          const msg = err.message;
-          // If region blocked or rate limited, try next model
-          if (msg.startsWith('REGION_BLOCKED:') || msg === 'RATE_LIMITED') {
-            console.warn(model + ' failed: ' + msg + ' — trying next...');
-            continue;
-          }
-          // For other errors, don't retry — show immediately
-          showError(msg.replace('REGION_BLOCKED:', ''));
+          if (err.message.startsWith('REGION_BLOCKED:') || err.message === 'RATE_LIMITED') continue;
+          showError(err.message);
           setLoading(false);
           return;
         }
       }
 
       if (!content) {
-        showError('All AI models are unavailable in your region or rate limited. Try again in a minute.');
+        showError('All AI models unavailable or rate limited. Try again in a minute.');
         setLoading(false);
         return;
       }
 
-      // Save the working model for next time
       if (usedModel !== selectedModel) {
         document.getElementById('model-select').value = usedModel;
-        localStorage.setItem('vsa_model', usedModel);
       }
 
       // Parse JSON
@@ -563,27 +625,48 @@ Remember: 7-8 scenes, ~8 seconds each. RAW phone footage only — natural mornin
         parsed = JSON.parse(content);
       } catch(e) {
         const match = content.match(/```(?:json)?\s*([\s\S]*?)```/);
-        if (match) {
-          parsed = JSON.parse(match[1].trim());
-        } else {
+        if (match) parsed = JSON.parse(match[1].trim());
+        else {
           const objMatch = content.match(/\{[\s\S]*\}/);
           if (objMatch) parsed = JSON.parse(objMatch[0]);
-          else {
-            rawText = content;
-            showResults([]);
-            setLoading(false);
-            return;
-          }
+          else { rawText = content; showResults([]); setLoading(false); return; }
         }
       }
 
       if (parsed.scenes && Array.isArray(parsed.scenes) && parsed.scenes.length > 0) {
         scenes = parsed.scenes;
         rawText = parsed.rawText || '';
-        showResults(scenes);
       } else {
         rawText = parsed.rawText || content;
-        showResults([]);
+        scenes = [];
+      }
+
+      // Show results immediately
+      sceneImages = new Array(scenes.length).fill(null);
+      showResults(scenes);
+
+      // Generate images after showing text
+      if (genImages && scenes.length > 0) {
+        const progressEl = document.createElement('div');
+        progressEl.className = 'img-progress';
+        progressEl.id = 'img-progress';
+        document.getElementById('cards-view').after(progressEl);
+
+        for (let i = 0; i < scenes.length; i++) {
+          progressEl.textContent = `Generating image ${i + 1} of ${scenes.length}...`;
+          try {
+            const imgUrl = await generateSceneImage(scenes[i], i, idea);
+            sceneImages[i] = imgUrl;
+            // Update the scene card image
+            const imgWrap = document.getElementById('img-wrap-' + i);
+            if (imgWrap && imgUrl) {
+              imgWrap.innerHTML = `<img class="scene-img" src="${imgUrl}" alt="Scene ${scenes[i].sceneNumber}" />`;
+            }
+          } catch(e) {
+            console.warn('Image gen failed for scene', i);
+          }
+        }
+        progressEl.remove();
       }
 
       setLoading(false);
@@ -598,9 +681,14 @@ Remember: 7-8 scenes, ~8 seconds each. RAW phone footage only — natural mornin
       document.getElementById('empty-state').classList.add('hidden');
     }
 
+    function setLoadingMsg(msg) {
+      document.getElementById('loading-text').textContent = msg;
+    }
+
     function clearResults() {
       scenes = [];
       rawText = '';
+      sceneImages = [];
       document.getElementById('results-section').classList.add('hidden');
       document.getElementById('cards-view').innerHTML = '';
       document.getElementById('text-content').textContent = '';
@@ -611,7 +699,7 @@ Remember: 7-8 scenes, ~8 seconds each. RAW phone footage only — natural mornin
       document.getElementById('loading-section').classList.add('hidden');
       document.getElementById('empty-state').classList.add('hidden');
       const banner = document.getElementById('error-banner');
-      banner.textContent = '❌ ' + msg;
+      banner.textContent = msg;
       banner.classList.remove('hidden');
     }
 
@@ -621,32 +709,37 @@ Remember: 7-8 scenes, ~8 seconds each. RAW phone footage only — natural mornin
       document.getElementById('error-banner').classList.add('hidden');
       document.getElementById('results-section').classList.remove('hidden');
 
-      // Count
       const count = scenesArr.length > 0 ? scenesArr.length + ' scenes' : 'ready to copy';
       document.getElementById('results-count').textContent = '(' + count + ')';
 
-      // Cards
       if (scenesArr.length > 0) {
         document.getElementById('cards-view').innerHTML = scenesArr.map((s, i) => `
           <div class="scene-card" id="scene-${s.sceneNumber}">
-            <div class="scene-top">
-              <div>
-                <span class="scene-badge">SCENE ${s.sceneNumber}</span>
-                <span class="scene-duration">⏱ ${s.duration}</span>
+            <div class="scene-img-wrap" id="img-wrap-${i}">
+              <div class="scene-img-placeholder">
+                <div class="spinner"></div>
+                Generating image...
               </div>
-              <button class="copy-scene-btn" onclick="copyScene(${i})">📋 Copy</button>
             </div>
-            <div class="scene-lines">
-              <div class="scene-line"><span class="scene-line-label">📹 Camera:</span> ${escHtml(s.camera)}</div>
-              <div class="scene-line"><span class="scene-line-label">🎬 Action:</span> ${escHtml(s.action)}</div>
-              <div class="scene-line dialogue"><span class="scene-line-label">💬 Dialogue:</span> ${escHtml(s.dialogue)}</div>
-              <div class="scene-line"><span class="scene-line-label">📊 Engagement:</span> ${escHtml(s.engagement)}</div>
+            <div class="scene-body">
+              <div class="scene-top">
+                <div>
+                  <span class="scene-badge">SCENE ${s.sceneNumber}</span>
+                  <span class="scene-duration">${s.duration}</span>
+                </div>
+                <button class="copy-scene-btn" onclick="copyScene(${i})">Copy</button>
+              </div>
+              <div class="scene-lines">
+                <div class="scene-line"><span class="scene-line-label">Camera:</span> ${escHtml(s.camera)}</div>
+                <div class="scene-line"><span class="scene-line-label">Action:</span> ${escHtml(s.action)}</div>
+                <div class="scene-line dialogue"><span class="scene-line-label">Dialogue:</span> ${escHtml(s.dialogue)}</div>
+                <div class="scene-line"><span class="scene-line-label">Engagement:</span> ${escHtml(s.engagement)}</div>
+              </div>
             </div>
           </div>
         `).join('');
       }
 
-      // Text
       let textContent = '';
       if (rawText) {
         textContent = rawText;
@@ -656,29 +749,22 @@ Remember: 7-8 scenes, ~8 seconds each. RAW phone footage only — natural mornin
         ).join('\n\n---\n\n');
       }
       document.getElementById('text-content').textContent = textContent;
-
-      // Set view
       setView(currentView);
     }
 
     function copyAll() {
       let text = '';
-      if (rawText) {
-        text = rawText;
-      } else if (scenes.length > 0) {
+      if (rawText) { text = rawText; }
+      else if (scenes.length > 0) {
         text = scenes.map(s =>
           `SCENE ${s.sceneNumber} (${s.duration})\n\nCamera: ${s.camera}\nAction: ${s.action}\nDialogue: ${s.dialogue}\nEngagement: ${s.engagement}`
         ).join('\n\n---\n\n');
       }
-
       navigator.clipboard.writeText(text).then(() => {
         const btn = document.getElementById('copy-all-btn');
-        btn.textContent = '✅ Copied!';
+        btn.textContent = 'Copied!';
         btn.classList.add('copied');
-        setTimeout(() => {
-          btn.textContent = '📋 Copy All';
-          btn.classList.remove('copied');
-        }, 2000);
+        setTimeout(() => { btn.textContent = 'Copy All'; btn.classList.remove('copied'); }, 2000);
       });
     }
 
@@ -688,12 +774,9 @@ Remember: 7-8 scenes, ~8 seconds each. RAW phone footage only — natural mornin
       navigator.clipboard.writeText(text).then(() => {
         const card = document.getElementById('scene-' + s.sceneNumber);
         const btn = card.querySelector('.copy-scene-btn');
-        btn.textContent = '✅ Copied';
+        btn.textContent = 'Copied';
         btn.classList.add('copied');
-        setTimeout(() => {
-          btn.textContent = '📋 Copy';
-          btn.classList.remove('copied');
-        }, 2000);
+        setTimeout(() => { btn.textContent = 'Copy'; btn.classList.remove('copied'); }, 2000);
       });
     }
 
