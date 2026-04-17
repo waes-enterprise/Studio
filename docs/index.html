@@ -104,6 +104,16 @@
     .key-status { font-size: 11px; margin-top: 6px; color: var(--text-dimmer); }
     .key-status.connected { color: var(--green); }
     .key-status.error { color: var(--red); }
+    .model-select {
+      width: 100%; background: rgba(0,0,0,0.4); border: 1px solid var(--border);
+      border-radius: 10px; padding: 10px 12px; color: var(--text); font-size: 13px;
+      font-family: inherit; outline: none; cursor: pointer; margin-top: 10px;
+      -webkit-appearance: none; appearance: none;
+      background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='12' fill='%236b7280' viewBox='0 0 16 16'%3E%3Cpath d='M8 11L3 6h10z'/%3E%3C/svg%3E");
+      background-repeat: no-repeat; background-position: right 12px center;
+    }
+    .model-select:focus { border-color: rgba(234,179,8,0.4); }
+    .model-select option { background: #111827; color: #f3f4f6; }
 
     /* Input */
     .input-card {
@@ -267,6 +277,14 @@
         <button class="save-btn" id="save-key-btn" onclick="saveApiKey()">Save</button>
       </div>
       <div class="key-status" id="key-status"></div>
+      <div class="settings-label" style="margin-top:12px">🤖 AI Model</div>
+      <select class="model-select" id="model-select">
+        <option value="deepseek/deepseek-chat-v3-0324" selected>DeepSeek V3 (Fast & Cheap)</option>
+        <option value="meta-llama/llama-4-maverick">Llama 4 Maverick</option>
+        <option value="google/gemini-2.0-flash-001">Gemini 2.0 Flash</option>
+        <option value="mistralai/mistral-small-3.1-24b-instruct">Mistral Small 3.1</option>
+        <option value="qwen/qwen3-32b">Qwen 3 32B</option>
+      </select>
     </div>
 
     <!-- Input -->
@@ -389,6 +407,52 @@
     }
 
     // --- Generate ---
+    const FALLBACK_MODELS = [
+      'deepseek/deepseek-chat-v3-0324',
+      'meta-llama/llama-4-maverick',
+      'mistralai/mistral-small-3.1-24b-instruct',
+      'qwen/qwen3-32b'
+    ];
+
+    async function callModel(model, apiKey, systemPrompt, userMessage) {
+      const response = await fetch('https://openrouter.ai/api/v1/chat/completions', {
+        method: 'POST',
+        headers: {
+          'Authorization': 'Bearer ' + apiKey,
+          'Content-Type': 'application/json',
+          'HTTP-Referer': window.location.href,
+          'X-Title': 'ViralScript AI'
+        },
+        body: JSON.stringify({
+          model: model,
+          messages: [
+            { role: 'system', content: systemPrompt },
+            { role: 'user', content: userMessage }
+          ],
+          temperature: 0.85,
+          max_tokens: 4000
+        })
+      });
+
+      if (!response.ok) {
+        let errMsg = '';
+        try {
+          const errData = await response.json();
+          errMsg = errData.error && errData.error.message ? errData.error.message : '';
+        } catch(e) {}
+        if (response.status === 401) throw new Error('Invalid API key. Check your OpenRouter key.');
+        if (response.status === 402) throw new Error('Insufficient credits on your OpenRouter account.');
+        if (response.status === 403) throw new Error('REGION_BLOCKED:' + (errMsg || 'Model not available in your region'));
+        if (response.status === 429) throw new Error('RATE_LIMITED');
+        throw new Error('AI service error (' + response.status + '): ' + (errMsg || 'Unknown error'));
+      }
+
+      const data = await response.json();
+      const content = data.choices && data.choices[0] && data.choices[0].message && data.choices[0].message.content;
+      if (!content) throw new Error('EMPTY_RESPONSE');
+      return content;
+    }
+
     async function generateScript() {
       const idea = document.getElementById('idea-input').value.trim();
       if (!idea) return;
@@ -438,78 +502,80 @@ TONE/VIBE: ${currentTone}
 
 Remember: 7-8 scenes, ~8 seconds each, raw handheld camera style, realistic African dialogue with slang, hook in first 3 seconds, engagement drivers in every scene. Return ONLY valid JSON.`;
 
-      try {
-        const response = await fetch('https://openrouter.ai/api/v1/chat/completions', {
-          method: 'POST',
-          headers: {
-            'Authorization': 'Bearer ' + apiKey,
-            'Content-Type': 'application/json',
-            'HTTP-Referer': window.location.href,
-            'X-Title': 'ViralScript AI'
-          },
-          body: JSON.stringify({
-            model: 'google/gemini-2.0-flash-001',
-            messages: [
-              { role: 'system', content: systemPrompt },
-              { role: 'user', content: userMessage }
-            ],
-            temperature: 0.85,
-            max_tokens: 4000
-          })
-        });
+      // Build model list: selected model first, then fallbacks
+      const selectedModel = document.getElementById('model-select').value;
+      const modelQueue = [selectedModel];
+      FALLBACK_MODELS.forEach(m => { if (m !== selectedModel) modelQueue.push(m); });
+      // Remove duplicates
+      const uniqueModels = [...new Set(modelQueue)];
 
-        if (!response.ok) {
-          let errMsg = 'AI service error (' + response.status + ')';
-          try {
-            const errData = await response.json();
-            if (errData.error && errData.error.message) errMsg = errData.error.message;
-          } catch(e) {}
-          if (response.status === 401) errMsg = 'Invalid API key. Check your OpenRouter key.';
-          if (response.status === 402) errMsg = 'Insufficient credits on your OpenRouter account.';
-          if (response.status === 429) errMsg = 'Rate limited. Wait a moment and try again.';
-          throw new Error(errMsg);
-        }
+      let content = null;
+      let usedModel = null;
 
-        const data = await response.json();
-        const content = data.choices && data.choices[0] && data.choices[0].message && data.choices[0].message.content;
-
-        if (!content) throw new Error('AI returned empty response. Try again.');
-
-        // Parse JSON
-        let parsed;
+      for (let i = 0; i < uniqueModels.length; i++) {
+        const model = uniqueModels[i];
         try {
-          parsed = JSON.parse(content);
-        } catch(e) {
-          // Try extracting from code fences
-          const match = content.match(/```(?:json)?\s*([\s\S]*?)```/);
-          if (match) {
-            parsed = JSON.parse(match[1].trim());
-          } else {
-            const objMatch = content.match(/\{[\s\S]*\}/);
-            if (objMatch) parsed = JSON.parse(objMatch[0]);
-            else {
-              // Raw text fallback
-              rawText = content;
-              showResults([]);
-              return;
-            }
+          // Show which model we're trying
+          document.querySelector('.loading-card').textContent = '🎬 Trying ' + model.split('/').pop() + '...';
+          content = await callModel(model, apiKey, systemPrompt, userMessage);
+          usedModel = model;
+          break;
+        } catch(err) {
+          const msg = err.message;
+          // If region blocked or rate limited, try next model
+          if (msg.startsWith('REGION_BLOCKED:') || msg === 'RATE_LIMITED') {
+            console.warn(model + ' failed: ' + msg + ' — trying next...');
+            continue;
+          }
+          // For other errors, don't retry — show immediately
+          showError(msg.replace('REGION_BLOCKED:', ''));
+          setLoading(false);
+          return;
+        }
+      }
+
+      if (!content) {
+        showError('All AI models are unavailable in your region or rate limited. Try again in a minute.');
+        setLoading(false);
+        return;
+      }
+
+      // Save the working model for next time
+      if (usedModel !== selectedModel) {
+        document.getElementById('model-select').value = usedModel;
+        localStorage.setItem('vsa_model', usedModel);
+      }
+
+      // Parse JSON
+      let parsed;
+      try {
+        parsed = JSON.parse(content);
+      } catch(e) {
+        const match = content.match(/```(?:json)?\s*([\s\S]*?)```/);
+        if (match) {
+          parsed = JSON.parse(match[1].trim());
+        } else {
+          const objMatch = content.match(/\{[\s\S]*\}/);
+          if (objMatch) parsed = JSON.parse(objMatch[0]);
+          else {
+            rawText = content;
+            showResults([]);
+            setLoading(false);
+            return;
           }
         }
-
-        if (parsed.scenes && Array.isArray(parsed.scenes) && parsed.scenes.length > 0) {
-          scenes = parsed.scenes;
-          rawText = parsed.rawText || '';
-          showResults(scenes);
-        } else {
-          rawText = parsed.rawText || content;
-          showResults([]);
-        }
-
-      } catch(err) {
-        showError(err.message);
-      } finally {
-        setLoading(false);
       }
+
+      if (parsed.scenes && Array.isArray(parsed.scenes) && parsed.scenes.length > 0) {
+        scenes = parsed.scenes;
+        rawText = parsed.rawText || '';
+        showResults(scenes);
+      } else {
+        rawText = parsed.rawText || content;
+        showResults([]);
+      }
+
+      setLoading(false);
     }
 
     // --- UI Helpers ---
