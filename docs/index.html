@@ -265,6 +265,25 @@
     }
 
     .img-progress { font-size: 11px; color: var(--text-dimmer); text-align: center; padding: 8px; }
+
+    .char-sheet-card {
+      background: var(--card); border: 1px solid rgba(234,179,8,0.15);
+      border-radius: 14px; padding: 16px; margin-bottom: 12px;
+    }
+    .char-sheet-title {
+      font-size: 12px; font-weight: 700; color: var(--yellow);
+      text-transform: uppercase; letter-spacing: 1px; margin-bottom: 12px;
+    }
+    .char-info { margin-bottom: 14px; }
+    .char-info:last-child { margin-bottom: 0; }
+    .char-name {
+      font-size: 14px; font-weight: 700; color: var(--text);
+      margin-bottom: 6px; padding-bottom: 6px;
+      border-bottom: 1px solid var(--border);
+    }
+    .char-details { display: grid; grid-template-columns: 1fr 1fr; gap: 4px 16px; }
+    .char-row { font-size: 12px; color: var(--text-dim); line-height: 1.8; }
+    .frame-line { color: var(--text-dimmer); font-style: italic; font-size: 12px; }
   </style>
 </head>
 <body>
@@ -375,6 +394,7 @@
     let currentTone = 'comedy';
     let currentView = 'cards';
     let scenes = [];
+    let characterSheet = null;
     let rawText = '';
     let sceneImages = [];
 
@@ -538,7 +558,7 @@
       setLoading(true);
       clearResults();
 
-      const systemPrompt = `You are ViralScript AI — an expert at writing viral 60-second African-style short-form video scripts for TikTok, Reels, and Shorts.
+      const systemPrompt = `You are ViralScript AI — an expert at writing viral 60-second African-style short-form video scripts for TikTok, Reels, and Shorts with FULL character consistency and scene continuity.
 
 VISUAL STYLE RULES (CRITICAL):
 - ALL footage must be RAW — shot directly from a phone camera, no professional equipment
@@ -551,9 +571,17 @@ VISUAL STYLE RULES (CRITICAL):
 - ABSOLUTELY NO zoom in or zoom out — fixed focal length, camera stays at one distance
 - The footage must look like someone grabbed their phone and started recording real life
 
+CHARACTER CONSISTENCY + CONTINUITY (MANDATORY):
+- Generate a full CHARACTER SHEET for every named character before the scenes
+- Each character sheet must include: name, age, ethnicity, height + body proportions, skin tone (specific shade), face structure (eyes, nose, jaw), hair (style, texture, hairline), distinct features (scars, posture), default expression, full outfit + footwear + accessories, movement style, personality
+- Once defined, a character MUST remain 100% identical across ALL scenes — no changes to face, body, skin tone, hair, or outfit (ANTI-DRIFT RULE)
+- Each scene must END with a FRAME STATE (position, posture, expression, objects in hand, environment, camera angle, lighting)
+- Each scene (after the first) must START by matching the END FRAME STATE of the previous scene exactly
+- Behavior consistency: keep movement, reactions, and pacing identical throughout
+
 SCRIPT RULES:
 - Output exactly 7-8 scenes, each ~8 seconds
-- Each scene MUST have: sceneNumber, duration, camera, action, dialogue, engagement
+- Each scene MUST have: sceneNumber, duration, camera, action, dialogue, engagement, endFrame
 - Realistic African dialogue (mix English + local slang naturally — Nigerian, Ghanaian, South African, Kenyan, etc.)
 - Hook must be in the first 3 seconds — grab attention instantly
 - Every scene must drive engagement (comments, shares, saves)
@@ -566,17 +594,36 @@ SCRIPT RULES:
 
 OUTPUT FORMAT — Return ONLY valid JSON (no markdown fences, no code blocks):
 {
+  "characterSheet": {
+    "character1Name": {
+      "name": "full name",
+      "age": "age",
+      "ethnicity": "specific African ethnicity",
+      "height": "height",
+      "bodyType": "body proportions",
+      "skinTone": "specific skin tone description",
+      "face": "face structure, eyes, nose, jaw description",
+      "hair": "style, texture, hairline",
+      "distinctFeatures": "scars, posture, or unique traits",
+      "defaultExpression": "resting facial expression",
+      "outfit": "full clothing description including footwear and accessories",
+      "movementStyle": "how they move and carry themselves",
+      "personality": "personality traits"
+    }
+  },
   "scenes": [
     {
       "sceneNumber": 1,
       "duration": "0:00 - 0:08",
       "camera": "natural handheld camera movement description",
-      "action": "what is happening physically in the scene",
+      "action": "what is happening physically in the scene, character positions and movements",
       "dialogue": "what characters say (natural African speech)",
-      "engagement": "why viewer keeps watching"
+      "engagement": "why viewer keeps watching",
+      "startFrame": "starting position, posture, expression, environment, lighting (for scene 1, describe the initial setup)",
+      "endFrame": "ending position, posture, expression, objects in hand, environment, camera angle, lighting"
     }
   ],
-  "rawText": "The full script in clean copy-paste format. Plain text only, no emojis, no icons. Labels: SCENE, Camera, Action, Dialogue, Engagement."
+  "rawText": "Full script in clean copy-paste format. Starts with CHARACTER SHEET section listing all characters with full details. Then each scene with: SCENE number, duration, Camera, Action, Dialogue, Engagement, START FRAME (for scene 2+), END FRAME. Plain text only, no emojis, no icons, no decorative symbols."
 }`;
 
       const userMessage = `Create a viral 60-second African-style short-form video script for this idea:
@@ -584,7 +631,7 @@ OUTPUT FORMAT — Return ONLY valid JSON (no markdown fences, no code blocks):
 IDEA: ${idea}
 TONE/VIBE: ${currentTone}
 
-Remember: 7-8 scenes, ~8 seconds each. RAW phone footage only — natural morning sunlight, no filters, no color grading, no CGI, no VFX, no background music, no zoom. All African people and locations. Handheld camera — natural movement only. Realistic African dialogue with slang. Hook in first 3 seconds. No emojis or icons in the output. Return ONLY valid JSON.`;
+Remember: 7-8 scenes, ~8 seconds each. RAW phone footage only — natural morning sunlight, no filters, no color grading, no CGI, no VFX, no background music, no zoom. All African people and locations. Handheld camera — natural movement only. Realistic African dialogue with slang. Hook in first 3 seconds. No emojis or icons. CHARACTER SHEET is mandatory — define every character fully before scenes. Every scene needs START FRAME and END FRAME for continuity. ANTI-DRIFT: characters must look identical in every scene. Return ONLY valid JSON.`;
 
       // Try models with fallback
       const selectedModel = document.getElementById('model-select').value;
@@ -635,10 +682,12 @@ Remember: 7-8 scenes, ~8 seconds each. RAW phone footage only — natural mornin
 
       if (parsed.scenes && Array.isArray(parsed.scenes) && parsed.scenes.length > 0) {
         scenes = parsed.scenes;
+        characterSheet = parsed.characterSheet || null;
         rawText = parsed.rawText || '';
       } else {
         rawText = parsed.rawText || content;
         scenes = [];
+        characterSheet = null;
       }
 
       // Show results immediately
@@ -687,6 +736,7 @@ Remember: 7-8 scenes, ~8 seconds each. RAW phone footage only — natural mornin
 
     function clearResults() {
       scenes = [];
+      characterSheet = null;
       rawText = '';
       sceneImages = [];
       document.getElementById('results-section').classList.add('hidden');
@@ -703,6 +753,33 @@ Remember: 7-8 scenes, ~8 seconds each. RAW phone footage only — natural mornin
       banner.classList.remove('hidden');
     }
 
+    function buildCharSheetHtml() {
+      if (!characterSheet) return '';
+      let html = '<div class="char-sheet-card"><div class="char-sheet-title">CHARACTER SHEET</div>';
+      for (const [key, ch] of Object.entries(characterSheet)) {
+        html += `
+          <div class="char-info">
+            <div class="char-name">${escHtml(ch.name || key)}</div>
+            <div class="char-details">
+              <div class="char-row"><span class="scene-line-label">Age:</span> ${escHtml(ch.age)}</div>
+              <div class="char-row"><span class="scene-line-label">Ethnicity:</span> ${escHtml(ch.ethnicity)}</div>
+              <div class="char-row"><span class="scene-line-label">Height:</span> ${escHtml(ch.height)}</div>
+              <div class="char-row"><span class="scene-line-label">Body:</span> ${escHtml(ch.bodyType)}</div>
+              <div class="char-row"><span class="scene-line-label">Skin:</span> ${escHtml(ch.skinTone)}</div>
+              <div class="char-row"><span class="scene-line-label">Face:</span> ${escHtml(ch.face)}</div>
+              <div class="char-row"><span class="scene-line-label">Hair:</span> ${escHtml(ch.hair)}</div>
+              <div class="char-row"><span class="scene-line-label">Features:</span> ${escHtml(ch.distinctFeatures)}</div>
+              <div class="char-row"><span class="scene-line-label">Expression:</span> ${escHtml(ch.defaultExpression)}</div>
+              <div class="char-row"><span class="scene-line-label">Outfit:</span> ${escHtml(ch.outfit)}</div>
+              <div class="char-row"><span class="scene-line-label">Movement:</span> ${escHtml(ch.movementStyle)}</div>
+              <div class="char-row"><span class="scene-line-label">Personality:</span> ${escHtml(ch.personality)}</div>
+            </div>
+          </div>`;
+      }
+      html += '</div>';
+      return html;
+    }
+
     function showResults(scenesArr) {
       document.getElementById('loading-section').classList.add('hidden');
       document.getElementById('empty-state').classList.add('hidden');
@@ -712,8 +789,13 @@ Remember: 7-8 scenes, ~8 seconds each. RAW phone footage only — natural mornin
       const count = scenesArr.length > 0 ? scenesArr.length + ' scenes' : 'ready to copy';
       document.getElementById('results-count').textContent = '(' + count + ')';
 
+      let cardsHtml = buildCharSheetHtml();
+
       if (scenesArr.length > 0) {
-        document.getElementById('cards-view').innerHTML = scenesArr.map((s, i) => `
+        cardsHtml += scenesArr.map((s, i) => {
+          const startFrame = s.startFrame ? `                <div class="scene-line frame-line"><span class="scene-line-label">Start Frame:</span> ${escHtml(s.startFrame)}</div>` : '';
+          const endFrame = s.endFrame ? `                <div class="scene-line frame-line"><span class="scene-line-label">End Frame:</span> ${escHtml(s.endFrame)}</div>` : '';
+          return `
           <div class="scene-card" id="scene-${s.sceneNumber}">
             <div class="scene-img-wrap" id="img-wrap-${i}">
               <div class="scene-img-placeholder">
@@ -733,32 +815,65 @@ Remember: 7-8 scenes, ~8 seconds each. RAW phone footage only — natural mornin
                 <div class="scene-line"><span class="scene-line-label">Camera:</span> ${escHtml(s.camera)}</div>
                 <div class="scene-line"><span class="scene-line-label">Action:</span> ${escHtml(s.action)}</div>
                 <div class="scene-line dialogue"><span class="scene-line-label">Dialogue:</span> ${escHtml(s.dialogue)}</div>
-                <div class="scene-line"><span class="scene-line-label">Engagement:</span> ${escHtml(s.engagement)}</div>
+                <div class="scene-line"><span class="scene-line-label">Engagement:</span> ${escHtml(s.engagement)}</div>${startFrame}${endFrame}
               </div>
             </div>
-          </div>
-        `).join('');
+          </div>`;
+        }).join('');
       }
 
+      document.getElementById('cards-view').innerHTML = cardsHtml;
+
+      // Text view
       let textContent = '';
       if (rawText) {
         textContent = rawText;
       } else if (scenesArr.length > 0) {
-        textContent = scenesArr.map(s =>
-          `SCENE ${s.sceneNumber} (${s.duration})\n\nCamera: ${s.camera}\nAction: ${s.action}\nDialogue: ${s.dialogue}\nEngagement: ${s.engagement}`
-        ).join('\n\n---\n\n');
+        let sheetText = buildCharSheetText();
+        textContent = sheetText + scenesArr.map(s => {
+          let t = `SCENE ${s.sceneNumber} (${s.duration})\n\nCamera: ${s.camera}\nAction: ${s.action}\nDialogue: ${s.dialogue}\nEngagement: ${s.engagement}`;
+          if (s.startFrame) t += `\nStart Frame: ${s.startFrame}`;
+          if (s.endFrame) t += `\nEnd Frame: ${s.endFrame}`;
+          return t;
+        }).join('\n\n---\n\n');
       }
       document.getElementById('text-content').textContent = textContent;
       setView(currentView);
+    }
+
+    function buildCharSheetText() {
+      if (!characterSheet) return '';
+      let text = 'CHARACTER SHEET\n';
+      for (const [key, ch] of Object.entries(characterSheet)) {
+        text += `\n--- ${ch.name || key} ---\n`;
+        text += `Age: ${ch.age}\n`;
+        text += `Ethnicity: ${ch.ethnicity}\n`;
+        text += `Height: ${ch.height}\n`;
+        text += `Body: ${ch.bodyType}\n`;
+        text += `Skin Tone: ${ch.skinTone}\n`;
+        text += `Face: ${ch.face}\n`;
+        text += `Hair: ${ch.hair}\n`;
+        text += `Distinct Features: ${ch.distinctFeatures}\n`;
+        text += `Default Expression: ${ch.defaultExpression}\n`;
+        text += `Outfit: ${ch.outfit}\n`;
+        text += `Movement Style: ${ch.movementStyle}\n`;
+        text += `Personality: ${ch.personality}\n`;
+      }
+      text += '\n';
+      return text;
     }
 
     function copyAll() {
       let text = '';
       if (rawText) { text = rawText; }
       else if (scenes.length > 0) {
-        text = scenes.map(s =>
-          `SCENE ${s.sceneNumber} (${s.duration})\n\nCamera: ${s.camera}\nAction: ${s.action}\nDialogue: ${s.dialogue}\nEngagement: ${s.engagement}`
-        ).join('\n\n---\n\n');
+        let sheetText = buildCharSheetText();
+        text = sheetText + scenes.map(s => {
+          let t = `SCENE ${s.sceneNumber} (${s.duration})\n\nCamera: ${s.camera}\nAction: ${s.action}\nDialogue: ${s.dialogue}\nEngagement: ${s.engagement}`;
+          if (s.startFrame) t += `\nStart Frame: ${s.startFrame}`;
+          if (s.endFrame) t += `\nEnd Frame: ${s.endFrame}`;
+          return t;
+        }).join('\n\n---\n\n');
       }
       navigator.clipboard.writeText(text).then(() => {
         const btn = document.getElementById('copy-all-btn');
@@ -770,7 +885,10 @@ Remember: 7-8 scenes, ~8 seconds each. RAW phone footage only — natural mornin
 
     function copyScene(index) {
       const s = scenes[index];
-      const text = `SCENE ${s.sceneNumber} (${s.duration})\n\nCamera: ${s.camera}\nAction: ${s.action}\nDialogue: ${s.dialogue}\nEngagement: ${s.engagement}`;
+      let t = `SCENE ${s.sceneNumber} (${s.duration})\n\nCamera: ${s.camera}\nAction: ${s.action}\nDialogue: ${s.dialogue}\nEngagement: ${s.engagement}`;
+      if (s.startFrame) t += `\nStart Frame: ${s.startFrame}`;
+      if (s.endFrame) t += `\nEnd Frame: ${s.endFrame}`;
+      const text = t;
       navigator.clipboard.writeText(text).then(() => {
         const card = document.getElementById('scene-' + s.sceneNumber);
         const btn = card.querySelector('.copy-scene-btn');
