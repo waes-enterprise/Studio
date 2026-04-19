@@ -256,10 +256,23 @@
     .copy-scene-btn.copied { opacity: 1; background: var(--green-dim); color: var(--green); border-color: rgba(34,197,94,0.3); }
 
     .scene-lines { display: flex; flex-direction: column; gap: 6px; }
-    .scene-line { font-size: 13px; color: var(--text-dim); }
+    .scene-line {
+      font-size: 13px; color: var(--text-dim); display: flex; align-items: flex-start; gap: 6px;
+      padding: 6px 8px; border-radius: 8px; background: rgba(255,255,255,0.02); transition: background 0.15s;
+    }
+    .scene-line:hover { background: rgba(255,255,255,0.05); }
+    .scene-line-content { flex: 1; }
     .scene-line-label { color: var(--text-dimmer); font-weight: 600; margin-right: 4px; }
-    .scene-line.dialogue { color: var(--text); font-weight: 500; }
+    .scene-line.dialogue .scene-line-content { color: var(--text); font-weight: 500; }
     .scene-line.dialogue .scene-line-label { font-weight: 400; color: var(--text-dimmer); }
+    .copy-field-btn {
+      flex-shrink: 0; background: none; border: 1px solid var(--border); border-radius: 5px;
+      padding: 1px 6px; font-size: 10px; color: var(--text-dimmer); cursor: pointer;
+      opacity: 0; transition: all 0.15s; line-height: 1.6;
+    }
+    .scene-line:hover .copy-field-btn { opacity: 1; }
+    .copy-field-btn:hover { background: rgba(255,255,255,0.08); color: var(--text); }
+    .copy-field-btn.copied { opacity: 1; color: var(--green); border-color: rgba(34,197,94,0.3); }
 
     .text-view {
       background: var(--card); border: 1px solid var(--border); border-radius: 14px; padding: 16px;
@@ -429,20 +442,57 @@
     function hideProgress() { document.getElementById('progress-section').classList.add('hidden'); }
 
     // --- Build HTML helpers ---
+    function fieldLine(icon, label, value, sceneIdx, fieldKey) {
+      var cls = fieldKey === 'dialogue' ? ' scene-line dialogue' : '';
+      return '<div class="scene-line' + cls + '"><span class="scene-line-content"><span class="scene-line-label">' + icon + ' ' + label + ':</span> ' + escHtml(value) + '</span>'
+        + '<button class="copy-field-btn" onclick="copyField(this, ' + sceneIdx + ', \'' + fieldKey + '\')" title="Copy ' + label + '">📋</button></div>';
+    }
+
+    function copyField(btn, sceneIdx, fieldKey) {
+      var s = scenes[sceneIdx];
+      var cb = buildCharText();
+      var text = '';
+      if (fieldKey === 'outfit' || fieldKey === 'expression' || fieldKey === 'physicalDetails' || fieldKey === 'props' || fieldKey === 'speechStyle') {
+        // Character-level field — find matching character or include all
+        var parts = [];
+        if (cb) parts.push(cb);
+        for (var i = 0; i < characters.length; i++) {
+          var c = characters[i];
+          var val = c[fieldKey] || '';
+          if (val) parts.push(c.name + ' - ' + fieldKey + ': ' + val);
+        }
+        text = parts.join('\n');
+      } else {
+        // Scene-level field
+        if (cb) text = cb + '\n\n';
+        text += '--- SCENE ' + s.sceneNumber + ' ---\n';
+        text += labelForKey(fieldKey) + ': ' + (s[fieldKey] || '');
+      }
+      navigator.clipboard.writeText(text).then(function() {
+        btn.textContent = '✓'; btn.classList.add('copied');
+        setTimeout(function() { btn.textContent = '📋'; btn.classList.remove('copied'); }, 1500);
+      });
+    }
+
+    function labelForKey(key) {
+      var map = { camera: 'Camera', action: 'Action', dialogue: 'Dialogue', engagement: 'Engagement', outfit: 'Outfit', expression: 'Expression', physicalDetails: 'Physical Details', props: 'Props', speechStyle: 'Speech Style' };
+      return map[key] || key;
+    }
+
     function buildSceneCardHtml(s, index) {
       var h = '<div class="scene-card streaming-in" id="scene-' + s.sceneNumber + '">';
       h += '<div class="scene-top"><div>';
       h += '<span class="scene-badge">SCENE ' + s.sceneNumber + '</span>';
       h += '<span class="scene-duration">' + escHtml(s.duration) + '</span>';
       if (s.characters && s.characters.length > 0) h += '<span class="scene-duration" style="margin-left:4px">' + escHtml(s.characters.join(', ')) + '</span>';
-      h += '</div><button class="copy-scene-btn" onclick="copyScene(' + index + ')">📋 Copy</button></div>';
+      h += '</div><button class="copy-scene-btn" onclick="copyScene(' + index + ')">📋 Copy All</button></div>';
       // Embedded character sheet inside every scene
       h += buildInlineCharSheet();
       h += '<div class="scene-lines">';
-      h += '<div class="scene-line"><span class="scene-line-label">📹 Camera:</span> ' + escHtml(s.camera) + '</div>';
-      h += '<div class="scene-line"><span class="scene-line-label">🎬 Action:</span> ' + escHtml(s.action) + '</div>';
-      h += '<div class="scene-line dialogue"><span class="scene-line-label">💬 Dialogue:</span> ' + escHtml(s.dialogue) + '</div>';
-      h += '<div class="scene-line"><span class="scene-line-label">📊 Engagement:</span> ' + escHtml(s.engagement) + '</div>';
+      h += fieldLine('📹', 'Camera', s.camera, index, 'camera');
+      h += fieldLine('🎬', 'Action', s.action, index, 'action');
+      h += fieldLine('💬', 'Dialogue', s.dialogue, index, 'dialogue');
+      h += fieldLine('📊', 'Engagement', s.engagement, index, 'engagement');
       h += '</div></div>';
       return h;
     }
@@ -591,23 +641,29 @@
       setLoading(true);
       clearResults();
 
-      // PROMPT — rich character profiles for AI image/video generator consistency
+      // PROMPT — ultra-detailed fields for image/video generation prompts
       var sys = 'ViralScript AI: Write viral 60s African-style short-form video scripts (TikTok, Reels, Shorts).'
         + '\n\nCHARACTER CONSISTENCY (CRITICAL — for AI image/video generation):'
         + '\n- Each character MUST have a CONSISTENT appearance across ALL scenes so AI generators produce visually consistent results'
         + '\n- Define DETAILED visual traits that never change between scenes'
+        + '\n\nCHARACTER FIELDS (be EXTREMELY detailed — these are used as AI image/video prompts):'
+        + '\n  name, role, description (personality, 2-3 sentences),'
+        + '\n  speechStyle (how they talk, accent, vocabulary level: e.g. "fast Lagos Pidgin with Yoruba phrases, loud and animated"),'
+        + '\n  outfit (FULL head-to-toe: hair accessory, top fabric/color/pattern, bottom, shoes, jewelry, accessories. e.g. "red durag, oversized white graphic tee with faded print, distressed black cargo shorts, white Air Force 1s with scuff marks, thin silver chain necklace, black digital watch on left wrist"),'
+        + '\n  expression (default face, micro-expressions: e.g. "slightly raised left eyebrow, relaxed jaw, confident half-smile showing teeth, eyes slightly narrowed"),'
+        + '\n  physicalDetails (skin tone description, build, age range, exact height, hair style/fade type, facial hair, distinguishing features: e.g. "deep dark brown skin, muscular athletic build, early 20s, 5\'11, fresh low skin fade with sharp line-up, thin mustache, small scar on left cheekbone"),'
+        + '\n  props (every item they carry, wear, or interact with — include color, size, condition: e.g. "worn brown leather satchel bag across right shoulder, cracked iPhone 13 in left hand with green case, rolled-up newspaper under right arm")'
+        + '\n\nSCENE FIELDS (each must be DETAILED for AI video generation):'
+        + '\n  camera (lens type, movement, speed, angle, framing: e.g. "Slow push-in with 50mm lens, low angle at knee height, subject centered in frame, shallow depth of field")'
+        + '\n  action (body language, pace, specific movements, timing: e.g. "Man slowly turns around, shoulders dropping, pauses for 2 seconds before speaking, wipes sweat from forehead with back of hand")'
+        + '\n  dialogue (include tone, delivery notes, accent cues in parentheses: e.g. "(Said with exhausted sarcasm, trailing off) Ah ah, so you people will just stress me for nothing?")'
+        + '\n  engagement (hook tactic, audience reaction trigger: e.g. "Plot twist reveal — freeze frame on character\'s shocked face with zoom-in, text overlay: WAIT FOR IT")'
         + '\n\nRULES:'
-        + '\n- 2-4 characters with ALL these fields:'
-        + '\n  name, role, description (personality), speechStyle (how they talk),'
-        + '\n  outfit (exact clothing: e.g. "yellow ankara print shirt, dark blue jeans, white sneakers, gold chain"),'
-        + '\n  expression (default face/mood: e.g. "confident smirk, slightly raised eyebrow"),'
-        + '\n  physicalDetails (skin tone, build, age range, hair, height: e.g. "dark brown skin, athletic build, early 20s, low fade haircut, 6ft"),'
-        + '\n  props (what they carry or interact with: e.g. "soccer ball, phone in back pocket, plastic bag")'
-        + '\n- 7-8 scenes, ~8s each. Fields: sceneNumber, duration, characters[], camera, action, dialogue, engagement'
-        + '\n- Handheld camera (shake, quick zoom, snap zoom, whip pan)'
-        + '\n- African dialogue with slang — each character must sound DISTINCT'
+        + '\n- 2-4 characters, 7-8 scenes, ~8s each. Fields: sceneNumber, duration, characters[]'
+        + '\n- Handheld camera style with African energy'
+        + '\n- African dialogue with local slang — each character must sound DISTINCT'
         + '\n- Hook in first 3s, engagement hooks every scene'
-        + '\n- Fast-paced, relatable African situations, no filler'
+        + '\n- NO filler, NO generic descriptions — every line must be specific enough to generate from'
         + '\n\nOUTPUT: Return ONLY valid JSON, no markdown:'
         + '\n{"characters":[{"name":"","role":"","description":"","speechStyle":"","outfit":"","expression":"","physicalDetails":"","props":""}],'
         + '"scenes":[{"sceneNumber":1,"duration":"0:00-0:08","characters":[],"camera":"","action":"","dialogue":"","engagement":""}]}';
