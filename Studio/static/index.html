@@ -468,7 +468,7 @@
         text += '--- SCENE ' + s.sceneNumber + ' ---\n';
         text += labelForKey(fieldKey) + ': ' + (s[fieldKey] || '');
       }
-      navigator.clipboard.writeText(text).then(function() {
+      clipCopy(text, function() {
         btn.textContent = '✓'; btn.classList.add('copied');
         setTimeout(function() { btn.textContent = '📋'; btn.classList.remove('copied'); }, 1500);
       });
@@ -570,7 +570,7 @@
     function copyFullPrompt(index) {
       var s = scenes[index];
       var text = buildFullPrompt(s);
-      navigator.clipboard.writeText(text).then(function() {
+      clipCopy(text, function() {
         var card = document.getElementById('scene-' + s.sceneNumber);
         var btns = card.querySelectorAll('.copy-scene-btn');
         if (btns[1]) { btns[1].textContent = '✅ Copied!'; setTimeout(function() { btns[1].textContent = '✨ Copy Prompt'; }, 2000); }
@@ -904,8 +904,34 @@
       setView(currentView);
     }
 
+    // --- Robust clipboard copy (works on all browsers including mobile) ---
+    function clipCopy(text, onSuccess) {
+      // Method 1: Clipboard API
+      if (navigator.clipboard && navigator.clipboard.writeText) {
+        navigator.clipboard.writeText(text).then(onSuccess).catch(function() { fallbackCopy(text, onSuccess); });
+      } else {
+        fallbackCopy(text, onSuccess);
+      }
+    }
+    function fallbackCopy(text, onSuccess) {
+      // Method 2: Hidden textarea + execCommand
+      try {
+        var ta = document.createElement('textarea');
+        ta.value = text;
+        ta.style.cssText = 'position:fixed;left:-9999px;top:-9999px;opacity:0';
+        document.body.appendChild(ta);
+        ta.focus(); ta.select();
+        var ok = document.execCommand('copy');
+        document.body.removeChild(ta);
+        if (ok) { if (onSuccess) onSuccess(); }
+        else { alert('Copy failed. Long-press the text below to copy manually:\n\n' + text.substring(0, 500)); }
+      } catch(e) {
+        alert('Copy failed. Long-press the text below to copy manually:\n\n' + text.substring(0, 500));
+      }
+    }
+
     function copyAll() {
-      navigator.clipboard.writeText(buildFullText()).then(function() {
+      clipCopy(buildFullText(), function() {
         var btn = document.getElementById('copy-all-btn');
         btn.textContent = '✅ Copied!'; btn.classList.add('copied');
         setTimeout(function() { btn.textContent = '📋 Copy All'; btn.classList.remove('copied'); }, 2000);
@@ -915,11 +941,10 @@
     function copyScene(index) {
       var s = scenes[index];
       var text = buildSceneText(s);
-      navigator.clipboard.writeText(text).then(function() {
+      clipCopy(text, function() {
         var card = document.getElementById('scene-' + s.sceneNumber);
-        var btn = card.querySelector('.copy-scene-btn');
-        btn.textContent = '✅ Copied'; btn.classList.add('copied');
-        setTimeout(function() { btn.textContent = '📋 Copy'; btn.classList.remove('copied'); }, 2000);
+        var btns = card.querySelectorAll('.copy-scene-btn');
+        if (btns[0]) { btns[0].textContent = '✅ Copied'; btns[0].classList.add('copied'); setTimeout(function() { btns[0].textContent = '📋 Copy All'; btns[0].classList.remove('copied'); }, 2000); }
       });
     }
 
