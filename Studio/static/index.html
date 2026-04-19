@@ -485,7 +485,8 @@
       h += '<span class="scene-badge">SCENE ' + s.sceneNumber + '</span>';
       h += '<span class="scene-duration">' + escHtml(s.duration) + '</span>';
       if (s.characters && s.characters.length > 0) h += '<span class="scene-duration" style="margin-left:4px">' + escHtml(s.characters.join(', ')) + '</span>';
-      h += '</div><button class="copy-scene-btn" onclick="copyScene(' + index + ')">📋 Copy All</button></div>';
+      h += '</div><div style="display:flex;gap:4px"><button class="copy-scene-btn" style="opacity:1" onclick="copyScene(' + index + ')">📋 Copy All</button>'
+        + '<button class="copy-scene-btn" style="opacity:1;border-color:rgba(168,85,247,0.3);color:var(--purple)" onclick="copyFullPrompt(' + index + ')">✨ Copy Prompt</button></div></div';
       // Embedded character sheet inside every scene
       h += buildInlineCharSheet();
       h += '<div class="scene-lines">';
@@ -539,6 +540,41 @@
       var sc = document.getElementById('scenes-container');
       if (sc) sc.insertAdjacentHTML('beforebegin', h);
       else document.getElementById('cards-view').insertAdjacentHTML('afterbegin', h);
+    }
+
+    function buildFullPrompt(s) {
+      var parts = [];
+      // Camera + action opening
+      if (s.camera) parts.push(s.camera);
+      if (s.action) parts.push(s.action);
+      // Character appearance paragraph
+      if (characters.length > 0) {
+        var charDescs = [];
+        for (var i = 0; i < characters.length; i++) {
+          var c = characters[i];
+          var bits = [];
+          if (c.name) bits.push(c.name);
+          if (c.physicalDetails) bits.push(c.physicalDetails);
+          if (c.outfit) bits.push('wearing ' + c.outfit);
+          if (c.expression) bits.push(c.expression);
+          if (c.props) bits.push('with ' + c.props);
+          if (bits.length > 1) charDescs.push(bits.join(', '));
+        }
+        if (charDescs.length > 0) parts.push('Characters: ' + charDescs.join('. '));
+      }
+      // Dialogue
+      if (s.dialogue) parts.push(s.dialogue);
+      return parts.join('. ') + '.';
+    }
+
+    function copyFullPrompt(index) {
+      var s = scenes[index];
+      var text = buildFullPrompt(s);
+      navigator.clipboard.writeText(text).then(function() {
+        var card = document.getElementById('scene-' + s.sceneNumber);
+        var btns = card.querySelectorAll('.copy-scene-btn');
+        if (btns[1]) { btns[1].textContent = '✅ Copied!'; setTimeout(function() { btns[1].textContent = '✨ Copy Prompt'; }, 2000); }
+      });
     }
 
     function buildCharText() {
