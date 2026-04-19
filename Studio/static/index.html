@@ -529,12 +529,64 @@
       return parts.join('\n');
     }
 
+    // --- Cache key for localStorage ---
+    function getCacheKey(idea, tone) {
+      return 'vsa_' + idea.toLowerCase().replace(/\s+/g, '_').substring(0, 80) + '_' + tone;
+    }
+
+    function loadFromCache(idea, tone) {
+      try {
+        var cached = localStorage.getItem(getCacheKey(idea, tone));
+        if (!cached) return null;
+        return JSON.parse(cached);
+      } catch(e) { return null; }
+    }
+
+    function saveToCache(idea, tone, data) {
+      try {
+        // Keep max 20 cached scripts
+        var keys = [];
+        for (var i = 0; i < localStorage.length; i++) {
+          var k = localStorage.key(i);
+          if (k && k.startsWith('vsa_')) keys.push(k);
+        }
+        if (keys.length >= 20) {
+          keys.sort(function(a, b) { return (localStorage.getItem(a) || '').length - (localStorage.getItem(b) || '').length; });
+          for (var j = 0; j < keys.length - 18; j++) localStorage.removeItem(keys[j]);
+        }
+        localStorage.setItem(getCacheKey(idea, tone), JSON.stringify(data));
+      } catch(e) {}
+    }
+
     // --- Generate with INCREMENTAL streaming render ---
     async function generateScript() {
       var idea = document.getElementById('idea-input').value.trim();
       if (!idea) return;
       var apiKey = getApiKey();
       if (!apiKey) { showError('Please save your OpenRouter API key first.'); return; }
+
+      // Check cache first
+      var cached = loadFromCache(idea, currentTone);
+      if (cached && cached.characters && cached.scenes && cached.scenes.length > 0) {
+        setLoading(true);
+        clearResults();
+        characters = cached.characters;
+        scenes = cached.scenes;
+        renderCharSheet(characters);
+        document.getElementById('results-section').classList.remove('hidden');
+        document.getElementById('results-count').textContent = '(' + scenes.length + ' scenes - cached)';
+        var container = document.getElementById('scenes-container');
+        if (!container) {
+          document.getElementById('cards-view').innerHTML = '<div class="scenes" id="scenes-container"></div>';
+          container = document.getElementById('scenes-container');
+        }
+        for (var ci = 0; ci < scenes.length; ci++) {
+          container.insertAdjacentHTML('beforeend', buildSceneCardHtml(scenes[ci], ci));
+        }
+        document.getElementById('text-content').textContent = buildFullText();
+        setLoading(false);
+        return;
+      }
 
       setLoading(true);
       clearResults();
@@ -574,13 +626,13 @@
             'X-Title': 'ViralScript AI'
           },
           body: JSON.stringify({
-            model: 'google/gemini-2.0-flash-001',
+            model: 'google/gemini-2.0-flash-lite-001',
             messages: [
               { role: 'system', content: sys },
               { role: 'user', content: usr }
             ],
             temperature: 0.7,
-            max_tokens: 1500,
+            max_tokens: 2000,
             stream: true
           })
         });
@@ -668,6 +720,9 @@
         // Final parse — with JSON repair for malformed AI output
         var parsed = safeJsonParse(fullContent);
         if (!parsed) { rawText = fullContent; showError('AI returned invalid JSON. Tap Generate to retry.'); return; }
+
+        // Cache the result
+        saveToCache(idea, currentTone, { characters: parsed.characters, scenes: parsed.scenes });
 
         characters = parsed.characters || characters;
         rawText = parsed.rawText || '';
