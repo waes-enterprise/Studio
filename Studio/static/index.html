@@ -1,0 +1,778 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>ViralScript AI — African Short-Form Video Scripts</title>
+  <meta name="description" content="Generate viral 60-second African-style short-form video scripts with one click." />
+  <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='90'>🎬</text></svg>" />
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+    :root {
+      --bg: #030712;
+      --card: #111827;
+      --card-hover: #1a2332;
+      --border: rgba(255,255,255,0.08);
+      --border-hover: rgba(234,179,8,0.2);
+      --yellow: #eab308;
+      --yellow-dim: rgba(234,179,8,0.15);
+      --orange: #f97316;
+      --text: #f3f4f6;
+      --text-dim: #9ca3af;
+      --text-dimmer: #6b7280;
+      --green: #22c55e;
+      --green-dim: rgba(34,197,94,0.15);
+      --red: #ef4444;
+      --red-dim: rgba(239,68,68,0.12);
+      --purple: #a855f7;
+      --purple-dim: rgba(168,85,247,0.15);
+    }
+
+    body {
+      font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+      background: var(--bg);
+      color: var(--text);
+      min-height: 100vh;
+      line-height: 1.6;
+      -webkit-font-smoothing: antialiased;
+    }
+
+    .header {
+      position: sticky; top: 0; z-index: 10;
+      background: rgba(3,7,18,0.8); backdrop-filter: blur(20px);
+      border-bottom: 1px solid var(--border); padding: 12px 16px;
+    }
+    .header-inner {
+      max-width: 640px; margin: 0 auto;
+      display: flex; align-items: center; justify-content: space-between;
+    }
+    .logo-group { display: flex; align-items: center; gap: 10px; }
+    .logo {
+      width: 36px; height: 36px; border-radius: 10px;
+      background: linear-gradient(135deg, var(--yellow), var(--orange));
+      display: flex; align-items: center; justify-content: center;
+      font-weight: 800; color: #000; font-size: 16px;
+    }
+    .logo-text { font-size: 17px; font-weight: 700; }
+    .logo-text span { background: linear-gradient(90deg, var(--yellow), var(--orange)); -webkit-background-clip: text; -webkit-text-fill-color: transparent; }
+    .logo-sub { font-size: 10px; color: var(--text-dimmer); margin-top: -2px; }
+    .view-toggle { display: flex; gap: 4px; }
+    .view-btn {
+      padding: 5px 12px; border-radius: 8px; font-size: 12px; font-weight: 600;
+      border: 1px solid var(--border); background: transparent; color: var(--text-dim);
+      cursor: pointer; transition: all 0.2s;
+    }
+    .view-btn.active { background: var(--yellow-dim); color: var(--yellow); border-color: rgba(234,179,8,0.3); }
+
+    .main { max-width: 640px; margin: 0 auto; padding: 20px 16px; }
+
+    .settings-panel {
+      background: var(--card); border: 1px solid var(--border); border-radius: 14px;
+      padding: 16px; margin-bottom: 16px;
+    }
+    .settings-label {
+      font-size: 11px; font-weight: 600; color: var(--text-dimmer);
+      text-transform: uppercase; letter-spacing: 0.5px; margin-bottom: 8px;
+    }
+    .key-input-row { display: flex; gap: 8px; }
+    .key-input {
+      flex: 1; background: rgba(0,0,0,0.4); border: 1px solid var(--border);
+      border-radius: 10px; padding: 10px 12px; color: var(--text); font-size: 13px;
+      font-family: 'SF Mono', 'Fira Code', monospace; outline: none; transition: border-color 0.2s;
+    }
+    .key-input:focus { border-color: rgba(234,179,8,0.4); }
+    .key-input::placeholder { color: var(--text-dimmer); }
+    .save-btn {
+      padding: 10px 16px; border-radius: 10px; border: none; cursor: pointer;
+      background: var(--yellow-dim); color: var(--yellow); font-size: 12px; font-weight: 600;
+      transition: all 0.2s; white-space: nowrap;
+    }
+    .save-btn:hover { background: rgba(234,179,8,0.25); }
+    .key-status { font-size: 11px; margin-top: 6px; color: var(--text-dimmer); }
+    .key-status.connected { color: var(--green); }
+    .key-status.error { color: var(--red); }
+
+    .input-card {
+      background: var(--card); border: 1px solid var(--border); border-radius: 14px;
+      padding: 16px; margin-bottom: 16px;
+    }
+    .input-label { font-size: 13px; font-weight: 600; color: var(--text-dim); margin-bottom: 8px; }
+    .idea-input {
+      width: 100%; background: rgba(0,0,0,0.4); border: 1px solid var(--border);
+      border-radius: 12px; padding: 12px 14px; color: var(--text); font-size: 14px;
+      font-family: inherit; resize: none; outline: none; min-height: 80px;
+      transition: border-color 0.2s; line-height: 1.5;
+    }
+    .idea-input:focus { border-color: rgba(234,179,8,0.4); }
+    .idea-input::placeholder { color: var(--text-dimmer); }
+
+    .tone-section { margin-top: 14px; }
+    .tone-label { font-size: 13px; font-weight: 600; color: var(--text-dim); margin-bottom: 8px; }
+    .tone-grid { display: grid; grid-template-columns: repeat(4, 1fr); gap: 6px; }
+    .tone-btn {
+      padding: 8px 4px; border-radius: 10px; font-size: 11px; font-weight: 600;
+      border: 1px solid var(--border); background: rgba(0,0,0,0.3); color: var(--text-dim);
+      cursor: pointer; transition: all 0.2s; text-align: center;
+    }
+    .tone-btn.active { background: var(--yellow-dim); color: var(--yellow); border-color: rgba(234,179,8,0.35); }
+
+    .generate-row { margin-top: 14px; display: flex; justify-content: flex-end; }
+    .generate-btn {
+      padding: 12px 28px; border-radius: 12px; border: none; cursor: pointer;
+      background: linear-gradient(135deg, var(--yellow), var(--orange));
+      color: #000; font-size: 14px; font-weight: 700; transition: all 0.2s;
+      display: flex; align-items: center; gap: 8px;
+    }
+    .generate-btn:hover { filter: brightness(1.1); transform: translateY(-1px); }
+    .generate-btn:disabled { opacity: 0.4; cursor: not-allowed; transform: none; filter: none; }
+
+    .spinner {
+      width: 16px; height: 16px; border: 2px solid rgba(0,0,0,0.2);
+      border-top-color: #000; border-radius: 50%; animation: spin 0.6s linear infinite;
+    }
+    @keyframes spin { to { transform: rotate(360deg); } }
+
+    .error-banner {
+      background: var(--red-dim); border: 1px solid rgba(239,68,68,0.25);
+      border-radius: 12px; padding: 12px 16px; margin-bottom: 16px;
+      font-size: 13px; color: var(--red);
+    }
+
+    .progress-section {
+      background: var(--card); border: 1px solid var(--border); border-radius: 14px;
+      padding: 20px; margin-bottom: 16px; text-align: center;
+    }
+    .progress-label { font-size: 13px; font-weight: 600; color: var(--yellow); margin-bottom: 12px; }
+    .progress-bar-track {
+      width: 100%; height: 6px; background: rgba(255,255,255,0.06);
+      border-radius: 3px; overflow: hidden; margin-bottom: 10px;
+    }
+    .progress-bar-fill {
+      height: 100%; background: linear-gradient(90deg, var(--yellow), var(--orange));
+      border-radius: 3px; width: 0%; transition: width 0.4s ease;
+    }
+    .progress-scene-dots { display: flex; justify-content: center; gap: 8px; margin-bottom: 8px; }
+    .progress-dot {
+      width: 28px; height: 28px; border-radius: 8px; font-size: 10px; font-weight: 700;
+      display: flex; align-items: center; justify-content: center;
+      background: rgba(255,255,255,0.04); color: var(--text-dimmer);
+      border: 1px solid var(--border); transition: all 0.3s;
+    }
+    .progress-dot.active {
+      background: var(--yellow-dim); color: var(--yellow); border-color: rgba(234,179,8,0.4);
+      animation: dotPulse 0.8s ease-in-out infinite;
+    }
+    .progress-dot.done {
+      background: var(--green-dim); color: var(--green); border-color: rgba(34,197,94,0.3);
+      animation: none;
+    }
+    @keyframes dotPulse { 0%, 100% { transform: scale(1); } 50% { transform: scale(1.15); } }
+    .progress-status { font-size: 11px; color: var(--text-dimmer); }
+
+    .results-header {
+      display: flex; align-items: center; justify-content: space-between; margin-bottom: 14px;
+    }
+    .results-title { font-size: 16px; font-weight: 700; }
+    .results-count { font-size: 12px; color: var(--text-dimmer); font-weight: 400; margin-left: 6px; }
+    .copy-all-btn {
+      padding: 7px 14px; border-radius: 8px; font-size: 12px; font-weight: 600;
+      border: 1px solid var(--border); background: rgba(255,255,255,0.04);
+      color: var(--text-dim); cursor: pointer; transition: all 0.2s;
+    }
+    .copy-all-btn:hover { background: rgba(255,255,255,0.08); color: var(--text); }
+    .copy-all-btn.copied { background: var(--green-dim); color: var(--green); border-color: rgba(34,197,94,0.3); }
+
+    .char-card {
+      background: var(--card); border: 1px solid var(--border); border-radius: 14px;
+      padding: 16px; margin-bottom: 14px; border-left: 3px solid var(--purple);
+      animation: cardFadeIn 0.35s ease-out;
+    }
+    .char-card-title {
+      font-size: 13px; font-weight: 700; color: var(--purple); margin-bottom: 12px;
+      display: flex; align-items: center; gap: 6px;
+    }
+    .char-list { display: flex; flex-direction: column; gap: 10px; }
+    .char-item { display: flex; gap: 10px; align-items: flex-start; }
+    .char-avatar {
+      width: 36px; height: 36px; border-radius: 10px; flex-shrink: 0;
+      background: var(--purple-dim); display: flex; align-items: center; justify-content: center;
+      font-size: 14px; font-weight: 800; color: var(--purple);
+    }
+    .char-info { flex: 1; }
+    .char-name { font-size: 13px; font-weight: 700; color: var(--text); }
+    .char-role { font-size: 11px; color: var(--purple); font-weight: 600; margin-top: 1px; }
+    .char-desc { font-size: 12px; color: var(--text-dim); margin-top: 3px; line-height: 1.5; }
+    /* Inline char sheet styles for scenes */
+    .scene-char-sheet {
+      background: rgba(168,85,247,0.06); border: 1px solid rgba(168,85,247,0.12); border-radius: 10px;
+      padding: 10px 12px; display: flex; flex-direction: column; gap: 6px;
+    }
+    .scene-char-sheet-title {
+      font-size: 10px; font-weight: 700; color: var(--purple); text-transform: uppercase;
+      letter-spacing: 0.5px; margin-bottom: 2px;
+    }
+    .scene-char-row {
+      display: flex; gap: 8px; align-items: flex-start; font-size: 11.5px;
+    }
+    .scene-char-mini-avatar {
+      width: 24px; height: 24px; border-radius: 6px; flex-shrink: 0;
+      background: var(--purple-dim); display: flex; align-items: center; justify-content: center;
+      font-size: 9px; font-weight: 800; color: var(--purple);
+    }
+    .scene-char-detail { flex: 1; line-height: 1.45; }
+    .scene-char-name { font-weight: 700; color: var(--text); font-size: 12px; }
+    .scene-char-meta { color: var(--text-dim); }
+    .scene-char-style { color: var(--orange); }
+    .scene-char-outfit { color: var(--text-dimmer); }
+
+    .scenes { display: flex; flex-direction: column; gap: 10px; }
+    .scene-card {
+      background: var(--card); border: 1px solid var(--border); border-radius: 14px;
+      padding: 16px; transition: all 0.2s; display: flex; flex-direction: column; gap: 10px;
+    }
+    .scene-card:hover { border-color: var(--border-hover); }
+    .scene-card.streaming-in { animation: cardFadeIn 0.35s ease-out; }
+    @keyframes cardFadeIn {
+      from { opacity: 0; transform: translateY(10px); }
+      to { opacity: 1; transform: translateY(0); }
+    }
+    .scene-top { display: flex; align-items: center; justify-content: space-between; margin-bottom: 10px; }
+    .scene-badge {
+      background: var(--yellow-dim); color: var(--yellow);
+      font-size: 11px; font-weight: 700; padding: 3px 8px; border-radius: 6px;
+    }
+    .scene-duration { font-size: 11px; color: var(--text-dimmer); margin-left: 8px; }
+    .copy-scene-btn {
+      padding: 4px 10px; border-radius: 6px; font-size: 11px; font-weight: 600;
+      border: 1px solid var(--border); background: transparent; color: var(--text-dimmer);
+      cursor: pointer; transition: all 0.15s; opacity: 0;
+    }
+    .scene-card:hover .copy-scene-btn { opacity: 1; }
+    .copy-scene-btn:hover { background: rgba(255,255,255,0.08); color: var(--text); }
+    .copy-scene-btn.copied { opacity: 1; background: var(--green-dim); color: var(--green); border-color: rgba(34,197,94,0.3); }
+
+    .scene-lines { display: flex; flex-direction: column; gap: 6px; }
+    .scene-line { font-size: 13px; color: var(--text-dim); }
+    .scene-line-label { color: var(--text-dimmer); font-weight: 600; margin-right: 4px; }
+    .scene-line.dialogue { color: var(--text); font-weight: 500; }
+    .scene-line.dialogue .scene-line-label { font-weight: 400; color: var(--text-dimmer); }
+
+    .text-view {
+      background: var(--card); border: 1px solid var(--border); border-radius: 14px; padding: 16px;
+    }
+    .text-pre {
+      font-family: 'SF Mono', 'Fira Code', 'Courier New', monospace;
+      font-size: 12.5px; line-height: 1.7; color: var(--text-dim);
+      white-space: pre-wrap; word-break: break-word; user-select: all;
+    }
+
+    .empty-state { text-align: center; padding: 48px 20px; }
+    .empty-emoji { font-size: 48px; margin-bottom: 12px; }
+    .empty-title { font-size: 18px; font-weight: 700; color: var(--text-dim); margin-bottom: 6px; }
+    .empty-sub { font-size: 13px; color: var(--text-dimmer); max-width: 320px; margin: 0 auto; }
+
+    .footer {
+      text-align: center; padding: 24px 16px; margin-top: 40px;
+      border-top: 1px solid var(--border); font-size: 11px; color: var(--text-dimmer);
+    }
+
+    .hidden { display: none !important; }
+  </style>
+</head>
+<body>
+
+  <header class="header">
+    <div class="header-inner">
+      <div class="logo-group">
+        <div class="logo">V</div>
+        <div>
+          <div class="logo-text"><span>ViralScript AI</span></div>
+          <div class="logo-sub">60-Second Video Script Generator</div>
+        </div>
+      </div>
+      <div class="view-toggle">
+        <button class="view-btn active" id="btn-cards" onclick="setView('cards')">Cards</button>
+        <button class="view-btn" id="btn-text" onclick="setView('text')">Text</button>
+      </div>
+    </div>
+  </header>
+
+  <main class="main">
+    <div class="settings-panel">
+      <div class="settings-label">🔑 OpenRouter API Key</div>
+      <div class="key-input-row">
+        <input type="password" class="key-input" id="api-key-input" placeholder="sk-or-v1-..." />
+        <button class="save-btn" id="save-key-btn" onclick="saveApiKey()">Save</button>
+      </div>
+      <div class="key-status" id="key-status"></div>
+    </div>
+
+    <div class="input-card">
+      <div class="input-label">💡 Your Video Idea</div>
+      <textarea class="idea-input" id="idea-input" placeholder="e.g. A guy tries to impress his girlfriend's Nigerian mom by cooking jollof rice but everything goes wrong..."></textarea>
+      <div class="tone-section">
+        <div class="tone-label">🎭 Tone / Vibe</div>
+        <div class="tone-grid">
+          <button class="tone-btn active" data-tone="comedy" onclick="setTone(this)">😂 Comedy</button>
+          <button class="tone-btn" data-tone="drama" onclick="setTone(this)">🎭 Drama</button>
+          <button class="tone-btn" data-tone="thriller" onclick="setTone(this)">😱 Thriller</button>
+          <button class="tone-btn" data-tone="romance" onclick="setTone(this)">❤️ Romance</button>
+          <button class="tone-btn" data-tone="horror" onclick="setTone(this)">👻 Horror</button>
+          <button class="tone-btn" data-tone="inspirational" onclick="setTone(this)">✨ Inspiring</button>
+          <button class="tone-btn" data-tone="street" onclick="setTone(this)">🔥 Street</button>
+          <button class="tone-btn" data-tone="educational" onclick="setTone(this)">📚 Edu</button>
+        </div>
+      </div>
+      <div class="generate-row">
+        <button class="generate-btn" id="generate-btn" onclick="generateScript()">
+          <span id="gen-text">⚡ Generate Script</span>
+          <span id="gen-spinner" class="hidden"><div class="spinner"></div></span>
+        </button>
+      </div>
+    </div>
+
+    <div class="error-banner hidden" id="error-banner"></div>
+
+    <div class="hidden" id="progress-section">
+      <div class="progress-label">🎬 Generating your script...</div>
+      <div class="progress-bar-track">
+        <div class="progress-bar-fill" id="progress-bar"></div>
+      </div>
+      <div class="progress-scene-dots" id="progress-dots">
+        <div class="progress-dot" id="dot-1">1</div>
+        <div class="progress-dot" id="dot-2">2</div>
+        <div class="progress-dot" id="dot-3">3</div>
+        <div class="progress-dot" id="dot-4">4</div>
+        <div class="progress-dot" id="dot-5">5</div>
+        <div class="progress-dot" id="dot-6">6</div>
+        <div class="progress-dot" id="dot-7">7</div>
+        <div class="progress-dot" id="dot-8">8</div>
+      </div>
+      <div class="progress-status" id="progress-status">Connecting to AI...</div>
+    </div>
+
+    <div class="hidden" id="results-section">
+      <div class="results-header">
+        <div class="results-title">
+          🎬 Your Script <span class="results-count" id="results-count"></span>
+        </div>
+        <button class="copy-all-btn" id="copy-all-btn" onclick="copyAll()">📋 Copy All</button>
+      </div>
+      <div id="cards-view"></div>
+      <div id="text-view" class="text-view hidden">
+        <pre class="text-pre" id="text-content"></pre>
+      </div>
+    </div>
+
+    <div id="empty-state" class="empty-state">
+      <div class="empty-emoji">🎬</div>
+      <div class="empty-title">Ready to Create Viral Scripts</div>
+      <div class="empty-sub">Drop your video idea, pick a tone, and hit Generate. Your 60-second African-style script will be ready in seconds.</div>
+    </div>
+  </main>
+
+  <footer class="footer">ViralScript AI — Copy, paste, shoot. 🌍</footer>
+
+  <script>
+    var currentTone = 'comedy';
+    var currentView = 'cards';
+    var scenes = [];
+    var characters = [];
+    var rawText = '';
+
+    (function init() {
+      var saved = localStorage.getItem('vsa_api_key');
+      if (saved) {
+        document.getElementById('api-key-input').value = saved;
+        showKeyStatus('Key saved ✓', 'connected');
+      }
+    })();
+
+    function saveApiKey() {
+      var key = document.getElementById('api-key-input').value.trim();
+      if (!key.startsWith('sk-or-v1-')) { showKeyStatus('Invalid key format. Must start with sk-or-v1-', 'error'); return; }
+      localStorage.setItem('vsa_api_key', key);
+      showKeyStatus('Key saved ✓', 'connected');
+    }
+    function showKeyStatus(msg, type) { var el = document.getElementById('key-status'); el.textContent = msg; el.className = 'key-status ' + type; }
+    function getApiKey() { return localStorage.getItem('vsa_api_key') || ''; }
+
+    function setTone(btn) {
+      document.querySelectorAll('.tone-btn').forEach(function(b) { b.classList.remove('active'); });
+      btn.classList.add('active');
+      currentTone = btn.dataset.tone;
+    }
+
+    function setView(v) {
+      currentView = v;
+      document.getElementById('btn-cards').classList.toggle('active', v === 'cards');
+      document.getElementById('btn-text').classList.toggle('active', v === 'text');
+      document.getElementById('cards-view').classList.toggle('hidden', v !== 'cards');
+      document.getElementById('text-view').classList.toggle('hidden', v !== 'text');
+    }
+
+    function updateProgress(sceneNum, statusText) {
+      document.getElementById('progress-bar').style.width = Math.min((sceneNum / 8) * 100, 100) + '%';
+      for (var i = 1; i <= 8; i++) {
+        var dot = document.getElementById('dot-' + i);
+        dot.classList.remove('active', 'done');
+        if (i < sceneNum) dot.classList.add('done');
+        else if (i === sceneNum) dot.classList.add('active');
+      }
+      if (statusText) document.getElementById('progress-status').textContent = statusText;
+    }
+
+    function hideProgress() { document.getElementById('progress-section').classList.add('hidden'); }
+
+    // --- Build HTML helpers ---
+    function buildSceneCardHtml(s, index) {
+      var h = '<div class="scene-card streaming-in" id="scene-' + s.sceneNumber + '">';
+      h += '<div class="scene-top"><div>';
+      h += '<span class="scene-badge">SCENE ' + s.sceneNumber + '</span>';
+      h += '<span class="scene-duration">' + escHtml(s.duration) + '</span>';
+      if (s.characters && s.characters.length > 0) h += '<span class="scene-duration" style="margin-left:4px">' + escHtml(s.characters.join(', ')) + '</span>';
+      h += '</div><button class="copy-scene-btn" onclick="copyScene(' + index + ')">📋 Copy</button></div>';
+      // Embedded character sheet inside every scene
+      h += buildInlineCharSheet();
+      h += '<div class="scene-lines">';
+      h += '<div class="scene-line"><span class="scene-line-label">📹 Camera:</span> ' + escHtml(s.camera) + '</div>';
+      h += '<div class="scene-line"><span class="scene-line-label">🎬 Action:</span> ' + escHtml(s.action) + '</div>';
+      h += '<div class="scene-line dialogue"><span class="scene-line-label">💬 Dialogue:</span> ' + escHtml(s.dialogue) + '</div>';
+      h += '<div class="scene-line"><span class="scene-line-label">📊 Engagement:</span> ' + escHtml(s.engagement) + '</div>';
+      h += '</div></div>';
+      return h;
+    }
+
+    function buildInlineCharSheet() {
+      if (!characters.length) return '';
+      var h = '<div class="scene-char-sheet">';
+      h += '<div class="scene-char-sheet-title">🎭 Characters</div>';
+      for (var i = 0; i < characters.length; i++) {
+        var c = characters[i];
+        var ini = (c.name || '?').split(' ').map(function(w) { return w[0]; }).join('').substring(0, 2).toUpperCase();
+        h += '<div class="scene-char-row"><div class="scene-char-mini-avatar">' + ini + '</div><div class="scene-char-detail">';
+        h += '<div class="scene-char-name">' + escHtml(c.name) + ' <span class="scene-char-meta">(' + escHtml(c.role || 'Character') + ')</span></div>';
+        if (c.description) h += '<div class="scene-char-meta">' + escHtml(c.description) + '</div>';
+        if (c.speechStyle) h += '<div class="scene-char-style">🗣 ' + escHtml(c.speechStyle) + '</div>';
+        if (c.clothing) h += '<div class="scene-char-outfit">👕 ' + escHtml(c.clothing) + '</div>';
+        h += '</div></div>';
+      }
+      h += '</div>';
+      return h;
+    }
+
+    function renderCharSheet(charArr) {
+      var existing = document.querySelector('.char-card');
+      if (existing) existing.remove();
+      var h = '<div class="char-card"><div class="char-card-title">🎭 Character Sheet</div><div class="char-list">';
+      for (var i = 0; i < charArr.length; i++) {
+        var ch = charArr[i];
+        var ini = (ch.name || '?').split(' ').map(function(w) { return w[0]; }).join('').substring(0, 2).toUpperCase();
+        h += '<div class="char-item"><div class="char-avatar">' + ini + '</div><div class="char-info">';
+        h += '<div class="char-name">' + escHtml(ch.name) + '</div>';
+        h += '<div class="char-role">' + escHtml(ch.role || '') + '</div>';
+        h += '<div class="char-desc">' + escHtml(ch.description || '') + '</div>';
+        if (ch.speechStyle) h += '<div class="char-desc" style="color:var(--orange)">' + escHtml('🗣 ' + ch.speechStyle) + '</div>';
+        if (ch.clothing) h += '<div class="char-desc" style="color:var(--text-dimmer)">' + escHtml('👕 ' + ch.clothing) + '</div>';
+        h += '</div></div>';
+      }
+      h += '</div></div>';
+      var sc = document.getElementById('scenes-container');
+      if (sc) sc.insertAdjacentHTML('beforebegin', h);
+      else document.getElementById('cards-view').insertAdjacentHTML('afterbegin', h);
+    }
+
+    function buildCharText() {
+      if (!characters.length) return '';
+      var lines = ['=== CHARACTER SHEET ==='];
+      for (var i = 0; i < characters.length; i++) {
+        var c = characters[i];
+        lines.push('');
+        lines.push(c.name.toUpperCase() + ' (' + (c.role || 'Character') + ')');
+        lines.push('Description: ' + (c.description || ''));
+        if (c.speechStyle) lines.push('Speech Style: ' + c.speechStyle);
+        if (c.clothing) lines.push('Clothing: ' + c.clothing);
+      }
+      return lines.join('\n');
+    }
+
+    function buildSceneText(s) {
+      var lines = [];
+      var cb = buildCharText();
+      if (cb) { lines.push(cb); lines.push(''); }
+      lines.push('--- SCENE ' + s.sceneNumber + ' (' + s.duration + ') ---');
+      if (s.characters && s.characters.length) lines.push('Characters in scene: ' + s.characters.join(', '));
+      lines.push('Camera: ' + s.camera, 'Action: ' + s.action, 'Dialogue: ' + s.dialogue, 'Engagement: ' + s.engagement);
+      return lines.join('\n');
+    }
+
+    function buildFullText() {
+      if (rawText) return rawText;
+      var parts = [];
+      for (var i = 0; i < scenes.length; i++) {
+        parts.push(buildSceneText(scenes[i]));
+        if (i < scenes.length - 1) parts.push('');
+      }
+      return parts.join('\n');
+    }
+
+    // --- Generate with INCREMENTAL streaming render ---
+    async function generateScript() {
+      var idea = document.getElementById('idea-input').value.trim();
+      if (!idea) return;
+      var apiKey = getApiKey();
+      if (!apiKey) { showError('Please save your OpenRouter API key first.'); return; }
+
+      setLoading(true);
+      clearResults();
+
+      // COMPACT PROMPT — 60% shorter for faster first token
+      var sys = 'ViralScript AI: Write viral 60s African-style short-form video scripts (TikTok, Reels, Shorts).'
+        + '\n\nCHARACTER CONSISTENCY (CRITICAL):'
+        + '\n- Each character MUST have a CONSISTENT speech style, personality, and vocabulary across ALL scenes'
+        + '\n- Define a unique speechStyle for each character (e.g. "fast Pidgin", "calm Yoruba accent", "loud Gen Z slang")'
+        + '\n- Include clothing/appearance details that stay constant across every scene'
+        + '\n- Every scene must reference the character sheet so the scene is fully self-contained'
+        + '\n\nRULES:'
+        + '\n- 2-4 characters with fields: name, role, description, speechStyle, clothing'
+        + '\n- 7-8 scenes, ~8s each. Fields: sceneNumber, duration, characters, camera, action, dialogue, engagement'
+        + '\n- Handheld camera (shake, quick zoom, snap zoom, whip pan)'
+        + '\n- African dialogue with slang — each character must sound DISTINCT and consistent'
+        + '\n- Hook in first 3s, engagement hooks every scene'
+        + '\n- Fast-paced, relatable African situations, no filler'
+        + '\n\nOUTPUT: Return ONLY valid JSON, no markdown:'
+        + '\n{"characters":[{"name":"","role":"","description":"","speechStyle":"","clothing":""}],'
+        + '"scenes":[{"sceneNumber":1,"duration":"0:00-0:08","characters":[],"camera":"","action":"","dialogue":"","engagement":""}],'
+        + '"rawText":"For EACH scene, include the full CHARACTER SHEET (all characters with name, role, description, speech style, clothing) before the scene details. Every scene block must be self-contained."}';
+
+      var usr = 'IDEA: ' + idea + '\nTONE: ' + currentTone + '\n\nWrite the script. JSON only.';
+
+      try {
+        updateProgress(0, 'Connecting to AI...');
+
+        var response = await fetch('https://openrouter.ai/api/v1/chat/completions', {
+          method: 'POST',
+          headers: {
+            'Authorization': 'Bearer ' + apiKey,
+            'Content-Type': 'application/json',
+            'HTTP-Referer': window.location.href,
+            'X-Title': 'ViralScript AI'
+          },
+          body: JSON.stringify({
+            model: 'google/gemini-2.0-flash-001',
+            messages: [
+              { role: 'system', content: sys },
+              { role: 'user', content: usr }
+            ],
+            temperature: 0.7,
+            max_tokens: 1500,
+            stream: true
+          })
+        });
+
+        if (!response.ok) {
+          var errMsg = 'AI service error (' + response.status + ')';
+          try { var ed = await response.json(); if (ed.error && ed.error.message) errMsg = ed.error.message; } catch(e) {}
+          if (response.status === 401) errMsg = 'Invalid API key.';
+          if (response.status === 402) errMsg = 'Insufficient credits.';
+          if (response.status === 429) errMsg = 'Rate limited. Wait and retry.';
+          throw new Error(errMsg);
+        }
+
+        // === INCREMENTAL STREAMING ===
+        var reader = response.body.getReader();
+        var decoder = new TextDecoder();
+        var fullContent = '';
+        var buffer = '';
+        var renderedChars = 0;
+        var renderedScenes = 0;
+        var chunkCount = 0;
+
+        // Show results area immediately for live rendering
+        document.getElementById('results-section').classList.remove('hidden');
+        document.getElementById('results-count').textContent = '(streaming...)';
+        document.getElementById('cards-view').innerHTML = '<div class="scenes" id="scenes-container"></div>';
+        updateProgress(0, 'Receiving...');
+
+        while (true) {
+          var result = await reader.read();
+          if (result.done) break;
+          buffer += decoder.decode(result.value, { stream: true });
+          var lines = buffer.split('\n');
+          buffer = lines.pop() || '';
+
+          for (var li = 0; li < lines.length; li++) {
+            var trimmed = lines[li].trim();
+            if (!trimmed || !trimmed.startsWith('data: ')) continue;
+            var data = trimmed.slice(6);
+            if (data === '[DONE]') continue;
+
+            try {
+              var chunk = JSON.parse(data);
+              var delta = chunk.choices && chunk.choices[0] && chunk.choices[0].delta;
+              if (delta && delta.content) {
+                fullContent += delta.content;
+                chunkCount++;
+
+                // Try incremental parse every 2 chunks for speed
+                if (chunkCount % 2 === 0 && fullContent.length > 80) {
+                  try {
+                    var ip = JSON.parse(fullContent);
+
+                    // Render character sheet once
+                    if (ip.characters && ip.characters.length > 0 && renderedChars === 0) {
+                      characters = ip.characters;
+                      renderCharSheet(ip.characters);
+                      renderedChars = ip.characters.length;
+                      updateProgress(0, 'Characters done, writing scenes...');
+                    }
+
+                    // Render new scenes as they complete
+                    if (ip.scenes && ip.scenes.length > renderedScenes) {
+                      var container = document.getElementById('scenes-container');
+                      for (var si = renderedScenes; si < ip.scenes.length; si++) {
+                        var s = ip.scenes[si];
+                        if (s.dialogue && s.engagement) {
+                          container.insertAdjacentHTML('beforeend', buildSceneCardHtml(s, si));
+                          scenes.push(s);
+                          renderedScenes++;
+                          updateProgress(renderedScenes, 'Scene ' + renderedScenes + ' live!');
+                        }
+                      }
+                      document.getElementById('text-content').textContent = buildFullText();
+                    }
+                  } catch(pe) { /* JSON still incomplete, normal */ }
+                }
+              }
+            } catch(e) {}
+          }
+        }
+
+        if (!fullContent) throw new Error('AI returned empty response. Try again.');
+
+        // Final parse — catch anything missed during streaming
+        var parsed;
+        try {
+          parsed = JSON.parse(fullContent);
+        } catch(e) {
+          var fm = fullContent.match(/```(?:json)?\s*([\s\S]*?)```/);
+          if (fm) parsed = JSON.parse(fm[1].trim());
+          else {
+            var om = fullContent.match(/\{[\s\S]*\}/);
+            if (om) parsed = JSON.parse(om[0]);
+            else { rawText = fullContent; showResults([]); return; }
+          }
+        }
+
+        characters = parsed.characters || characters;
+        rawText = parsed.rawText || '';
+
+        // Render remaining scenes
+        if (parsed.scenes && parsed.scenes.length > renderedScenes) {
+          var container = document.getElementById('scenes-container');
+          for (var fi = renderedScenes; fi < parsed.scenes.length; fi++) {
+            container.insertAdjacentHTML('beforeend', buildSceneCardHtml(parsed.scenes[fi], fi));
+            scenes.push(parsed.scenes[fi]);
+          }
+        }
+        if (characters.length > 0 && renderedChars === 0) renderCharSheet(characters);
+
+        updateProgress(scenes.length, 'Done!');
+        document.getElementById('results-count').textContent = '(' + scenes.length + ' scenes)';
+        document.getElementById('text-content').textContent = buildFullText();
+        setTimeout(hideProgress, 300);
+
+      } catch(err) {
+        hideProgress();
+        showError(err.message);
+      } finally {
+        setLoading(false);
+      }
+    }
+
+    // --- UI Helpers ---
+    function setLoading(on) {
+      document.getElementById('generate-btn').disabled = on;
+      document.getElementById('gen-text').classList.toggle('hidden', on);
+      document.getElementById('gen-spinner').classList.toggle('hidden', !on);
+      document.getElementById('empty-state').classList.add('hidden');
+    }
+
+    function clearResults() {
+      scenes = []; characters = []; rawText = '';
+      document.getElementById('results-section').classList.add('hidden');
+      document.getElementById('cards-view').innerHTML = '';
+      document.getElementById('text-content').textContent = '';
+      document.getElementById('error-banner').classList.add('hidden');
+      document.getElementById('progress-section').classList.add('hidden');
+      document.getElementById('results-count').textContent = '';
+      for (var i = 1; i <= 8; i++) document.getElementById('dot-' + i).classList.remove('active', 'done');
+      document.getElementById('progress-bar').style.width = '0%';
+    }
+
+    function showError(msg) {
+      document.getElementById('progress-section').classList.add('hidden');
+      document.getElementById('empty-state').classList.add('hidden');
+      var b = document.getElementById('error-banner');
+      b.textContent = '❌ ' + msg; b.classList.remove('hidden');
+    }
+
+    function showResults(scenesArr) {
+      document.getElementById('progress-section').classList.add('hidden');
+      document.getElementById('empty-state').classList.add('hidden');
+      document.getElementById('error-banner').classList.add('hidden');
+      document.getElementById('results-section').classList.remove('hidden');
+      document.getElementById('results-count').textContent = scenesArr.length > 0 ? '(' + scenesArr.length + ' scenes)' : '(ready to copy)';
+
+      var html = '';
+      if (characters.length > 0) {
+        html += '<div class="char-card"><div class="char-card-title">🎭 Character Sheet</div><div class="char-list">';
+        for (var ci = 0; ci < characters.length; ci++) {
+          var ch = characters[ci];
+          var ini = (ch.name || '?').split(' ').map(function(w) { return w[0]; }).join('').substring(0, 2).toUpperCase();
+          html += '<div class="char-item"><div class="char-avatar">' + ini + '</div><div class="char-info">';
+          html += '<div class="char-name">' + escHtml(ch.name) + '</div>';
+          html += '<div class="char-role">' + escHtml(ch.role || '') + '</div>';
+          html += '<div class="char-desc">' + escHtml(ch.description || '') + '</div>';
+          if (ch.speechStyle) html += '<div class="char-desc" style="color:var(--orange)">' + escHtml('🗣 ' + ch.speechStyle) + '</div>';
+          if (ch.clothing) html += '<div class="char-desc" style="color:var(--text-dimmer)">' + escHtml('👕 ' + ch.clothing) + '</div>';
+          html += '</div></div>';
+        }
+        html += '</div></div>';
+      }
+      html += '<div class="scenes" id="scenes-container">';
+      for (var si = 0; si < scenesArr.length; si++) html += buildSceneCardHtml(scenesArr[si], si);
+      html += '</div>';
+      document.getElementById('cards-view').innerHTML = html;
+      document.getElementById('text-content').textContent = buildFullText();
+      setView(currentView);
+    }
+
+    function copyAll() {
+      navigator.clipboard.writeText(buildFullText()).then(function() {
+        var btn = document.getElementById('copy-all-btn');
+        btn.textContent = '✅ Copied!'; btn.classList.add('copied');
+        setTimeout(function() { btn.textContent = '📋 Copy All'; btn.classList.remove('copied'); }, 2000);
+      });
+    }
+
+    function copyScene(index) {
+      var s = scenes[index];
+      var text = buildSceneText(s);
+      navigator.clipboard.writeText(text).then(function() {
+        var card = document.getElementById('scene-' + s.sceneNumber);
+        var btn = card.querySelector('.copy-scene-btn');
+        btn.textContent = '✅ Copied'; btn.classList.add('copied');
+        setTimeout(function() { btn.textContent = '📋 Copy'; btn.classList.remove('copied'); }, 2000);
+      });
+    }
+
+    function escHtml(str) {
+      var div = document.createElement('div');
+      div.textContent = str || '';
+      return div.innerHTML;
+    }
+  </script>
+</body>
+</html>
