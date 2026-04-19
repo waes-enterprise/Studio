@@ -341,7 +341,7 @@
 
   <main class="main">
     <div class="settings-panel">
-      <div class="settings-label">🔑 OpenRouter API Key</div>
+      <div class="settings-label">OpenRouter API Key</div>
       <div class="key-input-row">
         <input type="password" class="key-input" id="api-key-input" placeholder="sk-or-v1-..." />
         <button class="save-btn" id="save-key-btn" onclick="saveApiKey()">Save</button>
@@ -350,24 +350,24 @@
     </div>
 
     <div class="input-card">
-      <div class="input-label">💡 Your Video Idea</div>
+      <div class="input-label">Your Video Idea</div>
       <textarea class="idea-input" id="idea-input" placeholder="e.g. A guy tries to impress his girlfriend's Nigerian mom by cooking jollof rice but everything goes wrong..."></textarea>
       <div class="tone-section">
-        <div class="tone-label">🎭 Tone / Vibe</div>
+        <div class="tone-label">Tone / Vibe</div>
         <div class="tone-grid">
-          <button class="tone-btn active" data-tone="comedy" onclick="setTone(this)">😂 Comedy</button>
-          <button class="tone-btn" data-tone="drama" onclick="setTone(this)">🎭 Drama</button>
-          <button class="tone-btn" data-tone="thriller" onclick="setTone(this)">😱 Thriller</button>
-          <button class="tone-btn" data-tone="romance" onclick="setTone(this)">❤️ Romance</button>
-          <button class="tone-btn" data-tone="horror" onclick="setTone(this)">👻 Horror</button>
-          <button class="tone-btn" data-tone="inspirational" onclick="setTone(this)">✨ Inspiring</button>
-          <button class="tone-btn" data-tone="street" onclick="setTone(this)">🔥 Street</button>
-          <button class="tone-btn" data-tone="educational" onclick="setTone(this)">📚 Edu</button>
+          <button class="tone-btn active" data-tone="comedy" onclick="setTone(this)">Comedy</button>
+          <button class="tone-btn" data-tone="drama" onclick="setTone(this)">Drama</button>
+          <button class="tone-btn" data-tone="thriller" onclick="setTone(this)">Thriller</button>
+          <button class="tone-btn" data-tone="romance" onclick="setTone(this)">Romance</button>
+          <button class="tone-btn" data-tone="horror" onclick="setTone(this)">Horror</button>
+          <button class="tone-btn" data-tone="inspirational" onclick="setTone(this)">Inspiring</button>
+          <button class="tone-btn" data-tone="street" onclick="setTone(this)">Street</button>
+          <button class="tone-btn" data-tone="educational" onclick="setTone(this)">Edu</button>
         </div>
       </div>
       <div class="generate-row">
         <button class="generate-btn" id="generate-btn" onclick="generateScript()">
-          <span id="gen-text">⚡ Generate Script</span>
+          <span id="gen-text">Generate Script</span>
           <span id="gen-spinner" class="hidden"><div class="spinner"></div></span>
         </button>
       </div>
@@ -376,7 +376,7 @@
     <div class="error-banner hidden" id="error-banner"></div>
 
     <div class="hidden" id="progress-section">
-      <div class="progress-label">🎬 Generating your script...</div>
+      <div class="progress-label">Generating your script...</div>
       <div class="progress-bar-track">
         <div class="progress-bar-fill" id="progress-bar"></div>
       </div>
@@ -396,9 +396,9 @@
     <div class="hidden" id="results-section">
       <div class="results-header">
         <div class="results-title">
-          🎬 Your Script <span class="results-count" id="results-count"></span>
+          Your Script <span class="results-count" id="results-count"></span>
         </div>
-        <button class="copy-all-btn" id="copy-all-btn" onclick="copyAll()">📋 Copy All</button>
+        <button class="copy-all-btn" id="copy-all-btn" onclick="copyAll()">Copy All</button>
       </div>
       <div id="cards-view"></div>
       <div id="text-view" class="text-view hidden">
@@ -407,13 +407,13 @@
     </div>
 
     <div id="empty-state" class="empty-state">
-      <div class="empty-emoji">🎬</div>
+      <div class="empty-emoji"></div>
       <div class="empty-title">Ready to Create Viral Scripts</div>
       <div class="empty-sub">Drop your video idea, pick a tone, and hit Generate. Your 60-second African-style script will be ready in seconds.</div>
     </div>
   </main>
 
-  <footer class="footer">ViralScript AI — Copy, paste, shoot. 🌍</footer>
+  <footer class="footer">ViralScript AI — Copy, paste, shoot.</footer>
 
   <script>
     var currentTone = 'comedy';
@@ -495,7 +495,7 @@
       }
       clipCopy(text, function() {
         btn.textContent = '✓'; btn.classList.add('copied');
-        setTimeout(function() { btn.textContent = '📋'; btn.classList.remove('copied'); }, 1500);
+        setTimeout(function() { btn.textContent = 'Copy'; btn.classList.remove('copied'); }, 1500);
       });
     }
 
@@ -511,18 +511,18 @@
       h += '<span class="scene-duration">' + escHtml(s.duration) + '</span>';
       if (s.characters && s.characters.length > 0) h += '<span class="scene-duration" style="margin-left:4px">' + escHtml(s.characters.join(', ')) + '</span>';
       h += '</div><div style="display:flex;gap:4px;flex-wrap:wrap">';
-      h += '<button class="copy-scene-btn" style="opacity:1" onclick="copyScene(' + index + ')">📋 Copy All</button>';
-      h += '<button class="copy-scene-btn" style="opacity:1;border-color:rgba(168,85,247,0.3);color:var(--purple)" onclick="copyFullPrompt(' + index + ')">✨ Copy Prompt</button>';
-      h += '<button class="ai-prompt-btn" id="ai-btn-' + s.sceneNumber + '" onclick="generateAiPrompt(' + index + ')">✨ AI Prompt</button>';
+      h += '<button class="copy-scene-btn" style="opacity:1" onclick="copyScene(' + index + ')">Copy All</button>';
+      h += '<button class="copy-scene-btn" style="opacity:1;border-color:rgba(168,85,247,0.3);color:var(--purple)" onclick="copyFullPrompt(' + index + ')">Copy Prompt</button>';
+      h += '<button class="ai-prompt-btn" id="ai-btn-' + s.sceneNumber + '" onclick="generateAiPrompt(' + index + ')">AI Prompt</button>';
       h += '</div></div>';
       h += '<div id="ai-prompt-' + s.sceneNumber + '"></div>';
       // Embedded character sheet inside every scene
       h += buildInlineCharSheet();
       h += '<div class="scene-lines">';
-      h += fieldLine('📹', 'Camera', s.camera, index, 'camera');
-      h += fieldLine('🎬', 'Action', s.action, index, 'action');
-      h += fieldLine('💬', 'Dialogue', s.dialogue, index, 'dialogue');
-      h += fieldLine('📊', 'Engagement', s.engagement, index, 'engagement');
+      h += fieldLine('', 'Camera', s.camera, index, 'camera');
+      h += fieldLine('', 'Action', s.action, index, 'action');
+      h += fieldLine('', 'Dialogue', s.dialogue, index, 'dialogue');
+      h += fieldLine('', 'Engagement', s.engagement, index, 'engagement');
       h += '</div></div>';
       return h;
     }
@@ -530,17 +530,17 @@
     function buildInlineCharSheet() {
       if (!characters.length) return '';
       var h = '<div class="scene-char-sheet">';
-      h += '<div class="scene-char-sheet-title">🎭 Characters</div>';
+      h += '<div class="scene-char-sheet-title">Characters</div>';
       for (var i = 0; i < characters.length; i++) {
         var c = characters[i];
         var ini = (c.name || '?').split(' ').map(function(w) { return w[0]; }).join('').substring(0, 2).toUpperCase();
         h += '<div class="scene-char-row"><div class="scene-char-mini-avatar">' + ini + '</div><div class="scene-char-detail">';
         h += '<div class="scene-char-name">' + escHtml(c.name) + ' <span class="scene-char-meta">(' + escHtml(c.role || 'Character') + ')</span></div>';
-        if (c.outfit) h += '<div class="scene-char-outfit">👕 ' + escHtml(c.outfit) + '</div>';
-        if (c.expression) h += '<div class="scene-char-expression">😊 ' + escHtml(c.expression) + '</div>';
-        if (c.physicalDetails) h += '<div class="scene-char-physical">👤 ' + escHtml(c.physicalDetails) + '</div>';
-        if (c.props) h += '<div class="scene-char-props">📌 ' + escHtml(c.props) + '</div>';
-        if (c.speechStyle) h += '<div class="scene-char-style">🗣 ' + escHtml(c.speechStyle) + '</div>';
+        if (c.outfit) h += '<div class="scene-char-outfit">' + escHtml(c.outfit) + '</div>';
+        if (c.expression) h += '<div class="scene-char-expression">' + escHtml(c.expression) + '</div>';
+        if (c.physicalDetails) h += '<div class="scene-char-physical">' + escHtml(c.physicalDetails) + '</div>';
+        if (c.props) h += '<div class="scene-char-props">' + escHtml(c.props) + '</div>';
+        if (c.speechStyle) h += '<div class="scene-char-style">' + escHtml(c.speechStyle) + '</div>';
         h += '</div></div>';
       }
       h += '</div>';
@@ -550,7 +550,7 @@
     function renderCharSheet(charArr) {
       var existing = document.querySelector('.char-card');
       if (existing) existing.remove();
-      var h = '<div class="char-card"><div class="char-card-title">🎭 Character Sheet</div><div class="char-list">';
+      var h = '<div class="char-card"><div class="char-card-title">Character Sheet</div><div class="char-list">';
       for (var i = 0; i < charArr.length; i++) {
         var ch = charArr[i];
         var ini = (ch.name || '?').split(' ').map(function(w) { return w[0]; }).join('').substring(0, 2).toUpperCase();
@@ -558,11 +558,11 @@
         h += '<div class="char-name">' + escHtml(ch.name) + '</div>';
         h += '<div class="char-role">' + escHtml(ch.role || '') + '</div>';
         h += '<div class="char-desc">' + escHtml(ch.description || '') + '</div>';
-        if (ch.outfit) h += '<div class="char-desc" style="color:#22d3ee">👕 ' + escHtml(ch.outfit) + '</div>';
-        if (ch.expression) h += '<div class="char-desc" style="color:#a3e635">😊 ' + escHtml(ch.expression) + '</div>';
-        if (ch.physicalDetails) h += '<div class="char-desc" style="color:var(--text-dim)">👤 ' + escHtml(ch.physicalDetails) + '</div>';
-        if (ch.props) h += '<div class="char-desc" style="color:var(--yellow)">📌 ' + escHtml(ch.props) + '</div>';
-        if (ch.speechStyle) h += '<div class="char-desc" style="color:var(--orange)">🗣 ' + escHtml(ch.speechStyle) + '</div>';
+        if (ch.outfit) h += '<div class="char-desc" style="color:#22d3ee">' + escHtml(ch.outfit) + '</div>';
+        if (ch.expression) h += '<div class="char-desc" style="color:#a3e635">' + escHtml(ch.expression) + '</div>';
+        if (ch.physicalDetails) h += '<div class="char-desc" style="color:var(--text-dim)">' + escHtml(ch.physicalDetails) + '</div>';
+        if (ch.props) h += '<div class="char-desc" style="color:var(--yellow)">' + escHtml(ch.props) + '</div>';
+        if (ch.speechStyle) h += '<div class="char-desc" style="color:var(--orange)">' + escHtml(ch.speechStyle) + '</div>';
         h += '</div></div>';
       }
       h += '</div></div>';
@@ -644,7 +644,7 @@
           body: JSON.stringify({
             model: 'google/gemini-2.0-flash-lite-001',
             messages: [
-              { role: 'system', content: 'You are an expert cinematographer and AI video prompt engineer. Given a scene with character details, write ONE single flowing paragraph as a perfect prompt for AI video generators (Kling, Runway, Pika, Sora). Describe the visual scene vividly: camera movement, lens, angle, framing, lighting, colors, depth of field. Weave in each character\'s exact physical appearance, outfit, expression, and props naturally. Include dialogue with delivery cues in parentheses. No labels, no bullets, no formatting \u2014 just one continuous cinematic paragraph. 2-4 sentences max.' },
+              { role: 'system', content: 'You are an expert cinematographer and AI video prompt engineer. Given a scene with character details, write ONE single flowing paragraph as a perfect prompt for AI video generators (Kling, Runway, Pika, Sora). CRITICAL CAMERA RULE: ONLY handheld shaky camera movements. NEVER use zoom in, zoom out, dolly, slider, gimbal, crane, or any smooth/stabilized camera movement. All shots must feel raw, documentary-style, with natural handheld shake. Describe the shake intensity, hand-held feel, lens (wide prime like 24mm or 35mm preferred), angle, framing, lighting, colors, depth of field. Weave in each character\'s exact physical appearance, outfit, expression, and props naturally. Include dialogue with delivery cues in parentheses. No labels, no bullets, no formatting \u2014 just one continuous cinematic paragraph. 2-4 sentences max.' },
               { role: 'user', content: 'Write the AI video generation prompt:\n\n' + ctx }
             ],
             temperature: 0.8,
@@ -782,13 +782,13 @@
         + '\n  physicalDetails (skin tone description, build, age range, exact height, hair style/fade type, facial hair, distinguishing features: e.g. "deep dark brown skin, muscular athletic build, early 20s, 5\'11, fresh low skin fade with sharp line-up, thin mustache, small scar on left cheekbone"),'
         + '\n  props (every item they carry, wear, or interact with — include color, size, condition: e.g. "worn brown leather satchel bag across right shoulder, cracked iPhone 13 in left hand with green case, rolled-up newspaper under right arm")'
         + '\n\nSCENE FIELDS (each must be DETAILED for AI video generation):'
-        + '\n  camera (lens type, movement, speed, angle, framing: e.g. "Slow push-in with 50mm lens, low angle at knee height, subject centered in frame, shallow depth of field")'
+        + '\n  camera (HANDHELD SHAKY CAMERA ONLY — NO zooming in, NO zooming out, NO dolly, NO slider, NO stabilizer. Describe shake intensity, tilt, angle, framing: e.g. "Handheld shaky camera, medium shake intensity, slightly tilted right, eye-level angle following subject walking, 24mm wide lens, natural shallow depth of field")'
         + '\n  action (body language, pace, specific movements, timing: e.g. "Man slowly turns around, shoulders dropping, pauses for 2 seconds before speaking, wipes sweat from forehead with back of hand")'
         + '\n  dialogue (include tone, delivery notes, accent cues in parentheses: e.g. "(Said with exhausted sarcasm, trailing off) Ah ah, so you people will just stress me for nothing?")'
-        + '\n  engagement (hook tactic, audience reaction trigger: e.g. "Plot twist reveal — freeze frame on character\'s shocked face with zoom-in, text overlay: WAIT FOR IT")'
+        + '\n  engagement (hook tactic, audience reaction trigger: e.g. "Plot twist reveal — freeze frame on character\'s shocked face, text overlay: WAIT FOR IT")'
         + '\n\nRULES:'
         + '\n- 2-4 characters, 7-8 scenes, ~8s each. Fields: sceneNumber, duration, characters[]'
-        + '\n- Handheld camera style with African energy'
+        + '\n- HANDHELD SHAKY CAMERA ONLY — Never use zoom in, zoom out, dolly shots, slider, gimbal, or any stabilized/smooth movement. All camera work must feel raw, documentary-style, shaky, handheld with energy'
         + '\n- African dialogue with local slang — each character must sound DISTINCT'
         + '\n- Hook in first 3s, engagement hooks every scene'
         + '\n- NO filler, NO generic descriptions — every line must be specific enough to generate from'
@@ -970,7 +970,7 @@
 
       var html = '';
       if (characters.length > 0) {
-        html += '<div class="char-card"><div class="char-card-title">🎭 Character Sheet</div><div class="char-list">';
+        html += '<div class="char-card"><div class="char-card-title">Character Sheet</div><div class="char-list">';
         for (var ci = 0; ci < characters.length; ci++) {
           var ch = characters[ci];
           var ini = (ch.name || '?').split(' ').map(function(w) { return w[0]; }).join('').substring(0, 2).toUpperCase();
@@ -978,12 +978,12 @@
           html += '<div class="char-name">' + escHtml(ch.name) + '</div>';
           html += '<div class="char-role">' + escHtml(ch.role || '') + '</div>';
           html += '<div class="char-desc">' + escHtml(ch.description || '') + '</div>';
-          if (ch.outfit) html += '<div class="char-desc" style="color:#22d3ee">👕 ' + escHtml(ch.outfit) + '</div>';
-          if (ch.expression) html += '<div class="char-desc" style="color:#a3e635">😊 ' + escHtml(ch.expression) + '</div>';
-          if (ch.physicalDetails) html += '<div class="char-desc" style="color:var(--text-dim)">👤 ' + escHtml(ch.physicalDetails) + '</div>';
-          if (ch.props) html += '<div class="char-desc" style="color:var(--yellow)">📌 ' + escHtml(ch.props) + '</div>';
-          if (ch.speechStyle) html += '<div class="char-desc" style="color:var(--orange)">🗣 ' + escHtml(ch.speechStyle) + '</div>';
-          if (ch.clothing) html += '<div class="char-desc" style="color:var(--text-dimmer)">👕 ' + escHtml(ch.clothing) + '</div>';
+          if (ch.outfit) html += '<div class="char-desc" style="color:#22d3ee">' + escHtml(ch.outfit) + '</div>';
+          if (ch.expression) html += '<div class="char-desc" style="color:#a3e635">' + escHtml(ch.expression) + '</div>';
+          if (ch.physicalDetails) html += '<div class="char-desc" style="color:var(--text-dim)">' + escHtml(ch.physicalDetails) + '</div>';
+          if (ch.props) html += '<div class="char-desc" style="color:var(--yellow)">' + escHtml(ch.props) + '</div>';
+          if (ch.speechStyle) html += '<div class="char-desc" style="color:var(--orange)">' + escHtml(ch.speechStyle) + '</div>';
+          if (ch.clothing) html += '<div class="char-desc" style="color:var(--text-dimmer)">' + escHtml(ch.clothing) + '</div>';
           html += '</div></div>';
         }
         html += '</div></div>';
@@ -1026,7 +1026,7 @@
       clipCopy(buildFullText(), function() {
         var btn = document.getElementById('copy-all-btn');
         btn.textContent = '✅ Copied!'; btn.classList.add('copied');
-        setTimeout(function() { btn.textContent = '📋 Copy All'; btn.classList.remove('copied'); }, 2000);
+        setTimeout(function() { btn.textContent = 'Copy All'; btn.classList.remove('copied'); }, 2000);
       });
     }
 
@@ -1036,7 +1036,7 @@
       clipCopy(text, function() {
         var card = document.getElementById('scene-' + s.sceneNumber);
         var btns = card.querySelectorAll('.copy-scene-btn');
-        if (btns[0]) { btns[0].textContent = '✅ Copied'; btns[0].classList.add('copied'); setTimeout(function() { btns[0].textContent = '📋 Copy All'; btns[0].classList.remove('copied'); }, 2000); }
+        if (btns[0]) { btns[0].textContent = '✅ Copied'; btns[0].classList.add('copied'); setTimeout(function() { btns[0].textContent = 'Copy All'; btns[0].classList.remove('copied'); }, 2000); }
       });
     }
 
