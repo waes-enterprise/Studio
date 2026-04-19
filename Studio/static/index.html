@@ -273,6 +273,31 @@
     .scene-line:hover .copy-field-btn { opacity: 1; }
     .copy-field-btn:hover { background: rgba(255,255,255,0.08); color: var(--text); }
     .copy-field-btn.copied { opacity: 1; color: var(--green); border-color: rgba(34,197,94,0.3); }
+    .ai-prompt-btn {
+      flex-shrink: 0; background: linear-gradient(135deg, rgba(168,85,247,0.2), rgba(234,179,8,0.15));
+      border: 1px solid rgba(168,85,247,0.3); border-radius: 6px;
+      padding: 4px 10px; font-size: 11px; font-weight: 600;
+      color: var(--purple); cursor: pointer; transition: all 0.2s; opacity: 1;
+      display: flex; align-items: center; gap: 4px;
+    }
+    .ai-prompt-btn:hover { background: linear-gradient(135deg, rgba(168,85,247,0.35), rgba(234,179,8,0.25)); transform: translateY(-1px); }
+    .ai-prompt-btn.loading { opacity: 0.6; cursor: wait; pointer-events: none; }
+    .ai-prompt-btn .mini-spinner { width: 10px; height: 10px; border: 1.5px solid rgba(168,85,247,0.3); border-top-color: var(--purple); border-radius: 50%; animation: spin 0.6s linear infinite; }
+    .ai-prompt-box {
+      background: rgba(168,85,247,0.06); border: 1px solid rgba(168,85,247,0.15); border-radius: 10px;
+      padding: 12px; margin-top: 6px; animation: cardFadeIn 0.3s ease-out;
+    }
+    .ai-prompt-box-label { font-size: 10px; font-weight: 700; color: var(--purple); text-transform: uppercase; letter-spacing: 0.5px; margin-bottom: 8px; display: flex; align-items: center; justify-content: space-between; }
+    .ai-prompt-text {
+      font-size: 12.5px; color: var(--text); line-height: 1.65; font-style: italic;
+      white-space: pre-wrap; word-break: break-word;
+    }
+    .ai-prompt-copy-btn {
+      background: none; border: 1px solid rgba(168,85,247,0.2); border-radius: 5px;
+      padding: 2px 8px; font-size: 10px; color: var(--purple); cursor: pointer; font-weight: 600;
+    }
+    .ai-prompt-copy-btn:hover { background: rgba(168,85,247,0.15); }
+    .ai-prompt-copy-btn.copied { color: var(--green); border-color: rgba(34,197,94,0.3); }
 
     .text-view {
       background: var(--card); border: 1px solid var(--border); border-radius: 14px; padding: 16px;
@@ -485,8 +510,12 @@
       h += '<span class="scene-badge">SCENE ' + s.sceneNumber + '</span>';
       h += '<span class="scene-duration">' + escHtml(s.duration) + '</span>';
       if (s.characters && s.characters.length > 0) h += '<span class="scene-duration" style="margin-left:4px">' + escHtml(s.characters.join(', ')) + '</span>';
-      h += '</div><div style="display:flex;gap:4px"><button class="copy-scene-btn" style="opacity:1" onclick="copyScene(' + index + ')">📋 Copy All</button>'
-        + '<button class="copy-scene-btn" style="opacity:1;border-color:rgba(168,85,247,0.3);color:var(--purple)" onclick="copyFullPrompt(' + index + ')">✨ Copy Prompt</button></div></div';
+      h += '</div><div style="display:flex;gap:4px;flex-wrap:wrap">';
+      h += '<button class="copy-scene-btn" style="opacity:1" onclick="copyScene(' + index + ')">📋 Copy All</button>';
+      h += '<button class="copy-scene-btn" style="opacity:1;border-color:rgba(168,85,247,0.3);color:var(--purple)" onclick="copyFullPrompt(' + index + ')">✨ Copy Prompt</button>';
+      h += '<button class="ai-prompt-btn" id="ai-btn-' + s.sceneNumber + '" onclick="generateAiPrompt(' + index + ')">✨ AI Prompt</button>';
+      h += '</div></div>';
+      h += '<div id="ai-prompt-' + s.sceneNumber + '"></div>';
       // Embedded character sheet inside every scene
       h += buildInlineCharSheet();
       h += '<div class="scene-lines">';
@@ -575,6 +604,69 @@
         var btns = card.querySelectorAll('.copy-scene-btn');
         if (btns[1]) { btns[1].textContent = '✅ Copied!'; setTimeout(function() { btns[1].textContent = '✨ Copy Prompt'; }, 2000); }
       });
+    }
+
+    async function generateAiPrompt(index) {
+      var s = scenes[index];
+      var btn = document.getElementById('ai-btn-' + s.sceneNumber);
+      var box = document.getElementById('ai-prompt-' + s.sceneNumber);
+      if (!btn || !box) return;
+
+      btn.classList.add('loading');
+      btn.innerHTML = '<div class="mini-spinner"></div> Generating...';
+
+      var ctx = 'Scene ' + s.sceneNumber + ' (' + s.duration + '):\n';
+      ctx += 'Camera: ' + (s.camera || '') + '\n';
+      ctx += 'Action: ' + (s.action || '') + '\n';
+      ctx += 'Dialogue: ' + (s.dialogue || '') + '\n';
+      ctx += 'Engagement: ' + (s.engagement || '') + '\n\nCharacters:\n';
+      for (var i = 0; i < characters.length; i++) {
+        var c = characters[i];
+        ctx += '- ' + (c.name || 'Character') + ' (' + (c.role || '') + '): ';
+        if (c.physicalDetails) ctx += c.physicalDetails + '. ';
+        if (c.outfit) ctx += 'Wearing: ' + c.outfit + '. ';
+        if (c.expression) ctx += 'Expression: ' + c.expression + '. ';
+        if (c.props) ctx += 'Props: ' + c.props + '. ';
+        ctx += '\n';
+      }
+
+      var apiKey = getApiKey();
+      if (!apiKey) {
+        btn.classList.remove('loading'); btn.innerHTML = '\u2728 AI Prompt';
+        box.innerHTML = '<div class="ai-prompt-box"><div style="color:var(--red);font-size:12px">Save your API key first.</div></div>';
+        return;
+      }
+
+      try {
+        var response = await fetch('https://openrouter.ai/api/v1/chat/completions', {
+          method: 'POST',
+          headers: { 'Authorization': 'Bearer ' + apiKey, 'Content-Type': 'application/json', 'HTTP-Referer': window.location.href, 'X-Title': 'ViralScript AI' },
+          body: JSON.stringify({
+            model: 'google/gemini-2.0-flash-lite-001',
+            messages: [
+              { role: 'system', content: 'You are an expert cinematographer and AI video prompt engineer. Given a scene with character details, write ONE single flowing paragraph as a perfect prompt for AI video generators (Kling, Runway, Pika, Sora). Describe the visual scene vividly: camera movement, lens, angle, framing, lighting, colors, depth of field. Weave in each character\'s exact physical appearance, outfit, expression, and props naturally. Include dialogue with delivery cues in parentheses. No labels, no bullets, no formatting \u2014 just one continuous cinematic paragraph. 2-4 sentences max.' },
+              { role: 'user', content: 'Write the AI video generation prompt:\n\n' + ctx }
+            ],
+            temperature: 0.8,
+            max_tokens: 300
+          })
+        });
+        if (!response.ok) throw new Error('API error ' + response.status);
+        var data = await response.json();
+        var prompt = data.choices && data.choices[0] && data.choices[0].message && data.choices[0].message.content;
+        if (!prompt) throw new Error('Empty response');
+
+        var textId = 'ai-text-' + s.sceneNumber;
+        var copyId = 'ai-copy-' + s.sceneNumber;
+        box.innerHTML = '<div class="ai-prompt-box"><div class="ai-prompt-box-label"><span>\u2728 AI Video Prompt</span>'
+          + '<button class="ai-prompt-copy-btn" id="' + copyId + '" onclick="clipCopy(document.getElementById(\'' + textId + '\').textContent,function(){var b=document.getElementById(\'' + copyId + '\');b.textContent=\'\u2705 Copied\';setTimeout(function(){b.textContent=\'\U0001f4cb Copy\'},2000)})">\U0001f4cb Copy</button></div>'
+          + '<div class="ai-prompt-text" id="' + textId + '">' + escHtml(prompt.trim()) + '</div></div>';
+
+        btn.classList.remove('loading'); btn.innerHTML = '\u2728 AI Prompt';
+      } catch(err) {
+        btn.classList.remove('loading'); btn.innerHTML = '\u2728 AI Prompt';
+        box.innerHTML = '<div class="ai-prompt-box"><div style="color:var(--red);font-size:12px">Failed: ' + escHtml(err.message) + '</div></div>';
+      }
     }
 
     function buildCharText() {
