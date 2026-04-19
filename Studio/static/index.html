@@ -224,7 +224,10 @@
     .scene-char-name { font-weight: 700; color: var(--text); font-size: 12px; }
     .scene-char-meta { color: var(--text-dim); }
     .scene-char-style { color: var(--orange); }
-    .scene-char-outfit { color: var(--text-dimmer); }
+    .scene-char-outfit { color: #22d3ee; }
+    .scene-char-expression { color: #a3e635; }
+    .scene-char-physical { color: var(--text-dim); }
+    .scene-char-props { color: var(--yellow); }
 
     .scenes { display: flex; flex-direction: column; gap: 10px; }
     .scene-card {
@@ -453,9 +456,11 @@
         var ini = (c.name || '?').split(' ').map(function(w) { return w[0]; }).join('').substring(0, 2).toUpperCase();
         h += '<div class="scene-char-row"><div class="scene-char-mini-avatar">' + ini + '</div><div class="scene-char-detail">';
         h += '<div class="scene-char-name">' + escHtml(c.name) + ' <span class="scene-char-meta">(' + escHtml(c.role || 'Character') + ')</span></div>';
-        if (c.description) h += '<div class="scene-char-meta">' + escHtml(c.description) + '</div>';
+        if (c.outfit) h += '<div class="scene-char-outfit">👕 ' + escHtml(c.outfit) + '</div>';
+        if (c.expression) h += '<div class="scene-char-expression">😊 ' + escHtml(c.expression) + '</div>';
+        if (c.physicalDetails) h += '<div class="scene-char-physical">👤 ' + escHtml(c.physicalDetails) + '</div>';
+        if (c.props) h += '<div class="scene-char-props">📌 ' + escHtml(c.props) + '</div>';
         if (c.speechStyle) h += '<div class="scene-char-style">🗣 ' + escHtml(c.speechStyle) + '</div>';
-        if (c.clothing) h += '<div class="scene-char-outfit">👕 ' + escHtml(c.clothing) + '</div>';
         h += '</div></div>';
       }
       h += '</div>';
@@ -473,8 +478,11 @@
         h += '<div class="char-name">' + escHtml(ch.name) + '</div>';
         h += '<div class="char-role">' + escHtml(ch.role || '') + '</div>';
         h += '<div class="char-desc">' + escHtml(ch.description || '') + '</div>';
-        if (ch.speechStyle) h += '<div class="char-desc" style="color:var(--orange)">' + escHtml('🗣 ' + ch.speechStyle) + '</div>';
-        if (ch.clothing) h += '<div class="char-desc" style="color:var(--text-dimmer)">' + escHtml('👕 ' + ch.clothing) + '</div>';
+        if (ch.outfit) h += '<div class="char-desc" style="color:#22d3ee">👕 ' + escHtml(ch.outfit) + '</div>';
+        if (ch.expression) h += '<div class="char-desc" style="color:#a3e635">😊 ' + escHtml(ch.expression) + '</div>';
+        if (ch.physicalDetails) h += '<div class="char-desc" style="color:var(--text-dim)">👤 ' + escHtml(ch.physicalDetails) + '</div>';
+        if (ch.props) h += '<div class="char-desc" style="color:var(--yellow)">📌 ' + escHtml(ch.props) + '</div>';
+        if (ch.speechStyle) h += '<div class="char-desc" style="color:var(--orange)">🗣 ' + escHtml(ch.speechStyle) + '</div>';
         h += '</div></div>';
       }
       h += '</div></div>';
@@ -490,7 +498,11 @@
         var c = characters[i];
         lines.push('');
         lines.push(c.name.toUpperCase() + ' (' + (c.role || 'Character') + ')');
-        lines.push('Description: ' + (c.description || ''));
+        if (c.description) lines.push('Description: ' + c.description);
+        if (c.outfit) lines.push('Outfit: ' + c.outfit);
+        if (c.expression) lines.push('Expression/Mood: ' + c.expression);
+        if (c.physicalDetails) lines.push('Physical Details: ' + c.physicalDetails);
+        if (c.props) lines.push('Props: ' + c.props);
         if (c.speechStyle) lines.push('Speech Style: ' + c.speechStyle);
         if (c.clothing) lines.push('Clothing: ' + c.clothing);
       }
@@ -527,24 +539,26 @@
       setLoading(true);
       clearResults();
 
-      // COMPACT PROMPT — 60% shorter for faster first token
+      // PROMPT — rich character profiles for AI image/video generator consistency
       var sys = 'ViralScript AI: Write viral 60s African-style short-form video scripts (TikTok, Reels, Shorts).'
-        + '\n\nCHARACTER CONSISTENCY (CRITICAL):'
-        + '\n- Each character MUST have a CONSISTENT speech style, personality, and vocabulary across ALL scenes'
-        + '\n- Define a unique speechStyle for each character (e.g. "fast Pidgin", "calm Yoruba accent", "loud Gen Z slang")'
-        + '\n- Include clothing/appearance details that stay constant across every scene'
-        + '\n- Every scene must reference the character sheet so the scene is fully self-contained'
+        + '\n\nCHARACTER CONSISTENCY (CRITICAL — for AI image/video generation):'
+        + '\n- Each character MUST have a CONSISTENT appearance across ALL scenes so AI generators produce visually consistent results'
+        + '\n- Define DETAILED visual traits that never change between scenes'
         + '\n\nRULES:'
-        + '\n- 2-4 characters with fields: name, role, description, speechStyle, clothing'
-        + '\n- 7-8 scenes, ~8s each. Fields: sceneNumber, duration, characters, camera, action, dialogue, engagement'
+        + '\n- 2-4 characters with ALL these fields:'
+        + '\n  name, role, description (personality), speechStyle (how they talk),'
+        + '\n  outfit (exact clothing: e.g. "yellow ankara print shirt, dark blue jeans, white sneakers, gold chain"),'
+        + '\n  expression (default face/mood: e.g. "confident smirk, slightly raised eyebrow"),'
+        + '\n  physicalDetails (skin tone, build, age range, hair, height: e.g. "dark brown skin, athletic build, early 20s, low fade haircut, 6ft"),'
+        + '\n  props (what they carry or interact with: e.g. "soccer ball, phone in back pocket, plastic bag")'
+        + '\n- 7-8 scenes, ~8s each. Fields: sceneNumber, duration, characters[], camera, action, dialogue, engagement'
         + '\n- Handheld camera (shake, quick zoom, snap zoom, whip pan)'
-        + '\n- African dialogue with slang — each character must sound DISTINCT and consistent'
+        + '\n- African dialogue with slang — each character must sound DISTINCT'
         + '\n- Hook in first 3s, engagement hooks every scene'
         + '\n- Fast-paced, relatable African situations, no filler'
         + '\n\nOUTPUT: Return ONLY valid JSON, no markdown:'
-        + '\n{"characters":[{"name":"","role":"","description":"","speechStyle":"","clothing":""}],'
-        + '"scenes":[{"sceneNumber":1,"duration":"0:00-0:08","characters":[],"camera":"","action":"","dialogue":"","engagement":""}],'
-        + '"rawText":"For EACH scene, include the full CHARACTER SHEET (all characters with name, role, description, speech style, clothing) before the scene details. Every scene block must be self-contained."}';
+        + '\n{"characters":[{"name":"","role":"","description":"","speechStyle":"","outfit":"","expression":"","physicalDetails":"","props":""}],'
+        + '"scenes":[{"sceneNumber":1,"duration":"0:00-0:08","characters":[],"camera":"","action":"","dialogue":"","engagement":""}]}';
 
       var usr = 'IDEA: ' + idea + '\nTONE: ' + currentTone + '\n\nWrite the script. JSON only.';
 
@@ -735,8 +749,12 @@
           html += '<div class="char-name">' + escHtml(ch.name) + '</div>';
           html += '<div class="char-role">' + escHtml(ch.role || '') + '</div>';
           html += '<div class="char-desc">' + escHtml(ch.description || '') + '</div>';
-          if (ch.speechStyle) html += '<div class="char-desc" style="color:var(--orange)">' + escHtml('🗣 ' + ch.speechStyle) + '</div>';
-          if (ch.clothing) html += '<div class="char-desc" style="color:var(--text-dimmer)">' + escHtml('👕 ' + ch.clothing) + '</div>';
+          if (ch.outfit) html += '<div class="char-desc" style="color:#22d3ee">👕 ' + escHtml(ch.outfit) + '</div>';
+          if (ch.expression) html += '<div class="char-desc" style="color:#a3e635">😊 ' + escHtml(ch.expression) + '</div>';
+          if (ch.physicalDetails) html += '<div class="char-desc" style="color:var(--text-dim)">👤 ' + escHtml(ch.physicalDetails) + '</div>';
+          if (ch.props) html += '<div class="char-desc" style="color:var(--yellow)">📌 ' + escHtml(ch.props) + '</div>';
+          if (ch.speechStyle) html += '<div class="char-desc" style="color:var(--orange)">🗣 ' + escHtml(ch.speechStyle) + '</div>';
+          if (ch.clothing) html += '<div class="char-desc" style="color:var(--text-dimmer)">👕 ' + escHtml(ch.clothing) + '</div>';
           html += '</div></div>';
         }
         html += '</div></div>';
