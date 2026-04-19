@@ -25,8 +25,6 @@
       --green-dim: rgba(34,197,94,0.15);
       --red: #ef4444;
       --red-dim: rgba(239,68,68,0.12);
-      --purple: #a855f7;
-      --purple-dim: rgba(168,85,247,0.15);
     }
 
     body {
@@ -38,18 +36,27 @@
       -webkit-font-smoothing: antialiased;
     }
 
+    /* Header */
     .header {
-      position: sticky; top: 0; z-index: 10;
-      background: rgba(3,7,18,0.8); backdrop-filter: blur(20px);
-      border-bottom: 1px solid var(--border); padding: 12px 16px;
+      position: sticky;
+      top: 0;
+      z-index: 10;
+      background: rgba(3,7,18,0.8);
+      backdrop-filter: blur(20px);
+      border-bottom: 1px solid var(--border);
+      padding: 12px 16px;
     }
     .header-inner {
-      max-width: 640px; margin: 0 auto;
-      display: flex; align-items: center; justify-content: space-between;
+      max-width: 640px;
+      margin: 0 auto;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
     }
     .logo-group { display: flex; align-items: center; gap: 10px; }
     .logo {
-      width: 36px; height: 36px; border-radius: 10px;
+      width: 36px; height: 36px;
+      border-radius: 10px;
       background: linear-gradient(135deg, var(--yellow), var(--orange));
       display: flex; align-items: center; justify-content: center;
       font-weight: 800; color: #000; font-size: 16px;
@@ -63,10 +70,14 @@
       border: 1px solid var(--border); background: transparent; color: var(--text-dim);
       cursor: pointer; transition: all 0.2s;
     }
-    .view-btn.active { background: var(--yellow-dim); color: var(--yellow); border-color: rgba(234,179,8,0.3); }
+    .view-btn.active {
+      background: var(--yellow-dim); color: var(--yellow); border-color: rgba(234,179,8,0.3);
+    }
 
+    /* Main */
     .main { max-width: 640px; margin: 0 auto; padding: 20px 16px; }
 
+    /* Settings */
     .settings-panel {
       background: var(--card); border: 1px solid var(--border); border-radius: 14px;
       padding: 16px; margin-bottom: 16px;
@@ -79,7 +90,8 @@
     .key-input {
       flex: 1; background: rgba(0,0,0,0.4); border: 1px solid var(--border);
       border-radius: 10px; padding: 10px 12px; color: var(--text); font-size: 13px;
-      font-family: 'SF Mono', 'Fira Code', monospace; outline: none; transition: border-color 0.2s;
+      font-family: 'SF Mono', 'Fira Code', monospace;
+      outline: none; transition: border-color 0.2s;
     }
     .key-input:focus { border-color: rgba(234,179,8,0.4); }
     .key-input::placeholder { color: var(--text-dimmer); }
@@ -93,6 +105,7 @@
     .key-status.connected { color: var(--green); }
     .key-status.error { color: var(--red); }
 
+    /* Input */
     .input-card {
       background: var(--card); border: 1px solid var(--border); border-radius: 14px;
       padding: 16px; margin-bottom: 16px;
@@ -115,7 +128,9 @@
       border: 1px solid var(--border); background: rgba(0,0,0,0.3); color: var(--text-dim);
       cursor: pointer; transition: all 0.2s; text-align: center;
     }
-    .tone-btn.active { background: var(--yellow-dim); color: var(--yellow); border-color: rgba(234,179,8,0.35); }
+    .tone-btn.active {
+      background: var(--yellow-dim); color: var(--yellow); border-color: rgba(234,179,8,0.35);
+    }
 
     .generate-row { margin-top: 14px; display: flex; justify-content: flex-end; }
     .generate-btn {
@@ -129,21 +144,26 @@
 
     .spinner {
       width: 16px; height: 16px; border: 2px solid rgba(0,0,0,0.2);
-      border-top-color: #000; border-radius: 50%; animation: spin 0.6s linear infinite;
+      border-top-color: #000; border-radius: 50%;
+      animation: spin 0.6s linear infinite;
     }
     @keyframes spin { to { transform: rotate(360deg); } }
 
+    /* Error */
     .error-banner {
       background: var(--red-dim); border: 1px solid rgba(239,68,68,0.25);
       border-radius: 12px; padding: 12px 16px; margin-bottom: 16px;
       font-size: 13px; color: var(--red);
     }
 
+    /* Progress Indicator */
     .progress-section {
       background: var(--card); border: 1px solid var(--border); border-radius: 14px;
       padding: 20px; margin-bottom: 16px; text-align: center;
     }
-    .progress-label { font-size: 13px; font-weight: 600; color: var(--yellow); margin-bottom: 12px; }
+    .progress-label {
+      font-size: 13px; font-weight: 600; color: var(--yellow); margin-bottom: 12px;
+    }
     .progress-bar-track {
       width: 100%; height: 6px; background: rgba(255,255,255,0.06);
       border-radius: 3px; overflow: hidden; margin-bottom: 10px;
@@ -152,7 +172,9 @@
       height: 100%; background: linear-gradient(90deg, var(--yellow), var(--orange));
       border-radius: 3px; width: 0%; transition: width 0.4s ease;
     }
-    .progress-scene-dots { display: flex; justify-content: center; gap: 8px; margin-bottom: 8px; }
+    .progress-scene-dots {
+      display: flex; justify-content: center; gap: 8px; margin-bottom: 8px;
+    }
     .progress-dot {
       width: 28px; height: 28px; border-radius: 8px; font-size: 10px; font-weight: 700;
       display: flex; align-items: center; justify-content: center;
@@ -167,11 +189,16 @@
       background: var(--green-dim); color: var(--green); border-color: rgba(34,197,94,0.3);
       animation: none;
     }
-    @keyframes dotPulse { 0%, 100% { transform: scale(1); } 50% { transform: scale(1.15); } }
+    @keyframes dotPulse {
+      0%, 100% { transform: scale(1); }
+      50% { transform: scale(1.15); }
+    }
     .progress-status { font-size: 11px; color: var(--text-dimmer); }
 
+    /* Results Header */
     .results-header {
-      display: flex; align-items: center; justify-content: space-between; margin-bottom: 14px;
+      display: flex; align-items: center; justify-content: space-between;
+      margin-bottom: 14px;
     }
     .results-title { font-size: 16px; font-weight: 700; }
     .results-count { font-size: 12px; color: var(--text-dimmer); font-weight: 400; margin-left: 6px; }
@@ -183,59 +210,16 @@
     .copy-all-btn:hover { background: rgba(255,255,255,0.08); color: var(--text); }
     .copy-all-btn.copied { background: var(--green-dim); color: var(--green); border-color: rgba(34,197,94,0.3); }
 
-    .char-card {
-      background: var(--card); border: 1px solid var(--border); border-radius: 14px;
-      padding: 16px; margin-bottom: 14px; border-left: 3px solid var(--purple);
-      animation: cardFadeIn 0.35s ease-out;
-    }
-    .char-card-title {
-      font-size: 13px; font-weight: 700; color: var(--purple); margin-bottom: 12px;
-      display: flex; align-items: center; gap: 6px;
-    }
-    .char-list { display: flex; flex-direction: column; gap: 10px; }
-    .char-item { display: flex; gap: 10px; align-items: flex-start; }
-    .char-avatar {
-      width: 36px; height: 36px; border-radius: 10px; flex-shrink: 0;
-      background: var(--purple-dim); display: flex; align-items: center; justify-content: center;
-      font-size: 14px; font-weight: 800; color: var(--purple);
-    }
-    .char-info { flex: 1; }
-    .char-name { font-size: 13px; font-weight: 700; color: var(--text); }
-    .char-role { font-size: 11px; color: var(--purple); font-weight: 600; margin-top: 1px; }
-    .char-desc { font-size: 12px; color: var(--text-dim); margin-top: 3px; line-height: 1.5; }
-    /* Inline char sheet styles for scenes */
-    .scene-char-sheet {
-      background: rgba(168,85,247,0.06); border: 1px solid rgba(168,85,247,0.12); border-radius: 10px;
-      padding: 10px 12px; display: flex; flex-direction: column; gap: 6px;
-    }
-    .scene-char-sheet-title {
-      font-size: 10px; font-weight: 700; color: var(--purple); text-transform: uppercase;
-      letter-spacing: 0.5px; margin-bottom: 2px;
-    }
-    .scene-char-row {
-      display: flex; gap: 8px; align-items: flex-start; font-size: 11.5px;
-    }
-    .scene-char-mini-avatar {
-      width: 24px; height: 24px; border-radius: 6px; flex-shrink: 0;
-      background: var(--purple-dim); display: flex; align-items: center; justify-content: center;
-      font-size: 9px; font-weight: 800; color: var(--purple);
-    }
-    .scene-char-detail { flex: 1; line-height: 1.45; }
-    .scene-char-name { font-weight: 700; color: var(--text); font-size: 12px; }
-    .scene-char-meta { color: var(--text-dim); }
-    .scene-char-style { color: var(--orange); }
-    .scene-char-outfit { color: #22d3ee; }
-    .scene-char-expression { color: #a3e635; }
-    .scene-char-physical { color: var(--text-dim); }
-    .scene-char-props { color: var(--yellow); }
-
+    /* Scene Cards */
     .scenes { display: flex; flex-direction: column; gap: 10px; }
     .scene-card {
       background: var(--card); border: 1px solid var(--border); border-radius: 14px;
-      padding: 16px; transition: all 0.2s; display: flex; flex-direction: column; gap: 10px;
+      padding: 16px; transition: all 0.2s;
     }
     .scene-card:hover { border-color: var(--border-hover); }
-    .scene-card.streaming-in { animation: cardFadeIn 0.35s ease-out; }
+    .scene-card.streaming-in {
+      animation: cardFadeIn 0.35s ease-out;
+    }
     @keyframes cardFadeIn {
       from { opacity: 0; transform: translateY(10px); }
       to { opacity: 1; transform: translateY(0); }
@@ -247,52 +231,24 @@
     }
     .scene-duration { font-size: 11px; color: var(--text-dimmer); margin-left: 8px; }
     .copy-scene-btn {
-      padding: 5px 14px; border-radius: 8px; font-size: 12px; font-weight: 600;
+      padding: 4px 10px; border-radius: 6px; font-size: 11px; font-weight: 600;
       border: 1px solid var(--border); background: transparent; color: var(--text-dimmer);
-      cursor: pointer; transition: all 0.15s;
+      cursor: pointer; transition: all 0.15s; opacity: 0;
     }
+    .scene-card:hover .copy-scene-btn { opacity: 1; }
     .copy-scene-btn:hover { background: rgba(255,255,255,0.08); color: var(--text); }
-    .copy-scene-btn.copied { background: var(--green-dim); color: var(--green); border-color: rgba(34,197,94,0.3); }
+    .copy-scene-btn.copied { opacity: 1; background: var(--green-dim); color: var(--green); border-color: rgba(34,197,94,0.3); }
 
-    .scene-lines { display: flex; flex-direction: column; gap: 12px; }
-    .scene-line {
-      font-size: 13px; color: var(--text-dim); line-height: 1.65;
-      padding: 10px 12px; border-radius: 10px; background: rgba(255,255,255,0.02);
-      border: 1px solid var(--border); transition: background 0.15s;
-    }
-    .scene-line:hover { background: rgba(255,255,255,0.04); }
-    .scene-line-content { flex: 1; }
+    .scene-lines { display: flex; flex-direction: column; gap: 6px; }
+    .scene-line { font-size: 13px; color: var(--text-dim); }
     .scene-line-label { color: var(--text-dimmer); font-weight: 600; margin-right: 4px; }
-    .scene-line.dialogue .scene-line-content { color: var(--text); font-weight: 500; }
+    .scene-line.dialogue { color: var(--text); font-weight: 500; }
     .scene-line.dialogue .scene-line-label { font-weight: 400; color: var(--text-dimmer); }
-    .scene-line { padding: 10px 12px; }
-    .ai-prompt-btn {
-      flex-shrink: 0; background: linear-gradient(135deg, rgba(168,85,247,0.2), rgba(234,179,8,0.15));
-      border: 1px solid rgba(168,85,247,0.3); border-radius: 8px;
-      padding: 5px 14px; font-size: 12px; font-weight: 600;
-      color: var(--purple); cursor: pointer; transition: all 0.2s;
-    }
-    .ai-prompt-btn:hover { background: linear-gradient(135deg, rgba(168,85,247,0.35), rgba(234,179,8,0.25)); }
-    .ai-prompt-btn.loading { opacity: 0.6; cursor: wait; pointer-events: none; }
-    .ai-prompt-btn .mini-spinner { width: 10px; height: 10px; border: 1.5px solid rgba(168,85,247,0.3); border-top-color: var(--purple); border-radius: 50%; animation: spin 0.6s linear infinite; }
-    .ai-prompt-box {
-      background: rgba(168,85,247,0.06); border: 1px solid rgba(168,85,247,0.15); border-radius: 10px;
-      padding: 12px; margin-top: 6px; animation: cardFadeIn 0.3s ease-out;
-    }
-    .ai-prompt-box-label { font-size: 11px; font-weight: 700; color: var(--purple); text-transform: uppercase; letter-spacing: 0.5px; margin-bottom: 8px; display: flex; align-items: center; justify-content: space-between; }
-    .ai-prompt-text {
-      font-size: 12.5px; color: var(--text); line-height: 1.65; font-style: italic;
-      white-space: pre-wrap; word-break: break-word;
-    }
-    .ai-prompt-copy-btn {
-      background: none; border: 1px solid rgba(168,85,247,0.2); border-radius: 6px;
-      padding: 3px 10px; font-size: 11px; color: var(--purple); cursor: pointer; font-weight: 600;
-    }
-    .ai-prompt-copy-btn:hover { background: rgba(168,85,247,0.15); }
-    .ai-prompt-copy-btn.copied { color: var(--green); border-color: rgba(34,197,94,0.3); }
 
+    /* Text View */
     .text-view {
-      background: var(--card); border: 1px solid var(--border); border-radius: 14px; padding: 16px;
+      background: var(--card); border: 1px solid var(--border); border-radius: 14px;
+      padding: 16px;
     }
     .text-pre {
       font-family: 'SF Mono', 'Fira Code', 'Courier New', monospace;
@@ -300,21 +256,25 @@
       white-space: pre-wrap; word-break: break-word; user-select: all;
     }
 
+    /* Empty State */
     .empty-state { text-align: center; padding: 48px 20px; }
     .empty-emoji { font-size: 48px; margin-bottom: 12px; }
     .empty-title { font-size: 18px; font-weight: 700; color: var(--text-dim); margin-bottom: 6px; }
     .empty-sub { font-size: 13px; color: var(--text-dimmer); max-width: 320px; margin: 0 auto; }
 
+    /* Footer */
     .footer {
       text-align: center; padding: 24px 16px; margin-top: 40px;
       border-top: 1px solid var(--border); font-size: 11px; color: var(--text-dimmer);
     }
 
+    /* Hide sections */
     .hidden { display: none !important; }
   </style>
 </head>
 <body>
 
+  <!-- Header -->
   <header class="header">
     <div class="header-inner">
       <div class="logo-group">
@@ -332,8 +292,10 @@
   </header>
 
   <main class="main">
+
+    <!-- API Key Settings -->
     <div class="settings-panel">
-      <div class="settings-label">OpenRouter API Key</div>
+      <div class="settings-label">🔑 OpenRouter API Key</div>
       <div class="key-input-row">
         <input type="password" class="key-input" id="api-key-input" placeholder="sk-or-v1-..." />
         <button class="save-btn" id="save-key-btn" onclick="saveApiKey()">Save</button>
@@ -341,34 +303,39 @@
       <div class="key-status" id="key-status"></div>
     </div>
 
+    <!-- Input -->
     <div class="input-card">
-      <div class="input-label">Your Video Idea</div>
+      <div class="input-label">💡 Your Video Idea</div>
       <textarea class="idea-input" id="idea-input" placeholder="e.g. A guy tries to impress his girlfriend's Nigerian mom by cooking jollof rice but everything goes wrong..."></textarea>
+
       <div class="tone-section">
-        <div class="tone-label">Tone / Vibe</div>
+        <div class="tone-label">🎭 Tone / Vibe</div>
         <div class="tone-grid">
-          <button class="tone-btn active" data-tone="comedy" onclick="setTone(this)">Comedy</button>
-          <button class="tone-btn" data-tone="drama" onclick="setTone(this)">Drama</button>
-          <button class="tone-btn" data-tone="thriller" onclick="setTone(this)">Thriller</button>
-          <button class="tone-btn" data-tone="romance" onclick="setTone(this)">Romance</button>
-          <button class="tone-btn" data-tone="horror" onclick="setTone(this)">Horror</button>
-          <button class="tone-btn" data-tone="inspirational" onclick="setTone(this)">Inspiring</button>
-          <button class="tone-btn" data-tone="street" onclick="setTone(this)">Street</button>
-          <button class="tone-btn" data-tone="educational" onclick="setTone(this)">Edu</button>
+          <button class="tone-btn active" data-tone="comedy" onclick="setTone(this)">😂 Comedy</button>
+          <button class="tone-btn" data-tone="drama" onclick="setTone(this)">🎭 Drama</button>
+          <button class="tone-btn" data-tone="thriller" onclick="setTone(this)">😱 Thriller</button>
+          <button class="tone-btn" data-tone="romance" onclick="setTone(this)">❤️ Romance</button>
+          <button class="tone-btn" data-tone="horror" onclick="setTone(this)">👻 Horror</button>
+          <button class="tone-btn" data-tone="inspirational" onclick="setTone(this)">✨ Inspiring</button>
+          <button class="tone-btn" data-tone="street" onclick="setTone(this)">🔥 Street</button>
+          <button class="tone-btn" data-tone="educational" onclick="setTone(this)">📚 Edu</button>
         </div>
       </div>
+
       <div class="generate-row">
         <button class="generate-btn" id="generate-btn" onclick="generateScript()">
-          <span id="gen-text">Generate Script</span>
+          <span id="gen-text">⚡ Generate Script</span>
           <span id="gen-spinner" class="hidden"><div class="spinner"></div></span>
         </button>
       </div>
     </div>
 
+    <!-- Error Banner -->
     <div class="error-banner hidden" id="error-banner"></div>
 
+    <!-- Progress Indicator -->
     <div class="hidden" id="progress-section">
-      <div class="progress-label">Generating your script...</div>
+      <div class="progress-label">🎬 Generating your script...</div>
       <div class="progress-bar-track">
         <div class="progress-bar-fill" id="progress-bar"></div>
       </div>
@@ -385,58 +352,82 @@
       <div class="progress-status" id="progress-status">Connecting to AI...</div>
     </div>
 
+    <!-- Results -->
     <div class="hidden" id="results-section">
       <div class="results-header">
         <div class="results-title">
-          Your Script <span class="results-count" id="results-count"></span>
+          🎬 Your Script <span class="results-count" id="results-count"></span>
         </div>
-        <button class="copy-all-btn" id="copy-all-btn" onclick="copyAll()">Copy All</button>
+        <button class="copy-all-btn" id="copy-all-btn" onclick="copyAll()">📋 Copy All</button>
       </div>
-      <div id="cards-view"></div>
+
+      <!-- Card View -->
+      <div id="cards-view" class="scenes"></div>
+
+      <!-- Text View -->
       <div id="text-view" class="text-view hidden">
         <pre class="text-pre" id="text-content"></pre>
       </div>
     </div>
 
+    <!-- Empty State -->
     <div id="empty-state" class="empty-state">
-      
+      <div class="empty-emoji">🎬</div>
       <div class="empty-title">Ready to Create Viral Scripts</div>
       <div class="empty-sub">Drop your video idea, pick a tone, and hit Generate. Your 60-second African-style script will be ready in seconds.</div>
     </div>
+
   </main>
 
-  <footer class="footer">ViralScript AI — Copy, paste, shoot.</footer>
+  <footer class="footer">
+    ViralScript AI — Copy, paste, shoot. 🌍
+  </footer>
 
   <script>
-    var currentTone = 'comedy';
-    var currentView = 'cards';
-    var scenes = [];
-    var characters = [];
-    var rawText = '';
+    // State
+    let currentTone = 'comedy';
+    let currentView = 'cards';
+    let scenes = [];
+    let rawText = '';
 
+    // Init
     (function init() {
-      var saved = localStorage.getItem('vsa_api_key');
+      const saved = localStorage.getItem('vsa_api_key');
       if (saved) {
         document.getElementById('api-key-input').value = saved;
         showKeyStatus('Key saved ✓', 'connected');
       }
     })();
 
+    // --- API Key ---
     function saveApiKey() {
-      var key = document.getElementById('api-key-input').value.trim();
-      if (!key.startsWith('sk-or-v1-')) { showKeyStatus('Invalid key format. Must start with sk-or-v1-', 'error'); return; }
+      const key = document.getElementById('api-key-input').value.trim();
+      if (!key.startsWith('sk-or-v1-')) {
+        showKeyStatus('Invalid key format. Must start with sk-or-v1-', 'error');
+        return;
+      }
       localStorage.setItem('vsa_api_key', key);
       showKeyStatus('Key saved ✓', 'connected');
     }
-    function showKeyStatus(msg, type) { var el = document.getElementById('key-status'); el.textContent = msg; el.className = 'key-status ' + type; }
-    function getApiKey() { return localStorage.getItem('vsa_api_key') || ''; }
 
+    function showKeyStatus(msg, type) {
+      const el = document.getElementById('key-status');
+      el.textContent = msg;
+      el.className = 'key-status ' + type;
+    }
+
+    function getApiKey() {
+      return localStorage.getItem('vsa_api_key') || '';
+    }
+
+    // --- Tone ---
     function setTone(btn) {
-      document.querySelectorAll('.tone-btn').forEach(function(b) { b.classList.remove('active'); });
+      document.querySelectorAll('.tone-btn').forEach(b => b.classList.remove('active'));
       btn.classList.add('active');
       currentTone = btn.dataset.tone;
     }
 
+    // --- View ---
     function setView(v) {
       currentView = v;
       document.getElementById('btn-cards').classList.toggle('active', v === 'cards');
@@ -445,315 +436,44 @@
       document.getElementById('text-view').classList.toggle('hidden', v !== 'text');
     }
 
+    // --- Progress ---
     function updateProgress(sceneNum, statusText) {
-      document.getElementById('progress-bar').style.width = Math.min((sceneNum / 8) * 100, 100) + '%';
+      var bar = document.getElementById('progress-bar');
+      bar.style.width = Math.min((sceneNum / 8) * 100, 100) + '%';
+
       for (var i = 1; i <= 8; i++) {
         var dot = document.getElementById('dot-' + i);
         dot.classList.remove('active', 'done');
         if (i < sceneNum) dot.classList.add('done');
         else if (i === sceneNum) dot.classList.add('active');
       }
-      if (statusText) document.getElementById('progress-status').textContent = statusText;
-    }
 
-    function hideProgress() { document.getElementById('progress-section').classList.add('hidden'); }
-
-    // --- Build HTML helpers ---
-    function fieldLine(label, value, fieldKey) {
-      var cls = fieldKey === 'dialogue' ? ' scene-line dialogue' : '';
-      return '<div class="scene-line' + cls + '"><span class="scene-line-label">' + label + ':</span> ' + escHtml(value) + '</div>';
-    }
-
-    function buildSceneCardHtml(s, index) {
-      var h = '<div class="scene-card streaming-in" id="scene-' + s.sceneNumber + '">';
-      h += '<div class="scene-top"><div>';
-      h += '<span class="scene-badge">SCENE ' + s.sceneNumber + '</span>';
-      h += '<span class="scene-duration">' + escHtml(s.duration) + '</span>';
-      if (s.characters && s.characters.length > 0) h += '<span class="scene-duration" style="margin-left:4px">' + escHtml(s.characters.join(', ')) + '</span>';
-      h += '</div><div style="display:flex;gap:5px;align-items:center">';
-      h += '<button class="copy-scene-btn" onclick="copyScene(' + index + ')">Copy Scene</button>';
-      h += '<button class="ai-prompt-btn" id="ai-btn-' + s.sceneNumber + '" onclick="generateAiPrompt(' + index + ')">AI Prompt</button>';
-      h += '</div></div>';
-      h += '<div id="ai-prompt-' + s.sceneNumber + '"></div>';
-      h += '<div class="scene-lines">';
-      h += fieldLine('Camera', s.camera, 'camera');
-      h += fieldLine('Action', s.action, 'action');
-      h += fieldLine('Dialogue', s.dialogue, 'dialogue');
-      h += fieldLine('Engagement', s.engagement, 'engagement');
-      h += '</div></div>';
-      return h;
-    }
-
-    function buildInlineCharSheet() {
-      if (!characters.length) return '';
-      var h = '<div class="scene-char-sheet">';
-      h += '<div class="scene-char-sheet-title">Characters</div>';
-      for (var i = 0; i < characters.length; i++) {
-        var c = characters[i];
-        var ini = (c.name || '?').split(' ').map(function(w) { return w[0]; }).join('').substring(0, 2).toUpperCase();
-        h += '<div class="scene-char-row"><div class="scene-char-mini-avatar">' + ini + '</div><div class="scene-char-detail">';
-        h += '<div class="scene-char-name">' + escHtml(c.name) + ' <span class="scene-char-meta">(' + escHtml(c.role || 'Character') + ')</span></div>';
-        if (c.outfit) h += '<div class="scene-char-outfit">' + escHtml(c.outfit) + '</div>';
-        if (c.expression) h += '<div class="scene-char-expression">' + escHtml(c.expression) + '</div>';
-        if (c.physicalDetails) h += '<div class="scene-char-physical">' + escHtml(c.physicalDetails) + '</div>';
-        if (c.props) h += '<div class="scene-char-props">' + escHtml(c.props) + '</div>';
-        if (c.speechStyle) h += '<div class="scene-char-style">' + escHtml(c.speechStyle) + '</div>';
-        h += '</div></div>';
-      }
-      h += '</div>';
-      return h;
-    }
-
-    function renderCharSheet(charArr) {
-      var existing = document.querySelector('.char-card');
-      if (existing) existing.remove();
-      var h = '<div class="char-card"><div class="char-card-title">Character Sheet</div><div class="char-list">';
-      for (var i = 0; i < charArr.length; i++) {
-        var ch = charArr[i];
-        var ini = (ch.name || '?').split(' ').map(function(w) { return w[0]; }).join('').substring(0, 2).toUpperCase();
-        h += '<div class="char-item"><div class="char-avatar">' + ini + '</div><div class="char-info">';
-        h += '<div class="char-name">' + escHtml(ch.name) + '</div>';
-        h += '<div class="char-role">' + escHtml(ch.role || '') + '</div>';
-        h += '<div class="char-desc">' + escHtml(ch.description || '') + '</div>';
-        if (ch.outfit) h += '<div class="char-desc" style="color:#22d3ee">' + escHtml(ch.outfit) + '</div>';
-        if (ch.expression) h += '<div class="char-desc" style="color:#a3e635">' + escHtml(ch.expression) + '</div>';
-        if (ch.physicalDetails) h += '<div class="char-desc" style="color:var(--text-dim)">' + escHtml(ch.physicalDetails) + '</div>';
-        if (ch.props) h += '<div class="char-desc" style="color:var(--yellow)">' + escHtml(ch.props) + '</div>';
-        if (ch.speechStyle) h += '<div class="char-desc" style="color:var(--orange)">' + escHtml(ch.speechStyle) + '</div>';
-        h += '</div></div>';
-      }
-      h += '</div></div>';
-      var sc = document.getElementById('scenes-container');
-      if (sc) sc.insertAdjacentHTML('beforebegin', h);
-      else document.getElementById('cards-view').insertAdjacentHTML('afterbegin', h);
-    }
-
-    function buildFullPrompt(s) {
-      var parts = [];
-      // Camera + action opening
-      if (s.camera) parts.push(s.camera);
-      if (s.action) parts.push(s.action);
-      // Character appearance paragraph
-      if (characters.length > 0) {
-        var charDescs = [];
-        for (var i = 0; i < characters.length; i++) {
-          var c = characters[i];
-          var bits = [];
-          if (c.name) bits.push(c.name);
-          if (c.physicalDetails) bits.push(c.physicalDetails);
-          if (c.outfit) bits.push('wearing ' + c.outfit);
-          if (c.expression) bits.push(c.expression);
-          if (c.props) bits.push('with ' + c.props);
-          if (bits.length > 1) charDescs.push(bits.join(', '));
-        }
-        if (charDescs.length > 0) parts.push('Characters: ' + charDescs.join('. '));
-      }
-      // Dialogue
-      if (s.dialogue) parts.push(s.dialogue);
-      return parts.join('. ') + '.';
-    }
-
-    function copyFullPrompt(index) {
-      var s = scenes[index];
-      var text = buildFullPrompt(s);
-      clipCopy(text, function() {
-        var card = document.getElementById('scene-' + s.sceneNumber);
-        var btns = card.querySelectorAll('.copy-scene-btn');
-        if (btns[0]) { btns[0].textContent = 'Copied'; btns[0].classList.add('copied'); setTimeout(function() { btns[0].textContent = 'Copy Scene'; btns[0].classList.remove('copied'); }, 2000); }
-      });
-    }
-
-    async function generateAiPrompt(index) {
-      var s = scenes[index];
-      var btn = document.getElementById('ai-btn-' + s.sceneNumber);
-      var box = document.getElementById('ai-prompt-' + s.sceneNumber);
-      if (!btn || !box) return;
-
-      btn.classList.add('loading');
-      btn.innerHTML = '<div class="mini-spinner"></div> Generating...';
-
-      var ctx = 'Scene ' + s.sceneNumber + ' (' + s.duration + '):\n';
-      ctx += 'Camera: ' + (s.camera || '') + '\n';
-      ctx += 'Action: ' + (s.action || '') + '\n';
-      ctx += 'Dialogue: ' + (s.dialogue || '') + '\n';
-      ctx += 'Engagement: ' + (s.engagement || '') + '\n\nCharacters:\n';
-      for (var i = 0; i < characters.length; i++) {
-        var c = characters[i];
-        ctx += '- ' + (c.name || 'Character') + ' (' + (c.role || '') + '): ';
-        if (c.physicalDetails) ctx += c.physicalDetails + '. ';
-        if (c.outfit) ctx += 'Wearing: ' + c.outfit + '. ';
-        if (c.expression) ctx += 'Expression: ' + c.expression + '. ';
-        if (c.props) ctx += 'Props: ' + c.props + '. ';
-        ctx += '\n';
-      }
-
-      var apiKey = getApiKey();
-      if (!apiKey) {
-        btn.classList.remove('loading'); btn.innerHTML = 'AI Prompt';
-        box.innerHTML = '<div class="ai-prompt-box"><div style="color:var(--red);font-size:12px">Save your API key first.</div></div>';
-        return;
-      }
-
-      try {
-        var response = await fetch('https://openrouter.ai/api/v1/chat/completions', {
-          method: 'POST',
-          headers: { 'Authorization': 'Bearer ' + apiKey, 'Content-Type': 'application/json', 'HTTP-Referer': window.location.href, 'X-Title': 'ViralScript AI' },
-          body: JSON.stringify({
-            model: 'google/gemini-2.0-flash-lite-001',
-            messages: [
-              { role: 'system', content: 'You are an expert cinematographer and AI video prompt engineer. Given a scene with character details, write ONE single flowing paragraph as a perfect prompt for AI video generators (Kling, Runway, Pika, Sora). CRITICAL CAMERA RULE: ONLY handheld shaky camera movements. NEVER use zoom in, zoom out, dolly, slider, gimbal, crane, or any smooth/stabilized camera movement. All shots must feel raw, documentary-style, with natural handheld shake. Describe the shake intensity, hand-held feel, lens (wide prime like 24mm or 35mm preferred), angle, framing, lighting, colors, depth of field. Weave in each character\'s exact physical appearance, outfit, expression, and props naturally. Include dialogue with delivery cues in parentheses. No labels, no bullets, no formatting \u2014 just one continuous cinematic paragraph. 2-4 sentences max.' },
-              { role: 'user', content: 'Write the AI video generation prompt:\n\n' + ctx }
-            ],
-            temperature: 0.8,
-            max_tokens: 300
-          })
-        });
-        if (!response.ok) throw new Error('API error ' + response.status);
-        var data = await response.json();
-        var prompt = data.choices && data.choices[0] && data.choices[0].message && data.choices[0].message.content;
-        if (!prompt) throw new Error('Empty response');
-
-        var textId = 'ai-text-' + s.sceneNumber;
-        var copyId = 'ai-copy-' + s.sceneNumber;
-        box.innerHTML = '<div class="ai-prompt-box"><div class="ai-prompt-box-label"><span>AI Video Prompt</span>'
-          + '<button class="ai-prompt-copy-btn" id="' + copyId + '" onclick="clipCopy(document.getElementById(\'' + textId + '\').textContent,function(){var b=document.getElementById(\'' + copyId + '\');b.textContent=\'\u2705 Copied\';setTimeout(function(){b.textContent=\'\U0001f4cb Copy\'},2000)})">\U0001f4cb Copy</button></div>'
-          + '<div class="ai-prompt-text" id="' + textId + '">' + escHtml(prompt.trim()) + '</div></div>';
-
-        btn.classList.remove('loading'); btn.innerHTML = 'AI Prompt';
-      } catch(err) {
-        btn.classList.remove('loading'); btn.innerHTML = 'AI Prompt';
-        box.innerHTML = '<div class="ai-prompt-box"><div style="color:var(--red);font-size:12px">Failed: ' + escHtml(err.message) + '</div></div>';
+      if (statusText) {
+        document.getElementById('progress-status').textContent = statusText;
       }
     }
 
-    function buildCharText() {
-      if (!characters.length) return '';
-      var lines = ['=== CHARACTER SHEET ==='];
-      for (var i = 0; i < characters.length; i++) {
-        var c = characters[i];
-        lines.push('');
-        lines.push(c.name.toUpperCase() + ' (' + (c.role || 'Character') + ')');
-        if (c.description) lines.push('Description: ' + c.description);
-        if (c.outfit) lines.push('Outfit: ' + c.outfit);
-        if (c.expression) lines.push('Expression/Mood: ' + c.expression);
-        if (c.physicalDetails) lines.push('Physical Details: ' + c.physicalDetails);
-        if (c.props) lines.push('Props: ' + c.props);
-        if (c.speechStyle) lines.push('Speech Style: ' + c.speechStyle);
-        if (c.clothing) lines.push('Clothing: ' + c.clothing);
-      }
-      return lines.join('\n');
+    function hideProgress() {
+      document.getElementById('progress-section').classList.add('hidden');
     }
 
-    function buildSceneText(s) {
-      var lines = [];
-      var cb = buildCharText();
-      if (cb) { lines.push(cb); lines.push(''); }
-      lines.push('--- SCENE ' + s.sceneNumber + ' (' + s.duration + ') ---');
-      if (s.characters && s.characters.length) lines.push('Characters in scene: ' + s.characters.join(', '));
-      lines.push('Camera: ' + s.camera, 'Action: ' + s.action, 'Dialogue: ' + s.dialogue, 'Engagement: ' + s.engagement);
-      return lines.join('\n');
-    }
-
-    function buildFullText() {
-      if (rawText) return rawText;
-      var parts = [];
-      for (var i = 0; i < scenes.length; i++) {
-        parts.push(buildSceneText(scenes[i]));
-        if (i < scenes.length - 1) parts.push('');
-      }
-      return parts.join('\n');
-    }
-
-    // --- Cache key for localStorage ---
-    function getCacheKey(idea, tone) {
-      return 'vsa_' + idea.toLowerCase().replace(/\s+/g, '_').substring(0, 80) + '_' + tone;
-    }
-
-    function loadFromCache(idea, tone) {
-      try {
-        var cached = localStorage.getItem(getCacheKey(idea, tone));
-        if (!cached) return null;
-        return JSON.parse(cached);
-      } catch(e) { return null; }
-    }
-
-    function saveToCache(idea, tone, data) {
-      try {
-        // Keep max 20 cached scripts
-        var keys = [];
-        for (var i = 0; i < localStorage.length; i++) {
-          var k = localStorage.key(i);
-          if (k && k.startsWith('vsa_')) keys.push(k);
-        }
-        if (keys.length >= 20) {
-          keys.sort(function(a, b) { return (localStorage.getItem(a) || '').length - (localStorage.getItem(b) || '').length; });
-          for (var j = 0; j < keys.length - 18; j++) localStorage.removeItem(keys[j]);
-        }
-        localStorage.setItem(getCacheKey(idea, tone), JSON.stringify(data));
-      } catch(e) {}
-    }
-
-    // --- Generate with INCREMENTAL streaming render ---
+    // --- Generate (Streaming) ---
     async function generateScript() {
       var idea = document.getElementById('idea-input').value.trim();
       if (!idea) return;
-      var apiKey = getApiKey();
-      if (!apiKey) { showError('Please save your OpenRouter API key first.'); return; }
 
-      // Check cache first
-      var cached = loadFromCache(idea, currentTone);
-      if (cached && cached.characters && cached.scenes && cached.scenes.length > 0) {
-        setLoading(true);
-        clearResults();
-        characters = cached.characters;
-        scenes = cached.scenes;
-        renderCharSheet(characters);
-        document.getElementById('results-section').classList.remove('hidden');
-        document.getElementById('results-count').textContent = '(' + scenes.length + ' scenes - cached)';
-        var container = document.getElementById('scenes-container');
-        if (!container) {
-          document.getElementById('cards-view').innerHTML = '<div class="scenes" id="scenes-container"></div>';
-          container = document.getElementById('scenes-container');
-        }
-        for (var ci = 0; ci < scenes.length; ci++) {
-          container.insertAdjacentHTML('beforeend', buildSceneCardHtml(scenes[ci], ci));
-        }
-        document.getElementById('text-content').textContent = buildFullText();
-        setLoading(false);
+      var apiKey = getApiKey();
+      if (!apiKey) {
+        showError('Please save your OpenRouter API key first (the key field at the top).');
         return;
       }
 
       setLoading(true);
       clearResults();
 
-      // PROMPT — ultra-detailed fields for image/video generation prompts
-      var sys = 'ViralScript AI: Write viral 60s African-style short-form video scripts (TikTok, Reels, Shorts).'
-        + '\n\nCHARACTER CONSISTENCY (CRITICAL — for AI image/video generation):'
-        + '\n- Each character MUST have a CONSISTENT appearance across ALL scenes so AI generators produce visually consistent results'
-        + '\n- Define DETAILED visual traits that never change between scenes'
-        + '\n\nCHARACTER FIELDS (be EXTREMELY detailed — these are used as AI image/video prompts):'
-        + '\n  name, role, description (personality, 2-3 sentences),'
-        + '\n  speechStyle (how they talk, accent, vocabulary level: e.g. "fast Lagos Pidgin with Yoruba phrases, loud and animated"),'
-        + '\n  outfit (FULL head-to-toe: hair accessory, top fabric/color/pattern, bottom, shoes, jewelry, accessories. e.g. "red durag, oversized white graphic tee with faded print, distressed black cargo shorts, white Air Force 1s with scuff marks, thin silver chain necklace, black digital watch on left wrist"),'
-        + '\n  expression (default face, micro-expressions: e.g. "slightly raised left eyebrow, relaxed jaw, confident half-smile showing teeth, eyes slightly narrowed"),'
-        + '\n  physicalDetails (skin tone description, build, age range, exact height, hair style/fade type, facial hair, distinguishing features: e.g. "deep dark brown skin, muscular athletic build, early 20s, 5\'11, fresh low skin fade with sharp line-up, thin mustache, small scar on left cheekbone"),'
-        + '\n  props (every item they carry, wear, or interact with — include color, size, condition: e.g. "worn brown leather satchel bag across right shoulder, cracked iPhone 13 in left hand with green case, rolled-up newspaper under right arm")'
-        + '\n\nSCENE FIELDS (each must be DETAILED for AI video generation):'
-        + '\n  camera (HANDHELD SHAKY CAMERA ONLY — NO zooming in, NO zooming out, NO dolly, NO slider, NO stabilizer. Describe shake intensity, tilt, angle, framing: e.g. "Handheld shaky camera, medium shake intensity, slightly tilted right, eye-level angle following subject walking, 24mm wide lens, natural shallow depth of field")'
-        + '\n  action (body language, pace, specific movements, timing: e.g. "Man slowly turns around, shoulders dropping, pauses for 2 seconds before speaking, wipes sweat from forehead with back of hand")'
-        + '\n  dialogue (include tone, delivery notes, accent cues in parentheses: e.g. "(Said with exhausted sarcasm, trailing off) Ah ah, so you people will just stress me for nothing?")'
-        + '\n  engagement (hook tactic, audience reaction trigger: e.g. "Plot twist reveal — freeze frame on character\'s shocked face, text overlay: WAIT FOR IT")'
-        + '\n\nRULES:'
-        + '\n- 2-4 characters, 7-8 scenes, ~8s each. Fields: sceneNumber, duration, characters[]'
-        + '\n- HANDHELD SHAKY CAMERA ONLY — Never use zoom in, zoom out, dolly shots, slider, gimbal, or any stabilized/smooth movement. All camera work must feel raw, documentary-style, shaky, handheld with energy'
-        + '\n- African dialogue with local slang — each character must sound DISTINCT'
-        + '\n- Hook in first 3s, engagement hooks every scene'
-        + '\n- NO filler, NO generic descriptions — every line must be specific enough to generate from'+ '\n- EVERY field (camera, action, dialogue, engagement) must have AT LEAST 2 full sentences. No single-sentence fields. Each scene must have the SAME level of detail and length.'
-        + '\n\nOUTPUT: Return ONLY valid JSON, no markdown:'
-        + '\n{"characters":[{"name":"","role":"","description":"","speechStyle":"","outfit":"","expression":"","physicalDetails":"","props":""}],'
-        + '"scenes":[{"sceneNumber":1,"duration":"0:00-0:08","characters":[],"camera":"","action":"","dialogue":"","engagement":""}]}';
+      var systemPrompt = 'You are ViralScript AI \u2014 an expert at writing viral 60-second African-style short-form video scripts for TikTok, Reels, and Shorts.\n\nRULES:\n- Output exactly 7-8 scenes, each ~8 seconds\n- Each scene MUST have: sceneNumber, duration, camera, action, dialogue, engagement\n- Use handheld/raw camera style (shake, quick zoom, snap zoom, whip pan)\n- Realistic African dialogue (mix English + local slang naturally)\n- Hook must be in the first 3 seconds \u2014 grab attention instantly\n- Every scene must drive engagement (comments, shares, saves)\n- Dialogue should feel natural, like real people talking on the streets\n- Use relatable African situations (family, hustle, relationships, food, etc.)\n- Keep it fast-paced \u2014 no boring filler\n- Engagement hooks: ask questions, create suspense, use cliffhangers\n\nOUTPUT FORMAT \u2014 Return ONLY valid JSON (no markdown fences, no code blocks):\n{\n  "scenes": [\n    {\n      "sceneNumber": 1,\n      "duration": "0:00 - 0:08",\n      "camera": "description of camera movement",\n      "action": "what\'s happening physically",\n      "dialogue": "what characters say",\n      "engagement": "why viewer keeps watching"\n    }\n  ],\n  "rawText": "The full script in clean copy-paste format with scene separators"\n}';
 
-      var usr = 'IDEA: ' + idea + '\nTONE: ' + currentTone + '\n\nWrite the script. JSON only.';
+      var userMessage = 'Create a viral 60-second African-style short-form video script for this idea:\n\nIDEA: ' + idea + '\nTONE/VIBE: ' + currentTone + '\n\nRemember: 7-8 scenes, ~8 seconds each, raw handheld camera style, realistic African dialogue with slang, hook in first 3 seconds, engagement drivers in every scene. Return ONLY valid JSON.';
 
       try {
         updateProgress(0, 'Connecting to AI...');
@@ -767,12 +487,12 @@
             'X-Title': 'ViralScript AI'
           },
           body: JSON.stringify({
-            model: 'google/gemini-2.0-flash-lite-001',
+            model: 'google/gemini-2.0-flash-001',
             messages: [
-              { role: 'system', content: sys },
-              { role: 'user', content: usr }
+              { role: 'system', content: systemPrompt },
+              { role: 'user', content: userMessage }
             ],
-            temperature: 0.7,
+            temperature: 0.85,
             max_tokens: 2000,
             stream: true
           })
@@ -780,32 +500,30 @@
 
         if (!response.ok) {
           var errMsg = 'AI service error (' + response.status + ')';
-          try { var ed = await response.json(); if (ed.error && ed.error.message) errMsg = ed.error.message; } catch(e) {}
-          if (response.status === 401) errMsg = 'Invalid API key.';
-          if (response.status === 402) errMsg = 'Insufficient credits.';
-          if (response.status === 429) errMsg = 'Rate limited. Wait and retry.';
+          try {
+            var errData = await response.json();
+            if (errData.error && errData.error.message) errMsg = errData.error.message;
+          } catch(e) {}
+          if (response.status === 401) errMsg = 'Invalid API key. Check your OpenRouter key.';
+          if (response.status === 402) errMsg = 'Insufficient credits on your OpenRouter account.';
+          if (response.status === 429) errMsg = 'Rate limited. Wait a moment and try again.';
           throw new Error(errMsg);
         }
 
-        // === INCREMENTAL STREAMING ===
+        // Read streaming response
         var reader = response.body.getReader();
         var decoder = new TextDecoder();
         var fullContent = '';
         var buffer = '';
-        var renderedChars = 0;
-        var renderedScenes = 0;
-        var chunkCount = 0;
 
-        // Show results area immediately for live rendering
-        document.getElementById('results-section').classList.remove('hidden');
-        document.getElementById('results-count').textContent = '(streaming...)';
-        document.getElementById('cards-view').innerHTML = '<div class="scenes" id="scenes-container"></div>';
-        updateProgress(0, 'Receiving...');
+        updateProgress(1, 'Scene 1 generating...');
 
         while (true) {
           var result = await reader.read();
           if (result.done) break;
-          buffer += decoder.decode(result.value, { stream: true });
+          var value = result.value;
+
+          buffer += decoder.decode(value, { stream: true });
           var lines = buffer.split('\n');
           buffer = lines.pop() || '';
 
@@ -816,72 +534,60 @@
             if (data === '[DONE]') continue;
 
             try {
-              var chunk = JSON.parse(data);
-              var delta = chunk.choices && chunk.choices[0] && chunk.choices[0].delta;
+              var parsed = JSON.parse(data);
+              var delta = parsed.choices && parsed.choices[0] && parsed.choices[0].delta;
               if (delta && delta.content) {
                 fullContent += delta.content;
-                chunkCount++;
 
-                // Try incremental parse every 2 chunks for speed
-                if (chunkCount % 2 === 0 && fullContent.length > 80) {
-                  try {
-                    var ip = safeJsonParse(fullContent);
-
-                    // Render character sheet once
-                    if (ip.characters && ip.characters.length > 0 && renderedChars === 0) {
-                      characters = ip.characters;
-                      renderCharSheet(ip.characters);
-                      renderedChars = ip.characters.length;
-                      updateProgress(0, 'Characters done, writing scenes...');
-                    }
-
-                    // Render new scenes as they complete
-                    if (ip.scenes && ip.scenes.length > renderedScenes) {
-                      var container = document.getElementById('scenes-container');
-                      for (var si = renderedScenes; si < ip.scenes.length; si++) {
-                        var s = ip.scenes[si];
-                        if (s.dialogue && s.engagement) {
-                          container.insertAdjacentHTML('beforeend', buildSceneCardHtml(s, si));
-                          scenes.push(s);
-                          renderedScenes++;
-                          updateProgress(renderedScenes, 'Scene ' + renderedScenes + ' live!');
-                        }
-                      }
-                      document.getElementById('text-content').textContent = buildFullText();
-                    }
-                  } catch(pe) { /* JSON still incomplete, normal */ }
+                // Estimate progress from sceneNumber occurrences
+                var sceneMatches = fullContent.match(/"sceneNumber"\s*:\s*(\d)/g);
+                if (sceneMatches && sceneMatches.length > 0) {
+                  var lastScene = parseInt(sceneMatches[sceneMatches.length - 1].match(/(\d)/)[0]);
+                  updateProgress(lastScene, 'Scene ' + lastScene + ' done, continuing...');
+                } else if (fullContent.length > 50) {
+                  updateProgress(1, 'Building script...');
                 }
               }
-            } catch(e) {}
+            } catch(e) {
+              // Skip malformed chunks
+            }
           }
         }
 
         if (!fullContent) throw new Error('AI returned empty response. Try again.');
 
-        // Final parse — with JSON repair for malformed AI output
-        var parsed = safeJsonParse(fullContent);
-        if (!parsed) { rawText = fullContent; showError('AI returned invalid JSON. Tap Generate to retry.'); return; }
-
-        // Cache the result
-        saveToCache(idea, currentTone, { characters: parsed.characters, scenes: parsed.scenes });
-
-        characters = parsed.characters || characters;
-        rawText = parsed.rawText || '';
-
-        // Render remaining scenes
-        if (parsed.scenes && parsed.scenes.length > renderedScenes) {
-          var container = document.getElementById('scenes-container');
-          for (var fi = renderedScenes; fi < parsed.scenes.length; fi++) {
-            container.insertAdjacentHTML('beforeend', buildSceneCardHtml(parsed.scenes[fi], fi));
-            scenes.push(parsed.scenes[fi]);
+        // Parse JSON
+        var parsed;
+        try {
+          parsed = JSON.parse(fullContent);
+        } catch(e) {
+          var match = fullContent.match(/```(?:json)?\s*([\s\S]*?)```/);
+          if (match) {
+            parsed = JSON.parse(match[1].trim());
+          } else {
+            var objMatch = fullContent.match(/\{[\s\S]*\}/);
+            if (objMatch) parsed = JSON.parse(objMatch[0]);
+            else {
+              rawText = fullContent;
+              showResults([]);
+              return;
+            }
           }
         }
-        if (characters.length > 0 && renderedChars === 0) renderCharSheet(characters);
 
-        updateProgress(scenes.length, 'Done!');
-        document.getElementById('results-count').textContent = '(' + scenes.length + ' scenes)';
-        document.getElementById('text-content').textContent = buildFullText();
-        setTimeout(hideProgress, 300);
+        if (parsed.scenes && Array.isArray(parsed.scenes) && parsed.scenes.length > 0) {
+          scenes = parsed.scenes;
+          rawText = parsed.rawText || '';
+          updateProgress(scenes.length, 'Done!');
+          setTimeout(function() {
+            hideProgress();
+            showResults(scenes);
+          }, 400);
+        } else {
+          rawText = parsed.rawText || fullContent;
+          hideProgress();
+          showResults([]);
+        }
 
       } catch(err) {
         hideProgress();
@@ -900,22 +606,27 @@
     }
 
     function clearResults() {
-      scenes = []; characters = []; rawText = '';
+      scenes = [];
+      rawText = '';
       document.getElementById('results-section').classList.add('hidden');
       document.getElementById('cards-view').innerHTML = '';
       document.getElementById('text-content').textContent = '';
       document.getElementById('error-banner').classList.add('hidden');
       document.getElementById('progress-section').classList.add('hidden');
-      document.getElementById('results-count').textContent = '';
-      for (var i = 1; i <= 8; i++) document.getElementById('dot-' + i).classList.remove('active', 'done');
+
+      for (var i = 1; i <= 8; i++) {
+        var dot = document.getElementById('dot-' + i);
+        dot.classList.remove('active', 'done');
+      }
       document.getElementById('progress-bar').style.width = '0%';
     }
 
     function showError(msg) {
       document.getElementById('progress-section').classList.add('hidden');
       document.getElementById('empty-state').classList.add('hidden');
-      var b = document.getElementById('error-banner');
-      b.textContent = '❌ ' + msg; b.classList.remove('hidden');
+      var banner = document.getElementById('error-banner');
+      banner.textContent = '❌ ' + msg;
+      banner.classList.remove('hidden');
     }
 
     function showResults(scenesArr) {
@@ -923,116 +634,77 @@
       document.getElementById('empty-state').classList.add('hidden');
       document.getElementById('error-banner').classList.add('hidden');
       document.getElementById('results-section').classList.remove('hidden');
-      document.getElementById('results-count').textContent = scenesArr.length > 0 ? '(' + scenesArr.length + ' scenes)' : '(ready to copy)';
 
-      var html = '';
-      if (characters.length > 0) {
-        html += '<div class="char-card"><div class="char-card-title">Character Sheet</div><div class="char-list">';
-        for (var ci = 0; ci < characters.length; ci++) {
-          var ch = characters[ci];
-          var ini = (ch.name || '?').split(' ').map(function(w) { return w[0]; }).join('').substring(0, 2).toUpperCase();
-          html += '<div class="char-item"><div class="char-avatar">' + ini + '</div><div class="char-info">';
-          html += '<div class="char-name">' + escHtml(ch.name) + '</div>';
-          html += '<div class="char-role">' + escHtml(ch.role || '') + '</div>';
-          html += '<div class="char-desc">' + escHtml(ch.description || '') + '</div>';
-          if (ch.outfit) html += '<div class="char-desc" style="color:#22d3ee">' + escHtml(ch.outfit) + '</div>';
-          if (ch.expression) html += '<div class="char-desc" style="color:#a3e635">' + escHtml(ch.expression) + '</div>';
-          if (ch.physicalDetails) html += '<div class="char-desc" style="color:var(--text-dim)">' + escHtml(ch.physicalDetails) + '</div>';
-          if (ch.props) html += '<div class="char-desc" style="color:var(--yellow)">' + escHtml(ch.props) + '</div>';
-          if (ch.speechStyle) html += '<div class="char-desc" style="color:var(--orange)">' + escHtml(ch.speechStyle) + '</div>';
-          if (ch.clothing) html += '<div class="char-desc" style="color:var(--text-dimmer)">' + escHtml(ch.clothing) + '</div>';
-          html += '</div></div>';
-        }
-        html += '</div></div>';
+      var count = scenesArr.length > 0 ? scenesArr.length + ' scenes' : 'ready to copy';
+      document.getElementById('results-count').textContent = '(' + count + ')';
+
+      if (scenesArr.length > 0) {
+        document.getElementById('cards-view').innerHTML = scenesArr.map(function(s, i) {
+          return '<div class="scene-card streaming-in" id="scene-' + s.sceneNumber + '">' +
+            '<div class="scene-top">' +
+              '<div>' +
+                '<span class="scene-badge">SCENE ' + s.sceneNumber + '</span>' +
+                '<span class="scene-duration">⏱ ' + escHtml(s.duration) + '</span>' +
+              '</div>' +
+              '<button class="copy-scene-btn" onclick="copyScene(' + i + ')">📋 Copy</button>' +
+            '</div>' +
+            '<div class="scene-lines">' +
+              '<div class="scene-line"><span class="scene-line-label">📹 Camera:</span> ' + escHtml(s.camera) + '</div>' +
+              '<div class="scene-line"><span class="scene-line-label">🎬 Action:</span> ' + escHtml(s.action) + '</div>' +
+              '<div class="scene-line dialogue"><span class="scene-line-label">💬 Dialogue:</span> ' + escHtml(s.dialogue) + '</div>' +
+              '<div class="scene-line"><span class="scene-line-label">📊 Engagement:</span> ' + escHtml(s.engagement) + '</div>' +
+            '</div>' +
+          '</div>';
+        }).join('');
       }
-      html += '<div class="scenes" id="scenes-container">';
-      for (var si = 0; si < scenesArr.length; si++) html += buildSceneCardHtml(scenesArr[si], si);
-      html += '</div>';
-      document.getElementById('cards-view').innerHTML = html;
-      document.getElementById('text-content').textContent = buildFullText();
+
+      var textContent = '';
+      if (rawText) {
+        textContent = rawText;
+      } else if (scenesArr.length > 0) {
+        textContent = scenesArr.map(function(s) {
+          return '--- SCENE ' + s.sceneNumber + ' (' + s.duration + ') ---\n📹 Camera: ' + s.camera + '\n🎬 Action: ' + s.action + '\n💬 Dialogue: ' + s.dialogue + '\n📊 Engagement: ' + s.engagement;
+        }).join('\n\n');
+      }
+      document.getElementById('text-content').textContent = textContent;
+
       setView(currentView);
     }
 
-    // --- Robust clipboard copy (works on all browsers including mobile) ---
-    function clipCopy(text, onSuccess) {
-      // Method 1: Clipboard API
-      if (navigator.clipboard && navigator.clipboard.writeText) {
-        navigator.clipboard.writeText(text).then(onSuccess).catch(function() { fallbackCopy(text, onSuccess); });
-      } else {
-        fallbackCopy(text, onSuccess);
-      }
-    }
-    function fallbackCopy(text, onSuccess) {
-      // Method 2: Hidden textarea + execCommand
-      try {
-        var ta = document.createElement('textarea');
-        ta.value = text;
-        ta.style.cssText = 'position:fixed;left:-9999px;top:-9999px;opacity:0';
-        document.body.appendChild(ta);
-        ta.focus(); ta.select();
-        var ok = document.execCommand('copy');
-        document.body.removeChild(ta);
-        if (ok) { if (onSuccess) onSuccess(); }
-        else { alert('Copy failed. Long-press the text below to copy manually:\n\n' + text.substring(0, 500)); }
-      } catch(e) {
-        alert('Copy failed. Long-press the text below to copy manually:\n\n' + text.substring(0, 500));
-      }
-    }
-
     function copyAll() {
-      clipCopy(buildFullText(), function() {
+      var text = '';
+      if (rawText) {
+        text = rawText;
+      } else if (scenes.length > 0) {
+        text = scenes.map(function(s) {
+          return '--- SCENE ' + s.sceneNumber + ' (' + s.duration + ') ---\n📹 Camera: ' + s.camera + '\n🎬 Action: ' + s.action + '\n💬 Dialogue: ' + s.dialogue + '\n📊 Engagement: ' + s.engagement;
+        }).join('\n\n');
+      }
+
+      navigator.clipboard.writeText(text).then(function() {
         var btn = document.getElementById('copy-all-btn');
-        btn.textContent = 'Copied'; btn.classList.add('copied');
-        setTimeout(function() { btn.textContent = 'Copy All'; btn.classList.remove('copied'); }, 2000);
+        btn.textContent = '✅ Copied!';
+        btn.classList.add('copied');
+        setTimeout(function() {
+          btn.textContent = '📋 Copy All';
+          btn.classList.remove('copied');
+        }, 2000);
       });
     }
 
     function copyScene(index) {
       var s = scenes[index];
-      var text = buildSceneText(s);
-      clipCopy(text, function() {
+      var text = '--- SCENE ' + s.sceneNumber + ' (' + s.duration + ') ---\n📹 Camera: ' + s.camera + '\n🎬 Action: ' + s.action + '\n💬 Dialogue: ' + s.dialogue + '\n📊 Engagement: ' + s.engagement;
+      navigator.clipboard.writeText(text).then(function() {
         var card = document.getElementById('scene-' + s.sceneNumber);
-        var btns = card.querySelectorAll('.copy-scene-btn');
-        if (btns[0]) { btns[0].textContent = ' Copied'; btns[0].classList.add('copied'); setTimeout(function() { btns[0].textContent = 'Copy All'; btns[0].classList.remove('copied'); }, 2000); }
+        var btn = card.querySelector('.copy-scene-btn');
+        btn.textContent = '✅ Copied';
+        btn.classList.add('copied');
+        setTimeout(function() {
+          btn.textContent = '📋 Copy';
+          btn.classList.remove('copied');
+        }, 2000);
       });
-    }
-
-    // --- JSON Repair: fix common AI output issues ---
-    function repairJson(raw) {
-      var s = raw.trim();
-      // Strip markdown code fences
-      s = s.replace(/^```(?:json)?\s*/i, '').replace(/\s*```$/i, '');
-      // Extract JSON object if wrapped in other text
-      var match = s.match(/\{[\s\S]*\}/);
-      if (match) s = match[0];
-      // Fix trailing commas before } or ]
-      s = s.replace(/,\s*([}\]])/g, '$1');
-      // Fix unquoted keys: wordBeforeColon: → "wordBeforeColon":
-      s = s.replace(/([{,]\s*)([a-zA-Z_$][a-zA-Z0-9_$]*)\s*:/g, '$1"$2":');
-      // Fix single-quoted strings to double-quoted
-      s = s.replace(/\\'/g, '\u0027');
-      s = s.replace(/'/g, '"');
-      s = s.replace(/\u0027/g, "'");
-      // Remove control characters except \n \r \t
-      s = s.replace(/[\x00-\x08\x0b\x0c\x0e-\x1f]/g, '');
-      return s;
-    }
-
-    function safeJsonParse(raw) {
-      // Try clean parse first
-      try { return JSON.parse(raw); } catch(e) {}
-      // Try extracting from markdown fences
-      var fm = raw.match(/```(?:json)?\s*([\s\S]*?)```/);
-      if (fm) try { return JSON.parse(fm[1].trim()); } catch(e) {}
-      // Try extracting JSON object
-      var om = raw.match(/\{[\s\S]*\}/);
-      if (om) try { return JSON.parse(om[0]); } catch(e) {}
-      // Repair and parse
-      var repaired = repairJson(raw);
-      try { return JSON.parse(repaired); } catch(e) {}
-      // Try repair on extracted object
-      if (om) { repaired = repairJson(om[0]); try { return JSON.parse(repaired); } catch(e) {} }
-      return null;
     }
 
     function escHtml(str) {
