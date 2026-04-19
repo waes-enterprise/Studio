@@ -247,54 +247,46 @@
     }
     .scene-duration { font-size: 11px; color: var(--text-dimmer); margin-left: 8px; }
     .copy-scene-btn {
-      padding: 4px 10px; border-radius: 6px; font-size: 11px; font-weight: 600;
+      padding: 5px 14px; border-radius: 8px; font-size: 12px; font-weight: 600;
       border: 1px solid var(--border); background: transparent; color: var(--text-dimmer);
-      cursor: pointer; transition: all 0.15s; opacity: 0;
+      cursor: pointer; transition: all 0.15s;
     }
-    .scene-card:hover .copy-scene-btn { opacity: 1; }
     .copy-scene-btn:hover { background: rgba(255,255,255,0.08); color: var(--text); }
-    .copy-scene-btn.copied { opacity: 1; background: var(--green-dim); color: var(--green); border-color: rgba(34,197,94,0.3); }
+    .copy-scene-btn.copied { background: var(--green-dim); color: var(--green); border-color: rgba(34,197,94,0.3); }
 
-    .scene-lines { display: flex; flex-direction: column; gap: 6px; }
+    .scene-lines { display: flex; flex-direction: column; gap: 12px; }
     .scene-line {
-      font-size: 13px; color: var(--text-dim); display: flex; align-items: flex-start; gap: 6px;
-      padding: 6px 8px; border-radius: 8px; background: rgba(255,255,255,0.02); transition: background 0.15s;
+      font-size: 13px; color: var(--text-dim); line-height: 1.65;
+      padding: 10px 12px; border-radius: 10px; background: rgba(255,255,255,0.02);
+      border: 1px solid var(--border); transition: background 0.15s;
     }
-    .scene-line:hover { background: rgba(255,255,255,0.05); }
+    .scene-line:hover { background: rgba(255,255,255,0.04); }
     .scene-line-content { flex: 1; }
     .scene-line-label { color: var(--text-dimmer); font-weight: 600; margin-right: 4px; }
     .scene-line.dialogue .scene-line-content { color: var(--text); font-weight: 500; }
     .scene-line.dialogue .scene-line-label { font-weight: 400; color: var(--text-dimmer); }
-    .copy-field-btn {
-      flex-shrink: 0; background: none; border: 1px solid var(--border); border-radius: 5px;
-      padding: 1px 6px; font-size: 10px; color: var(--text-dimmer); cursor: pointer;
-      opacity: 0; transition: all 0.15s; line-height: 1.6;
-    }
-    .scene-line:hover .copy-field-btn { opacity: 1; }
-    .copy-field-btn:hover { background: rgba(255,255,255,0.08); color: var(--text); }
-    .copy-field-btn.copied { opacity: 1; color: var(--green); border-color: rgba(34,197,94,0.3); }
+    .scene-line { padding: 10px 12px; }
     .ai-prompt-btn {
       flex-shrink: 0; background: linear-gradient(135deg, rgba(168,85,247,0.2), rgba(234,179,8,0.15));
-      border: 1px solid rgba(168,85,247,0.3); border-radius: 6px;
-      padding: 4px 10px; font-size: 11px; font-weight: 600;
-      color: var(--purple); cursor: pointer; transition: all 0.2s; opacity: 1;
-      display: flex; align-items: center; gap: 4px;
+      border: 1px solid rgba(168,85,247,0.3); border-radius: 8px;
+      padding: 5px 14px; font-size: 12px; font-weight: 600;
+      color: var(--purple); cursor: pointer; transition: all 0.2s;
     }
-    .ai-prompt-btn:hover { background: linear-gradient(135deg, rgba(168,85,247,0.35), rgba(234,179,8,0.25)); transform: translateY(-1px); }
+    .ai-prompt-btn:hover { background: linear-gradient(135deg, rgba(168,85,247,0.35), rgba(234,179,8,0.25)); }
     .ai-prompt-btn.loading { opacity: 0.6; cursor: wait; pointer-events: none; }
     .ai-prompt-btn .mini-spinner { width: 10px; height: 10px; border: 1.5px solid rgba(168,85,247,0.3); border-top-color: var(--purple); border-radius: 50%; animation: spin 0.6s linear infinite; }
     .ai-prompt-box {
       background: rgba(168,85,247,0.06); border: 1px solid rgba(168,85,247,0.15); border-radius: 10px;
       padding: 12px; margin-top: 6px; animation: cardFadeIn 0.3s ease-out;
     }
-    .ai-prompt-box-label { font-size: 10px; font-weight: 700; color: var(--purple); text-transform: uppercase; letter-spacing: 0.5px; margin-bottom: 8px; display: flex; align-items: center; justify-content: space-between; }
+    .ai-prompt-box-label { font-size: 11px; font-weight: 700; color: var(--purple); text-transform: uppercase; letter-spacing: 0.5px; margin-bottom: 8px; display: flex; align-items: center; justify-content: space-between; }
     .ai-prompt-text {
       font-size: 12.5px; color: var(--text); line-height: 1.65; font-style: italic;
       white-space: pre-wrap; word-break: break-word;
     }
     .ai-prompt-copy-btn {
-      background: none; border: 1px solid rgba(168,85,247,0.2); border-radius: 5px;
-      padding: 2px 8px; font-size: 10px; color: var(--purple); cursor: pointer; font-weight: 600;
+      background: none; border: 1px solid rgba(168,85,247,0.2); border-radius: 6px;
+      padding: 3px 10px; font-size: 11px; color: var(--purple); cursor: pointer; font-weight: 600;
     }
     .ai-prompt-copy-btn:hover { background: rgba(168,85,247,0.15); }
     .ai-prompt-copy-btn.copied { color: var(--green); border-color: rgba(34,197,94,0.3); }
@@ -407,7 +399,7 @@
     </div>
 
     <div id="empty-state" class="empty-state">
-      <div class="empty-emoji"></div>
+      
       <div class="empty-title">Ready to Create Viral Scripts</div>
       <div class="empty-sub">Drop your video idea, pick a tone, and hit Generate. Your 60-second African-style script will be ready in seconds.</div>
     </div>
@@ -467,41 +459,9 @@
     function hideProgress() { document.getElementById('progress-section').classList.add('hidden'); }
 
     // --- Build HTML helpers ---
-    function fieldLine(icon, label, value, sceneIdx, fieldKey) {
+    function fieldLine(label, value, fieldKey) {
       var cls = fieldKey === 'dialogue' ? ' scene-line dialogue' : '';
-      return '<div class="scene-line' + cls + '"><span class="scene-line-content"><span class="scene-line-label">' + icon + ' ' + label + ':</span> ' + escHtml(value) + '</span>'
-        + '<button class="copy-field-btn" onclick="copyField(this, ' + sceneIdx + ', \'' + fieldKey + '\')" title="Copy ' + label + '">📋</button></div>';
-    }
-
-    function copyField(btn, sceneIdx, fieldKey) {
-      var s = scenes[sceneIdx];
-      var cb = buildCharText();
-      var text = '';
-      if (fieldKey === 'outfit' || fieldKey === 'expression' || fieldKey === 'physicalDetails' || fieldKey === 'props' || fieldKey === 'speechStyle') {
-        // Character-level field — find matching character or include all
-        var parts = [];
-        if (cb) parts.push(cb);
-        for (var i = 0; i < characters.length; i++) {
-          var c = characters[i];
-          var val = c[fieldKey] || '';
-          if (val) parts.push(c.name + ' - ' + fieldKey + ': ' + val);
-        }
-        text = parts.join('\n');
-      } else {
-        // Scene-level field
-        if (cb) text = cb + '\n\n';
-        text += '--- SCENE ' + s.sceneNumber + ' ---\n';
-        text += labelForKey(fieldKey) + ': ' + (s[fieldKey] || '');
-      }
-      clipCopy(text, function() {
-        btn.textContent = '✓'; btn.classList.add('copied');
-        setTimeout(function() { btn.textContent = 'Copy'; btn.classList.remove('copied'); }, 1500);
-      });
-    }
-
-    function labelForKey(key) {
-      var map = { camera: 'Camera', action: 'Action', dialogue: 'Dialogue', engagement: 'Engagement', outfit: 'Outfit', expression: 'Expression', physicalDetails: 'Physical Details', props: 'Props', speechStyle: 'Speech Style' };
-      return map[key] || key;
+      return '<div class="scene-line' + cls + '"><span class="scene-line-label">' + label + ':</span> ' + escHtml(value) + '</div>';
     }
 
     function buildSceneCardHtml(s, index) {
@@ -510,19 +470,16 @@
       h += '<span class="scene-badge">SCENE ' + s.sceneNumber + '</span>';
       h += '<span class="scene-duration">' + escHtml(s.duration) + '</span>';
       if (s.characters && s.characters.length > 0) h += '<span class="scene-duration" style="margin-left:4px">' + escHtml(s.characters.join(', ')) + '</span>';
-      h += '</div><div style="display:flex;gap:4px;flex-wrap:wrap">';
-      h += '<button class="copy-scene-btn" style="opacity:1" onclick="copyScene(' + index + ')">Copy All</button>';
-      h += '<button class="copy-scene-btn" style="opacity:1;border-color:rgba(168,85,247,0.3);color:var(--purple)" onclick="copyFullPrompt(' + index + ')">Copy Prompt</button>';
+      h += '</div><div style="display:flex;gap:5px;align-items:center">';
+      h += '<button class="copy-scene-btn" onclick="copyScene(' + index + ')">Copy Scene</button>';
       h += '<button class="ai-prompt-btn" id="ai-btn-' + s.sceneNumber + '" onclick="generateAiPrompt(' + index + ')">AI Prompt</button>';
       h += '</div></div>';
       h += '<div id="ai-prompt-' + s.sceneNumber + '"></div>';
-      // Embedded character sheet inside every scene
-      h += buildInlineCharSheet();
       h += '<div class="scene-lines">';
-      h += fieldLine('', 'Camera', s.camera, index, 'camera');
-      h += fieldLine('', 'Action', s.action, index, 'action');
-      h += fieldLine('', 'Dialogue', s.dialogue, index, 'dialogue');
-      h += fieldLine('', 'Engagement', s.engagement, index, 'engagement');
+      h += fieldLine('Camera', s.camera, 'camera');
+      h += fieldLine('Action', s.action, 'action');
+      h += fieldLine('Dialogue', s.dialogue, 'dialogue');
+      h += fieldLine('Engagement', s.engagement, 'engagement');
       h += '</div></div>';
       return h;
     }
@@ -602,7 +559,7 @@
       clipCopy(text, function() {
         var card = document.getElementById('scene-' + s.sceneNumber);
         var btns = card.querySelectorAll('.copy-scene-btn');
-        if (btns[1]) { btns[1].textContent = '✅ Copied!'; setTimeout(function() { btns[1].textContent = '✨ Copy Prompt'; }, 2000); }
+        if (btns[0]) { btns[0].textContent = 'Copied'; btns[0].classList.add('copied'); setTimeout(function() { btns[0].textContent = 'Copy Scene'; btns[0].classList.remove('copied'); }, 2000); }
       });
     }
 
@@ -632,7 +589,7 @@
 
       var apiKey = getApiKey();
       if (!apiKey) {
-        btn.classList.remove('loading'); btn.innerHTML = '\u2728 AI Prompt';
+        btn.classList.remove('loading'); btn.innerHTML = 'AI Prompt';
         box.innerHTML = '<div class="ai-prompt-box"><div style="color:var(--red);font-size:12px">Save your API key first.</div></div>';
         return;
       }
@@ -658,13 +615,13 @@
 
         var textId = 'ai-text-' + s.sceneNumber;
         var copyId = 'ai-copy-' + s.sceneNumber;
-        box.innerHTML = '<div class="ai-prompt-box"><div class="ai-prompt-box-label"><span>\u2728 AI Video Prompt</span>'
+        box.innerHTML = '<div class="ai-prompt-box"><div class="ai-prompt-box-label"><span>AI Video Prompt</span>'
           + '<button class="ai-prompt-copy-btn" id="' + copyId + '" onclick="clipCopy(document.getElementById(\'' + textId + '\').textContent,function(){var b=document.getElementById(\'' + copyId + '\');b.textContent=\'\u2705 Copied\';setTimeout(function(){b.textContent=\'\U0001f4cb Copy\'},2000)})">\U0001f4cb Copy</button></div>'
           + '<div class="ai-prompt-text" id="' + textId + '">' + escHtml(prompt.trim()) + '</div></div>';
 
-        btn.classList.remove('loading'); btn.innerHTML = '\u2728 AI Prompt';
+        btn.classList.remove('loading'); btn.innerHTML = 'AI Prompt';
       } catch(err) {
-        btn.classList.remove('loading'); btn.innerHTML = '\u2728 AI Prompt';
+        btn.classList.remove('loading'); btn.innerHTML = 'AI Prompt';
         box.innerHTML = '<div class="ai-prompt-box"><div style="color:var(--red);font-size:12px">Failed: ' + escHtml(err.message) + '</div></div>';
       }
     }
@@ -791,7 +748,7 @@
         + '\n- HANDHELD SHAKY CAMERA ONLY — Never use zoom in, zoom out, dolly shots, slider, gimbal, or any stabilized/smooth movement. All camera work must feel raw, documentary-style, shaky, handheld with energy'
         + '\n- African dialogue with local slang — each character must sound DISTINCT'
         + '\n- Hook in first 3s, engagement hooks every scene'
-        + '\n- NO filler, NO generic descriptions — every line must be specific enough to generate from'
+        + '\n- NO filler, NO generic descriptions — every line must be specific enough to generate from'+ '\n- EVERY field (camera, action, dialogue, engagement) must have AT LEAST 2 full sentences. No single-sentence fields. Each scene must have the SAME level of detail and length.'
         + '\n\nOUTPUT: Return ONLY valid JSON, no markdown:'
         + '\n{"characters":[{"name":"","role":"","description":"","speechStyle":"","outfit":"","expression":"","physicalDetails":"","props":""}],'
         + '"scenes":[{"sceneNumber":1,"duration":"0:00-0:08","characters":[],"camera":"","action":"","dialogue":"","engagement":""}]}';
@@ -1025,7 +982,7 @@
     function copyAll() {
       clipCopy(buildFullText(), function() {
         var btn = document.getElementById('copy-all-btn');
-        btn.textContent = '✅ Copied!'; btn.classList.add('copied');
+        btn.textContent = 'Copied'; btn.classList.add('copied');
         setTimeout(function() { btn.textContent = 'Copy All'; btn.classList.remove('copied'); }, 2000);
       });
     }
@@ -1036,7 +993,7 @@
       clipCopy(text, function() {
         var card = document.getElementById('scene-' + s.sceneNumber);
         var btns = card.querySelectorAll('.copy-scene-btn');
-        if (btns[0]) { btns[0].textContent = '✅ Copied'; btns[0].classList.add('copied'); setTimeout(function() { btns[0].textContent = 'Copy All'; btns[0].classList.remove('copied'); }, 2000); }
+        if (btns[0]) { btns[0].textContent = ' Copied'; btns[0].classList.add('copied'); setTimeout(function() { btns[0].textContent = 'Copy All'; btns[0].classList.remove('copied'); }, 2000); }
       });
     }
 
