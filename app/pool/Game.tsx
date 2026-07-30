@@ -396,9 +396,11 @@ export default function Game({ tableId }: { tableId: string }) {
     const canvas = canvasRef.current;
     if (!canvas) return;
     const rect = canvas.getBoundingClientRect();
+    const scaleX = TABLE_WIDTH / rect.width;
+    const scaleY = TABLE_HEIGHT / rect.height;
     mouseRef.current = {
-      x: e.clientX - rect.left,
-      y: e.clientY - rect.top,
+      x: (e.clientX - rect.left) * scaleX,
+      y: (e.clientY - rect.top) * scaleY,
       down: mouseRef.current.down,
     };
 
@@ -422,8 +424,10 @@ export default function Game({ tableId }: { tableId: string }) {
     const canvas = canvasRef.current;
     if (!canvas) return;
     const rect = canvas.getBoundingClientRect();
-    const x = e.clientX - rect.left;
-    const y = e.clientY - rect.top;
+    const scaleX = TABLE_WIDTH / rect.width;
+    const scaleY = TABLE_HEIGHT / rect.height;
+    const x = (e.clientX - rect.left) * scaleX;
+    const y = (e.clientY - rect.top) * scaleY;
 
     if (gameStatusRef.current === "placing_cue") {
       const cueBall = ballsRef.current[0];
@@ -523,8 +527,8 @@ export default function Game({ tableId }: { tableId: string }) {
           onMouseDown={handleMouseDown}
           onMouseUp={handleMouseUp}
           onMouseLeave={handleMouseUp}
-          className="rounded-xl cursor-crosshair max-w-full h-auto"
-          style={{ maxWidth: "100%", height: "auto" }}
+          className="rounded-xl cursor-crosshair"
+          style={{ width: "100%", height: "auto", aspectRatio: `${TABLE_WIDTH}/${TABLE_HEIGHT}` }}
         />
       </div>
 
