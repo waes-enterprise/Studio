@@ -1,321 +1,113 @@
 "use client";
 
 import { useState } from "react";
+import Link from "next/link";
 
-interface Scene {
-  sceneNumber: number;
-  duration: string;
-  camera: string;
-  action: string;
-  dialogue: string;
-  engagement: string;
+interface Table {
+  id: number;
+  name: string;
+  status: "available" | "in-progress" | "waiting";
+  players: number;
 }
 
 export default function Home() {
-  const [idea, setIdea] = useState("");
-  const [tone, setTone] = useState("comedy");
-  const [scenes, setScenes] = useState<Scene[]>([]);
-  const [rawText, setRawText] = useState("");
-  const [loading, setLoading] = useState(false);
-  const [error, setError] = useState("");
-  const [view, setView] = useState<"cards" | "text">("cards");
-  const [copiedAll, setCopiedAll] = useState(false);
-  const [copiedScene, setCopiedScene] = useState<number | null>(null);
-
-  const tones = [
-    { value: "comedy", label: "😂 Comedy" },
-    { value: "drama", label: "🎭 Drama" },
-    { value: "thriller", label: "😱 Thriller" },
-    { value: "romance", label: "❤️ Romance" },
-    { value: "horror", label: "👻 Horror" },
-    { value: "inspirational", label: "✨ Inspirational" },
-    { value: "street", label: "🔥 Street/Real" },
-    { value: "educational", label: "📚 Educational" },
-  ];
-
-  const generate = async () => {
-    if (!idea.trim()) return;
-    setLoading(true);
-    setError("");
-    setScenes([]);
-    setRawText("");
-    setCopiedAll(false);
-
-    try {
-      const res = await fetch("/api/generate", {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ idea: idea.trim(), tone }),
-      });
-
-      if (!res.ok) {
-        const errData = await res.json().catch(() => ({}));
-        throw new Error(errData.error || `Request failed (${res.status})`);
-      }
-
-      const data = await res.json();
-
-      if (data.scenes && data.scenes.length > 0) {
-        setScenes(data.scenes);
-      }
-
-      if (data.rawText) {
-        setRawText(data.rawText);
-      }
-
-      if (data.formatted) {
-        setRawText(data.formatted);
-      }
-    } catch (err: any) {
-      setError(err.message || "Something went wrong. Try again.");
-    } finally {
-      setLoading(false);
-    }
-  };
-
-  const copyAll = () => {
-    let text = "";
-    if (rawText) {
-      text = rawText;
-    } else if (scenes.length > 0) {
-      text = scenes
-        .map(
-          (s) =>
-            `--- SCENE ${s.sceneNumber} (${s.duration}) ---\n📹 Camera: ${s.camera}\n🎬 Action: ${s.action}\n💬 Dialogue: ${s.dialogue}\n📊 Engagement: ${s.engagement}`
-        )
-        .join("\n\n");
-    }
-    navigator.clipboard.writeText(text);
-    setCopiedAll(true);
-    setTimeout(() => setCopiedAll(false), 2000);
-  };
-
-  const copyScene = (scene: Scene) => {
-    const text = `--- SCENE ${scene.sceneNumber} (${scene.duration}) ---\n📹 Camera: ${scene.camera}\n🎬 Action: ${scene.action}\n💬 Dialogue: ${scene.dialogue}\n📊 Engagement: ${scene.engagement}`;
-    navigator.clipboard.writeText(text);
-    setCopiedScene(scene.sceneNumber);
-    setTimeout(() => setCopiedScene(null), 2000);
-  };
+  const [tables] = useState<Table[]>([
+    { id: 1, name: "Table 1", status: "available", players: 0 },
+    { id: 2, name: "Table 2", status: "in-progress", players: 1 },
+    { id: 3, name: "Table 3", status: "waiting", players: 1 },
+  ]);
 
   return (
-    <div className="min-h-screen bg-gradient-to-br from-gray-950 via-gray-900 to-black text-white">
-      {/* Header */}
+    <div className="min-h-screen bg-gradient-to-br from-green-950 via-green-900 to-black text-white">
       <header className="border-b border-white/10 backdrop-blur-sm bg-black/30 sticky top-0 z-10">
-        <div className="max-w-5xl mx-auto px-4 py-4 flex items-center justify-between">
+        <div className="max-w-6xl mx-auto px-4 py-6 flex items-center justify-between">
           <div className="flex items-center gap-3">
-            <div className="w-10 h-10 rounded-xl bg-gradient-to-br from-yellow-400 to-orange-500 flex items-center justify-center font-bold text-black text-lg">
-              V
+            <div className="w-12 h-12 rounded-xl bg-gradient-to-br from-green-400 to-emerald-600 flex items-center justify-center font-bold text-black text-2xl">
+              8
             </div>
             <div>
-              <h1 className="text-xl font-bold bg-gradient-to-r from-yellow-400 to-orange-400 bg-clip-text text-transparent">
-                ViralScript AI
+              <h1 className="text-2xl font-bold bg-gradient-to-r from-green-400 to-emerald-400 bg-clip-text text-transparent">
+                Pool Hall Online
               </h1>
-              <p className="text-xs text-gray-400">African Short-Form Video Scripts</p>
+              <p className="text-xs text-gray-400">8-Ball Pool • 3 Tables Available</p>
             </div>
           </div>
-          <div className="flex gap-2">
-            <button
-              onClick={() => setView("cards")}
-              className={`px-3 py-1.5 rounded-lg text-sm font-medium transition-all ${
-                view === "cards"
-                  ? "bg-yellow-500/20 text-yellow-400 border border-yellow-500/30"
-                  : "text-gray-400 hover:text-white border border-white/10"
-              }`}
-            >
-              Cards
-            </button>
-            <button
-              onClick={() => setView("text")}
-              className={`px-3 py-1.5 rounded-lg text-sm font-medium transition-all ${
-                view === "text"
-                  ? "bg-yellow-500/20 text-yellow-400 border border-yellow-500/30"
-                  : "text-gray-400 hover:text-white border border-white/10"
-              }`}
-            >
-              Text
-            </button>
+          <div className="text-sm text-gray-400">
+            <span className="inline-block w-2 h-2 bg-green-400 rounded-full mr-2 animate-pulse"></span>
+            {tables.reduce((a, t) => a + t.players, 0)} players online
           </div>
         </div>
       </header>
 
-      <main className="max-w-5xl mx-auto px-4 py-8">
-        {/* Input Section */}
-        <div className="bg-gray-900/60 border border-white/10 rounded-2xl p-6 mb-8">
-          <label className="block text-sm font-medium text-gray-300 mb-2">
-            💡 Your Video Idea
-          </label>
-          <textarea
-            value={idea}
-            onChange={(e) => setIdea(e.target.value)}
-            placeholder="e.g. A guy tries to impress his girlfriend's Nigerian mom by cooking jollof rice but everything goes wrong..."
-            className="w-full bg-black/40 border border-white/10 rounded-xl px-4 py-3 text-white placeholder-gray-500 focus:outline-none focus:border-yellow-500/50 focus:ring-1 focus:ring-yellow-500/30 resize-none mb-4"
-            rows={3}
-          />
-
-          <div className="flex flex-col sm:flex-row gap-4 items-start sm:items-end">
-            <div className="flex-1 w-full">
-              <label className="block text-sm font-medium text-gray-300 mb-2">
-                🎭 Tone / Vibe
-              </label>
-              <div className="grid grid-cols-4 sm:grid-cols-4 gap-2">
-                {tones.map((t) => (
-                  <button
-                    key={t.value}
-                    onClick={() => setTone(t.value)}
-                    className={`px-3 py-2 rounded-lg text-xs font-medium transition-all ${
-                      tone === t.value
-                        ? "bg-yellow-500/20 text-yellow-400 border border-yellow-500/40"
-                        : "bg-black/30 text-gray-400 border border-white/5 hover:border-white/20"
-                    }`}
-                  >
-                    {t.label}
-                  </button>
-                ))}
-              </div>
-            </div>
-
-            <button
-              onClick={generate}
-              disabled={loading || !idea.trim()}
-              className="px-8 py-3 bg-gradient-to-r from-yellow-500 to-orange-500 text-black font-bold rounded-xl hover:from-yellow-400 hover:to-orange-400 transition-all disabled:opacity-40 disabled:cursor-not-allowed whitespace-nowrap text-sm"
-            >
-              {loading ? (
-                <span className="flex items-center gap-2">
-                  <svg className="animate-spin h-4 w-4" viewBox="0 0 24 24">
-                    <circle className="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" strokeWidth="4" fill="none" />
-                    <path className="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4z" />
-                  </svg>
-                  Generating...
-                </span>
-              ) : (
-                "⚡ Generate Script"
-              )}
-            </button>
-          </div>
+      <main className="max-w-6xl mx-auto px-4 py-12">
+        <div className="text-center mb-12">
+          <h2 className="text-4xl font-bold mb-4">Choose Your Table</h2>
+          <p className="text-gray-400 max-w-xl mx-auto">
+            Join an 8-ball pool table and play against opponents from around the world.
+            Choose a table below to start playing.
+          </p>
         </div>
 
-        {/* Error */}
-        {error && (
-          <div className="bg-red-500/10 border border-red-500/30 rounded-xl p-4 mb-6 text-red-400 text-sm">
-            ❌ {error}
-          </div>
-        )}
-
-        {/* Results */}
-        {(scenes.length > 0 || rawText) && (
-          <div className="space-y-6">
-            {/* Copy All Button */}
-            <div className="flex items-center justify-between">
-              <h2 className="text-lg font-bold text-white">
-                🎬 Your Script{" "}
-                <span className="text-gray-500 font-normal text-sm">
-                  ({scenes.length > 0 ? `${scenes.length} scenes` : "ready to copy"})
-                </span>
-              </h2>
-              <button
-                onClick={copyAll}
-                className={`px-5 py-2 rounded-lg text-sm font-medium transition-all ${
-                  copiedAll
-                    ? "bg-green-500/20 text-green-400 border border-green-500/30"
-                    : "bg-white/5 text-gray-300 border border-white/10 hover:bg-white/10 hover:text-white"
-                }`}
-              >
-                {copiedAll ? "✅ Copied!" : "📋 Copy All"}
-              </button>
-            </div>
-
-            {/* Card View */}
-            {view === "cards" && scenes.length > 0 && (
-              <div className="space-y-4">
-                {scenes.map((scene) => (
-                  <div
-                    key={scene.sceneNumber}
-                    className="bg-gray-900/60 border border-white/10 rounded-2xl p-5 hover:border-yellow-500/20 transition-all group"
-                  >
-                    <div className="flex items-center justify-between mb-3">
-                      <div className="flex items-center gap-3">
-                        <span className="bg-yellow-500/20 text-yellow-400 text-xs font-bold px-2.5 py-1 rounded-lg">
-                          SCENE {scene.sceneNumber}
-                        </span>
-                        <span className="text-gray-500 text-xs">⏱ {scene.duration}</span>
-                      </div>
-                      <button
-                        onClick={() => copyScene(scene)}
-                        className={`px-3 py-1.5 rounded-lg text-xs font-medium transition-all opacity-0 group-hover:opacity-100 ${
-                          copiedScene === scene.sceneNumber
-                            ? "bg-green-500/20 text-green-400"
-                            : "bg-white/5 text-gray-400 hover:text-white"
-                        }`}
-                      >
-                        {copiedScene === scene.sceneNumber ? "✅ Copied" : "📋 Copy"}
-                      </button>
-                    </div>
-                    <div className="space-y-2 text-sm">
-                      <p className="text-gray-300">
-                        <span className="text-gray-500 font-medium">📹 Camera:</span>{" "}
-                        {scene.camera}
-                      </p>
-                      <p className="text-gray-300">
-                        <span className="text-gray-500 font-medium">🎬 Action:</span>{" "}
-                        {scene.action}
-                      </p>
-                      <p className="text-gray-200 font-medium">
-                        <span className="text-gray-500">💬 Dialogue:</span> {scene.dialogue}
-                      </p>
-                      <p className="text-gray-400">
-                        <span className="text-gray-500 font-medium">📊 Engagement:</span>{" "}
-                        {scene.engagement}
-                      </p>
-                    </div>
+        <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
+          {tables.map((table) => (
+            <Link
+              key={table.id}
+              href={`/pool/${table.id}`}
+              className="group block"
+            >
+              <div className="bg-gray-900/60 border border-white/10 rounded-2xl p-6 hover:border-green-500/40 transition-all hover:shadow-2xl hover:shadow-green-500/10">
+                <div className="flex items-center justify-between mb-4">
+                  <div className="w-16 h-16 rounded-xl bg-gradient-to-br from-green-800 to-green-950 border border-green-500/20 flex items-center justify-center">
+                    <svg className="w-8 h-8 text-green-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                      <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M4 6a2 2 0 012-2h2a2 2 0 012 2v2a2 2 0 01-2 2H6a2 2 0 01-2-2V6zM14 6a2 2 0 012-2h2a2 2 0 012 2v2a2 2 0 01-2 2h-2a2 2 0 01-2-2V6zM4 16a2 2 0 012-2h2a2 2 0 012 2v2a2 2 0 01-2 2H6a2 2 0 01-2-2v-2zM14 16a2 2 0 012-2h2a2 2 0 012 2v2a2 2 0 01-2 2h-2a2 2 0 01-2-2v-2z" />
+                    </svg>
                   </div>
-                ))}
-              </div>
-            )}
+                  <span
+                    className={`px-3 py-1 rounded-full text-xs font-medium ${
+                      table.status === "available"
+                        ? "bg-green-500/20 text-green-400 border border-green-500/30"
+                        : table.status === "in-progress"
+                        ? "bg-yellow-500/20 text-yellow-400 border border-yellow-500/30"
+                        : "bg-blue-500/20 text-blue-400 border border-blue-500/30"
+                    }`}
+                  >
+                    {table.status === "available"
+                      ? "Available"
+                      : table.status === "in-progress"
+                      ? "In Progress"
+                      : "Waiting for Player"}
+                  </span>
+                </div>
 
-            {/* Text View */}
-            {view === "text" && rawText && (
-              <div className="relative">
-                <pre className="bg-gray-900/60 border border-white/10 rounded-2xl p-6 text-sm text-gray-300 whitespace-pre-wrap font-mono leading-relaxed select-all">
-                  {rawText}
-                </pre>
-              </div>
-            )}
+                <h3 className="text-xl font-bold mb-2 group-hover:text-green-400 transition-colors">
+                  {table.name}
+                </h3>
+                <p className="text-sm text-gray-400 mb-4">
+                  {table.players === 0
+                    ? "No players yet. Be the first!"
+                    : `${table.players} player${table.players > 1 ? "s" : ""} playing`}
+                </p>
 
-            {/* Text View fallback when only scenes exist */}
-            {view === "text" && !rawText && scenes.length > 0 && (
-              <div className="relative">
-                <pre className="bg-gray-900/60 border border-white/10 rounded-2xl p-6 text-sm text-gray-300 whitespace-pre-wrap font-mono leading-relaxed select-all">
-                  {scenes
-                    .map(
-                      (s) =>
-                        `--- SCENE ${s.sceneNumber} (${s.duration}) ---\n📹 Camera: ${s.camera}\n🎬 Action: ${s.action}\n💬 Dialogue: ${s.dialogue}\n📊 Engagement: ${s.engagement}`
-                    )
-                    .join("\n\n")}
-                </pre>
+                <div className="flex items-center justify-between">
+                  <span className="text-xs text-gray-500">8-Ball • Standard Rules</span>
+                  <span className="text-green-400 text-sm font-medium group-hover:translate-x-1 transition-transform">
+                    Join Table →
+                  </span>
+                </div>
               </div>
-            )}
+            </Link>
+          ))}
+        </div>
+
+        <div className="mt-16 text-center">
+          <div className="inline-flex items-center gap-2 text-sm text-gray-500">
+            <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M13 16h-1v-4h-1m1-4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
+            </svg>
+            Click a table to play. Use mouse to aim and power up your shot.
           </div>
-        )}
-
-        {/* Empty State */}
-        {!loading && !error && scenes.length === 0 && !rawText && (
-          <div className="text-center py-20">
-            <div className="text-6xl mb-4">🎬</div>
-            <h3 className="text-xl font-bold text-gray-400 mb-2">
-              Ready to Create Viral Scripts
-            </h3>
-            <p className="text-gray-600 max-w-md mx-auto">
-              Drop your video idea above, pick a tone, and hit Generate. Your
-              60-second African-style script will be ready in seconds.
-            </p>
-          </div>
-        )}
+        </div>
       </main>
-
-      {/* Footer */}
-      <footer className="border-t border-white/5 mt-16 py-6 text-center text-xs text-gray-600">
-        ViralScript AI — Built for African Creators 🌍
-      </footer>
     </div>
   );
 }
